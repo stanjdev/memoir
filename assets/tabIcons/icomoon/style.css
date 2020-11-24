@@ -1,0 +1,76 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?u8ttep');
+  src:  url('fonts/icomoon.eot?u8ttep#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?u8ttep') format('truetype'),
+    url('fonts/icomoon.woff?u8ttep') format('woff'),
+    url('fonts/icomoon.svg?u8ttep#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-breathe-black-with-text:before {
+  content: "\e900";
+}
+.icon-breathe-grey-with-text:before {
+  content: "\e901";
+  color: #717171;
+}
+.icon-favorite-black-with-text:before {
+  content: "\e902";
+}
+.icon-favorite-grey-with-text:before {
+  content: "\e903";
+  color: #717171;
+}
+.icon-profile-black-with-text:before {
+  content: "\e906";
+}
+.icon-profile-grey-with-text:before {
+  content: "\e907";
+  color: #717171;
+}
+.icon-meditate-black:before {
+  content: "\e904";
+}
+.icon-meditate-grey:before {
+  content: "\e905";
+  color: #717171;
+}
+.icon-breathe-black:before {
+  content: "\e908";
+}
+.icon-breathe-grey:before {
+  content: "\e909";
+  color: #717171;
+}
+.icon-favorites-black:before {
+  content: "\e90a";
+}
+.icon-favorites-grey:before {
+  content: "\e90b";
+  color: #717171;
+}
+.icon-profile-black:before {
+  content: "\e90e";
+}
+.icon-profile-grey:before {
+  content: "\e90f";
+  color: #717171;
+}
