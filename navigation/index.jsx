@@ -149,6 +149,7 @@ export default function Navigation({navigation}) {
 import SplashScreen from './SplashScreen';
 import SignInScreen from './SignInScreen';
 import SignUpScreen from './SignUpScreen';
+import SignUpScreen2 from './SignUpScreen2';
 import UserWelcomeScreen from './UserWelcomeScreen';
 import MeditateExerciseScreen from '../navigation/tab-screens/meditate-screens-more/MeditateExerciseScreen';
 import ExerciseVideo from '../components/ExerciseVideo';
@@ -163,6 +164,7 @@ function RootNavigator() {
       <Stack.Screen options={{headerShown:false}} name="MeditateExerciseScreen" component={MeditateExerciseScreen} />
       <Stack.Screen options={{headerShown:false}} name="ExerciseVideo" component={ExerciseVideo} />
       <Stack.Screen options={{headerShown:false}} name="SignUpScreen" component={SignUpScreen} />
+      <Stack.Screen options={{headerShown:false}} name="SignUpScreen2" component={SignUpScreen2} />
       <Stack.Screen options={{headerShown:false}} name="SignInScreen" component={SignInScreen} />
       <Stack.Screen options={{headerShown:false}} name="UserWelcomeScreen" component={UserWelcomeScreen} />
     </Stack.Navigator>

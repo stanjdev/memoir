@@ -57,13 +57,18 @@ export default function BottomTabNavigator() {
   return(
     tabIconsLoaded ? 
 
-    <BottomTab.Navigator>
+    <BottomTab.Navigator
+      tabBarOptions={{
+        activeTintColor: "black",
+        inactiveTintColor: "#717171"
+      }}
+    >
       <BottomTab.Screen
         name="Explore"
         component={BreatheStackScreen}
         options={{
           // tabBarIcon: () => <TabBarIcon name="air" />
-          tabBarIcon: () => <CustomIcon size={14} name="breathe-grey" style={{marginBottom: -10}} />
+          tabBarIcon: ({ focused }) => <CustomIcon size={14} name="breathe-grey" style={{marginBottom: -10}} color={ focused ? "black" : "#717171"}/>
         }}
         fontFamily="Assistant-SemiBold"
       />
@@ -72,7 +77,7 @@ export default function BottomTabNavigator() {
         component={MeditateStackScreen}
         options={{
           // tabBarIcon: () => <TabBarIcon name="dots-two-horizontal" />
-          tabBarIcon: () => <CustomIcon size={18} name="meditate-grey" style={{marginBottom: -10}}  />
+          tabBarIcon: ({ focused }) => <CustomIcon size={18} name="meditate-grey" style={{marginBottom: -10}} color={ focused ? "black" : "#717171"} />
         }}
         
       />
@@ -81,7 +86,7 @@ export default function BottomTabNavigator() {
         component={FavoritesStackScreen}
         options={{
           // tabBarIcon: () => <TabBarIcon name="heart-outlined" />
-          tabBarIcon: () => <CustomIcon size={18} name="favorites-grey" style={{marginBottom: -10}}  />,
+          tabBarIcon: ({ focused }) => <CustomIcon size={18} name="favorites-grey" style={{marginBottom: -10}} color={ focused ? "black" : "#717171"} />,
           // tabBarLabel: "Favorites",
         }}
       />
@@ -90,7 +95,7 @@ export default function BottomTabNavigator() {
         component={ProfileStackScreen}
         options={{
           // tabBarIcon: () => <TabBarIcon name="user" />
-          tabBarIcon: () => <CustomIcon size={18} name="profile-grey" style={{marginBottom: -10}}  />
+          tabBarIcon: ({ focused }) => <CustomIcon size={18} name="profile-grey" style={{marginBottom: -10}} color={ focused ? "black" : "#717171"} /> 
         }}
       />
     </BottomTab.Navigator>

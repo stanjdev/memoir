@@ -135,98 +135,105 @@ export default function SignInScreen ({navigation}) {
     <View style={styles.container}>
       <StatusBar hidden={false}/>
         <View style={styles.footerIntro}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={{position: "absolute", left: 0, padding: 15}}>
+
+          <TouchableOpacity onPress={() => navigation.goBack()} style={{position: "absolute", left: 0, top: height * 0.069, zIndex: 10, padding: 15}}>
             <Image source={require('../assets/screen-icons/back-arrow.png')} style={{height: 20}} resizeMode="contain"/>
           </TouchableOpacity>
-          <Image source={require("../assets/memoir-logo.png")} />
-          <View>
-            <Text style={{fontSize: 26, color: "#717171", textAlign: "center", fontFamily: "Assistant-SemiBold", width: 247}}>Sign In</Text>
-            {/* <Text>firstName: {userInfo.firstName}</Text>
-            <Text>email: {userInfo.email}</Text>
-            <Text>pw: {userInfo.password}</Text>
-            <Text>pwAgain: {userInfo.passwordConfirm}</Text> */}
-          </View>
-          <View style={{height: 300, justifyContent: "space-between", alignItems: "center"}}>
+          
+          <View style={{ height: Math.max(height * 0.55, 450), marginTop: 0, alignItems: "center", justifyContent: "space-evenly"}}>
+            <Image source={require("../assets/memoir-logo1.png")} resizeMode="contain" style={{height: 20}}/>
+            <View style={{ width: 323 }}>
+              <Text style={{fontSize: 26, color: "#717171", textAlign: "center", fontFamily: "Assistant-SemiBold", }}>Welcome Back! Enter Your Email &amp; Password to Log In</Text>
+            </View>
 
-            <View>
-              <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>Email</Text>
-              <View style={styles.inputsWhole}>
-                <TextInput 
-                  placeholder="Email"
-                  style={styles.inputs} 
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  autoFocus={true}
-                  onChangeText={(val) => emailInputChange(val)}
-                  onEndEditing={e => handleValidEmail(e.nativeEvent.text)}
-                />
-
-                { userInfo.check_textInputChange ? 
-                <Animatable.View animation="bounceIn">
-                  <Feather 
-                    name="check-circle"
-                    color="green"
-                    size={20}
+            <View style={{height: 300, justifyContent: "space-between", alignItems: "center",}}>
+              <View>
+                <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>Email</Text>
+                <View style={styles.inputsWhole}>
+                  <TextInput 
+                    placeholder="Email"
+                    style={styles.inputs} 
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    autoFocus={true}
+                    onChangeText={(val) => emailInputChange(val)}
+                    onEndEditing={e => handleValidEmail(e.nativeEvent.text)}
                   />
-                </Animatable.View>
-                : null }
 
+                  { userInfo.check_textInputChange ? 
+                  <Animatable.View animation="bounceIn">
+                    <Feather 
+                      name="check-circle"
+                      color="green"
+                      size={20}
+                    />
+                  </Animatable.View>
+                  : null }
+
+                </View>
+                {userInfo.isValidEmail ? 
+                  null
+                : 
+                <Animatable.View animation="fadeInLeft" duration={500}>
+                  <Text style={styles.errorMsg}>Email must be valid email.</Text>
+                </Animatable.View>
+                }
               </View>
-              {userInfo.isValidEmail ? 
+
+              <View>
+                <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>Password</Text>
+                <View style={styles.inputsWhole}>
+                  <TextInput 
+                    placeholder="Password"
+                    secureTextEntry={userInfo.secureTextEntry ? true : false}
+                    style={styles.inputs} 
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    onChangeText={(val) => handlePasswordChange(val)}
+                    />
+                    <TouchableOpacity onPress={toggleShowPassword} style={{padding: 10}}>
+                      {userInfo.secureTextEntry ? 
+                        <Feather 
+                          name="eye-off"
+                          color="grey"
+                          size={20}
+                        /> 
+                        :
+                        <Feather 
+                          name="eye"
+                          color="grey"
+                          size={20}
+                        />
+                      }
+                    </TouchableOpacity>
+                </View>
+                {userInfo.isValidPassword ?
                 null
               : 
               <Animatable.View animation="fadeInLeft" duration={500}>
-                <Text style={styles.errorMsg}>Email must be valid email.</Text>
-              </Animatable.View>
-              }
-            </View>
-
-            <View>
-              <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>Password</Text>
-              <View style={styles.inputsWhole}>
-                <TextInput 
-                  placeholder="Password"
-                  secureTextEntry={userInfo.secureTextEntry ? true : false}
-                  style={styles.inputs} 
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  onChangeText={(val) => handlePasswordChange(val)}
-                  />
-                  <TouchableOpacity onPress={toggleShowPassword} style={{padding: 10}}>
-                    {userInfo.secureTextEntry ? 
-                      <Feather 
-                        name="eye-off"
-                        color="grey"
-                        size={20}
-                      /> 
-                      :
-                      <Feather 
-                        name="eye"
-                        color="grey"
-                        size={20}
-                      />
-                    }
-                  </TouchableOpacity>
-              </View>
-              {userInfo.isValidPassword ?
-              null
-             : 
-             <Animatable.View animation="fadeInLeft" duration={500}>
                 <Text style={styles.errorMsg}>Password must be 8 characters minimum.</Text>
               </Animatable.View>
-              }
+                }
 
-              </View>
+                </View>
 
-            <AppButton 
-              title="Sign In" 
-              buttonStyles={styles.blueButton} 
-              buttonTextStyles={styles.buttonText} 
-              // onPress={() => navigation.navigate('UserWelcomeScreen')}
-              onPress={() => {handleLogin(userInfo.email, userInfo.password)}}
-              // onPress={() => alert(loginState.useToken)}
-            />
+              <AppButton 
+                title="Sign In" 
+                buttonStyles={!(userInfo.email &&  userInfo.password) ? 
+                  styles.disabledButton : 
+                  styles.blueButton 
+                } 
+                buttonTextStyles={styles.buttonText} 
+                disabled={!(userInfo.email &&  userInfo.password)}
+                // onPress={() => navigation.navigate('UserWelcomeScreen')}
+                onPress={() => {handleLogin(userInfo.email, userInfo.password)}}
+                // onPress={() => alert(loginState.useToken)}
+              />
+            </View>
           </View>
+
+
+
         </View>
     </View>
   )
@@ -249,8 +256,6 @@ const styles = StyleSheet.create({
     flex: 2,
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    // borderColor: "pink",
-    // borderWidth: 2,
   },
   footerIntro: {
     fontFamily: "Assistant",
@@ -260,8 +265,8 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     paddingVertical: 50,
     paddingHorizontal: 45,
-    justifyContent: "space-evenly",
-    alignItems: "center"
+    // justifyContent: "space-evenly",
+    alignItems: "center",
   },
   inputsWhole: {
     flexDirection: 'row', 
@@ -286,9 +291,18 @@ const styles = StyleSheet.create({
   },
   blueButton: {
     backgroundColor: "#3681C7",
-    height: 69,
-    width: 327,
-    borderRadius: 20,
+    height: 62,
+    width: 313,
+    borderRadius: 24,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  disabledButton: {
+    backgroundColor: "#3681C7",
+    opacity: 0.5,
+    height: 62,
+    width: 313,
+    borderRadius: 24,
     alignItems: "center",
     justifyContent: "center",
   },

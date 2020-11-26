@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { Text, View, StatusBar, Button, Alert, Vibration, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, TouchableHighlight, TouchableNativeFeedback } from 'react-native';
+import { Animated, Text, View, StatusBar, Button, Alert, Vibration, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
 import AppButton from '../../../components/AppButton';
 import { useIsFocused } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -19,24 +19,23 @@ export default function MeditateExerciseScreen({ route, navigation }) {
     'Assistant-SemiBold': require('../../../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   });
   
-
-
-
-
+  
   const [ overlay, setOverlay ] = useState(true);
-  // let overlay = true;
-  const toggleOverLay = () => {
-    // overlay ? setOverlay(false) : setOverlay(true);
-    setOverlay(overlay => !overlay);
-    // overlay = !overlay;
-    // console.log(overlay);
+  const overlayFade = useRef(new Animated.Value(0)).current;
+
+  const overlayFader = () => {
+    Animated.timing(overlayFade, {
+      toValue: overlay ? 1 : 0,
+      duration: 200,
+      useNativeDriver: true
+    }).start();
+  }; 
+
+  const touchScreenToggleControls = () => {
+    setOverlay(!overlay);
+    overlayFader();
   }
 
-  // const [ overlayer, setOverlayer ] = useState(true);
-  // useEffect(() => {
-  //   setOverlayer(overlayer => overlay)
-  //   console.log(overlay)
-  // },[overlay])
 
 
 
@@ -44,26 +43,8 @@ export default function MeditateExerciseScreen({ route, navigation }) {
 
 
 
-  const { minutes, bellInterv } = route.params;
-  const [ timerRunning, setTimerRunning ] = useState(true);
-
-  const [ mins, setMins ] = useState(minutes);
-  // const [ mins, setMins ] = useState(0);
-  const [ secs, setSecs ] = useState(0);
 
 
-  // Add leading zero to numbers 9 or below (purely for aesthetics):
-  function leadingZero(time) {
-      if (time <= 9) {
-          time = "0" + time;
-      }
-      return time;
-  }
-
-  function pause() {
-    // console.log("pause button")
-    setTimerRunning(!timerRunning);
-  }
   
 
 
@@ -160,10 +141,24 @@ export default function MeditateExerciseScreen({ route, navigation }) {
 
 
 
+  const { minutes, bellInterv } = route.params;
+  const [ timerRunning, setTimerRunning ] = useState(true);
+
+  const [ mins, setMins ] = useState(minutes);
+  const [ secs, setSecs ] = useState(0);
+  // const [ mins, setMins ] = useState(0);
+  // const [ secs, setSecs ] = useState(2);
+
+  // Add leading zero to numbers 9 or below (purely for aesthetics):
+  function leadingZero(time) {
+      if (time <= 9) {
+          time = "0" + time;
+      }
+      return time;
+  }
 
 
-
-  // useInterval() ATTEMPT - ghetto, but works for the most part. once it hits 00:00, it still hits the else, and still runs every second.
+  // useInterval() ATTEMPT - ghetto, but works for the most part. once it hits 00:00, it still hits the else, and still runs every second. BUT DESTRUCTURING THE CLEAR() METHOD FROM USEINTERVAL FUNCTION AND CALLING THAT WORKS!
   // COUNTDOWN - useInterval()
   const countDown = () => {
     if (secs > 0) {
@@ -172,14 +167,16 @@ export default function MeditateExerciseScreen({ route, navigation }) {
       setSecs(59);
       setMins(mins - 1);
     } else {
-      // Alert.alert("Done!");
+      Alert.alert("Meditation Completed");
       setTimerRunning(false);
       bellSound.unloadAsync();
-      console.log('else');
-      loadSound(); // final 3 bells because of the 2 sec setTimeout below.
+      // console.log('else');
+      loadFinishedSound(); // final 3 bells because of the 2 sec setTimeout below.
+      clear();
       setTimeout(() => {
+        finishedSound.unloadAsync(); // cuts off the sound
         navigation.navigate("MeditateTimerSetScreen");
-      }, 2000);
+      }, 3000);
     }
   }
 
@@ -203,6 +200,25 @@ export default function MeditateExerciseScreen({ route, navigation }) {
     // // https://docs.expo.io/versions/latest/sdk/audio/?redirected#parameters
   }
 
+
+  // FINISHED BELL SOUND
+  const finishedSound = new Audio.Sound();
+  Audio.setAudioModeAsync({playsInSilentModeIOS: true});
+
+  const loadFinishedSound = async () => {
+    try {
+      await finishedSound.loadAsync(require('../../../assets/audio/meditation-finished-sound.mp3'));
+      await finishedSound.playAsync()
+      console.log("finished bell loaded!")
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+
+
+
   useEffect(() => {
     // MOUNT
     loadSound();
@@ -214,7 +230,12 @@ export default function MeditateExerciseScreen({ route, navigation }) {
     return () => bellSound.unloadAsync();
   }, [])
 
-  const [toggleClock, runningClock] = useInterval(() => {
+  useEffect(() => {
+    // UNMOUNT FINAL BELL
+    return () => finishedSound.unloadAsync();
+  }, [])
+
+  const [toggleClock, runningClock, clear] = useInterval(() => {
     countDown();
   }, 1000);
 
@@ -239,18 +260,21 @@ export default function MeditateExerciseScreen({ route, navigation }) {
 
 
 
+
+
+
+
+
   return (
     <ImageBackground source={bgImage} style={{ flex: 1, resizeMode: "cover", position: "relative", zIndex: -10}}>
       {isFocused ? <StatusBar hidden={false} barStyle="light-content"/> : null} 
 
-      {overlay ? 
-      <View style={{ width: width, flexDirection: "row", alignItems: "center", marginTop: height * 0.07, position: "absolute", zIndex: 100}}>
+      <Animated.View style={{ width: width, flexDirection: "row", alignItems: "center", marginTop: height * 0.07, position: "absolute", zIndex: 100, opacity: overlayFade}}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 15}}>
           <Image source={require('../../../assets/screen-icons/back-arrow-white.png')} style={{height: 20, marginLeft: 0}} resizeMode="contain"/>
         </TouchableOpacity>
         <Text style={{textAlign: "center", fontSize: 23, fontFamily: "Assistant-SemiBold", color: 'white', position: "absolute", zIndex: -1, width: width}}>Meditate</Text>
-      </View>
-      : null}
+      </Animated.View>
       
 
       <View style={{ justifyContent: "center", position: "absolute", height: height, width: width}}>
@@ -260,19 +284,32 @@ export default function MeditateExerciseScreen({ route, navigation }) {
         {/* <Text style={{fontFamily: "Assistant", color: "white", fontSize: 67}}>{`${leadingZero(clock.mins)}:${leadingZero(clock.secs)}`}</Text> */}
           
           {/* <TouchableOpacity onPress={() => pause()}> */}
-          <TouchableOpacity onPress={() => toggle()}>
+          <TouchableOpacity onPress={() => toggle()} >
             {timerRunning ? 
-            <Image source={require('../../../assets/screen-icons/pause-circle.png')} style={{height: 66}} resizeMode="contain"/>
+            <Image source={require('../../../assets/screen-icons/pause-circle.png')} style={{height: 66, width: 66}} resizeMode="contain"/>
             :
-            <Image source={require('../../../assets/screen-icons/play-circle.png')} style={{height: 66}} resizeMode="contain"/>
+            <Image source={require('../../../assets/screen-icons/play-circle.png')} style={{height: 66, width: 66}} resizeMode="contain"/>
             }
           </TouchableOpacity>
 
-          <TouchableNativeFeedback onPress={toggleOverLay}>
-            <Text>TOUCH to show/hide header</Text>
-          </TouchableNativeFeedback>
+
         </View>
+
+
       </View>
+
+        <TouchableWithoutFeedback onPress={touchScreenToggleControls}>
+          <View style={{ height: height * 0.51, width: width, position: "absolute", }}>
+            {/* <Text style={{color: "lightgreen", fontSize: 30}}>TOUCH!</Text> */}
+          </View>
+        </TouchableWithoutFeedback>
+
+        <TouchableWithoutFeedback onPress={touchScreenToggleControls}>
+          <View style={{ height: height * 0.39, width: width, position: "absolute", bottom: 0 }}>
+            {/* <Text style={{color: "lightgreen", fontSize: 30}}>TOUCH!</Text> */}
+          </View>
+        </TouchableWithoutFeedback>
+
     </ImageBackground>
   )
 }
@@ -341,5 +378,5 @@ function useInterval(callback, delay) {
     return clear;
   }, [currentDelay, clear]);
 
-  return [toggleRunning, !!currentDelay];
+  return [toggleRunning, !!currentDelay, clear];
 }

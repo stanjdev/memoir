@@ -30,6 +30,7 @@ export default function SignUpScreen ({navigation}) {
     email: '',
     password: '',
     passwordConfirm: '',
+    check_firstName: false,
     check_textInputChange: false,
     check_passwordMatch: false,
     secureTextEntry: true,
@@ -45,13 +46,15 @@ export default function SignUpScreen ({navigation}) {
       setUserInfo({
         ...userInfo,
         firstName: val,
-        isValidFirstName: true
+        isValidFirstName: true,
+        check_firstName: true
       })
     } else {
       setUserInfo({
         ...userInfo,
         firstName: "",
-        isValidFirstName: false
+        isValidFirstName: false,
+        check_firstName: false
       })
     }
   }
@@ -190,166 +193,93 @@ export default function SignUpScreen ({navigation}) {
     <View style={styles.container}>
       <StatusBar hidden={false}/>
         <View style={styles.footerIntro}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={{position: "absolute", left: 0, top: height * 0.08, padding: 15}}>
+          
+          <TouchableOpacity onPress={() => navigation.goBack()} style={{position: "absolute", left: 0, top: height * 0.08, padding: 15, zIndex: 10}}>
             <Image source={require('../assets/screen-icons/back-arrow.png')} style={{height: 20, }} resizeMode="contain"/>
           </TouchableOpacity>
-          <Image source={require("../assets/memoir-logo.png")} />
-          <View>
-            <Text style={{fontSize: 26, color: "#717171", textAlign: "center", fontFamily: "Assistant-SemiBold", width: 247}}>Create a Free Account to Get Started</Text>
-          </View>
-          <View style={{height: 500, justifyContent: "space-between", alignItems: "center", }}>
-            
+          
+          <View style={{ height: Math.max(height * 0.55, 450), marginTop: 0, alignItems: "center", justifyContent: "space-evenly", marginTop: 12}}>
+            <Image source={require("../assets/memoir-logo1.png")} resizeMode="contain" style={{height: 20, width: 150, }}/>
             <View>
-              <View style={{marginBottom: 15}}>
-                <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>First Name, {String(userInfo.isValidFirstName)}</Text>
-                <View style={styles.inputsWhole}>
-                  <TextInput 
-                    placeholder="Your First Name"
-                    style={styles.inputs} 
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    autoFocus={true}
-                    onChangeText={(val) => firstNameInputChange(val)}
-                    onEndEditing={e => handleValidFirstName(e.nativeEvent.text)}
-                  />
-                </View>
-                {userInfo.isValidFirstName ? null :
-                <Text style={styles.errorMsg}>First name must be included.</Text>
-                }
-              </View>
-              <View>
-                <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>Email Address, {String(userInfo.isValidEmail)}</Text>
-                <View style={styles.inputsWhole}>
-                  <TextInput 
-                    placeholder="Your Email Address"
-                    style={styles.inputs} 
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    onChangeText={(val) => emailInputChange(val)}
-                    onEndEditing={e => handleValidEmail(e.nativeEvent.text)}
-                  />
-                  {
-                    userInfo.check_textInputChange ? 
-                    <Animatable.View animation="bounceIn">
-                      <Feather
-                        name="check-circle"
-                        color="green"
-                        size={20}
-                      />
-                    </Animatable.View> 
-                  : null
-                  }
-                </View>
-                {
-                  userInfo.isValidEmail ? null :
-                  <Text style={styles.errorMsg}>Email must be valid email.</Text>
-                }
-              </View>
+              <Text style={{fontSize: 26, color: "#717171", textAlign: "center", fontFamily: "Assistant-SemiBold", width: 247}}>Enter Your Name and Email to Get Started</Text>
             </View>
-
-
-            <View>
-              <View style={{marginBottom: 15}}>
-                <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>Password, {String(userInfo.isValidPassword)}</Text>
-                <View style={styles.inputsWhole}>
-                  <TextInput 
-                    placeholder="Choose a Password"
-                    secureTextEntry={userInfo.secureTextEntry ? true : false}
-                    style={styles.passwordInputs} 
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    onChangeText={(val) => handlePasswordChange(val)}
+            <View style={{ height: 300, justifyContent: "space-around", alignItems: "center", }}>
+              <View>
+                <View style={{marginBottom: 15}}>
+                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>First Name, {String(userInfo.isValidFirstName)}</Text>
+                  <View style={styles.inputsWhole}>
+                    <TextInput 
+                      placeholder="Your First Name"
+                      style={styles.inputs} 
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      autoFocus={true}
+                      onChangeText={(val) => firstNameInputChange(val)}
+                      onEndEditing={e => handleValidFirstName(e.nativeEvent.text)}
                     />
-                  {
-                    userInfo.check_passwordMatch ? 
-                    <Animatable.View animation="bounceIn">
-                      <Feather
-                        name="check-circle"
-                        color="green"
-                        size={20}
-                      />
-                    </Animatable.View> 
-                  : null
-                  }
-                  <TouchableOpacity onPress={toggleShowPassword} style={{padding: 10}}>
-                    {userInfo.secureTextEntry ? 
-                      <Feather 
-                        name="eye-off"
-                        color="grey"
-                        size={20}
-                      /> 
-                      :
-                      <Feather 
-                        name="eye"
-                        color="grey"
-                        size={20}
-                      />
+                    {
+                      userInfo.check_firstName ? 
+                      <Animatable.View animation="bounceIn">
+                        <Feather
+                          name="check-circle"
+                          color="green"
+                          size={20}
+                        />
+                      </Animatable.View> 
+                    : null
                     }
-                  </TouchableOpacity>
+                  </View>
+                  {userInfo.isValidFirstName ? null :
+                  <Text style={styles.errorMsg}>First name must be included.</Text>
+                  }
                 </View>
-                {userInfo.isValidPassword ? null :
-                <Text style={styles.errorMsg}>Password must be 8 characters minimum.</Text>
-                }
+                <View>
+                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>Email Address, {String(userInfo.isValidEmail)}</Text>
+                  <View style={styles.inputsWhole}>
+                    <TextInput 
+                      placeholder="Your Email Address"
+                      style={styles.inputs} 
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      onChangeText={(val) => emailInputChange(val)}
+                      onEndEditing={e => handleValidEmail(e.nativeEvent.text)}
+                    />
+                    {
+                      userInfo.check_textInputChange ? 
+                      <Animatable.View animation="bounceIn">
+                        <Feather
+                          name="check-circle"
+                          color="green"
+                          size={20}
+                        />
+                      </Animatable.View> 
+                    : null
+                    }
+                  </View>
+                  {
+                    userInfo.isValidEmail ? null :
+                    <Text style={styles.errorMsg}>Email must be valid email.</Text>
+                  }
+                </View>
               </View>
 
-              <View>
-                <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>Confirm Password, {String(userInfo.isPasswordMatch)}</Text>
-                <View style={styles.inputsWhole}>
-                  <TextInput 
-                    placeholder="Confirm Password"
-                    secureTextEntry={userInfo.confirmSecureTextEntry ? true : false}
-                    style={styles.passwordInputs} 
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    onChangeText={(val) => handlePasswordConfirmChange(val)}
-                  />
-                  {
-                    userInfo.check_passwordMatch ? 
-                    <Animatable.View animation="bounceIn">
-                      <Feather
-                        name="check-circle"
-                        color="green"
-                        size={20}
-                      />
-                    </Animatable.View> 
-                  : null
-                  }
-                  <TouchableOpacity onPress={toggleShowConfirmPassword} style={{padding: 10}}>
-                    {userInfo.confirmSecureTextEntry ?
-                      <Feather 
-                        name="eye-off"
-                        color="grey"
-                        size={20}
-                      />
-                      :
-                      <Feather 
-                        name="eye"
-                        color="grey"
-                        size={20}
-                      />
-                    }
-                  </TouchableOpacity>
-                </View>
-                {userInfo.isPasswordMatch ? null : 
-                <Text style={styles.errorMsg}>Passwords do not match.</Text>
+              <AppButton 
+                title="Next" 
+                buttonStyles={
+                  !(userInfo.firstName &&
+                    userInfo.email) ? 
+                  styles.disabledButton :
+                  styles.blueButton 
+                } 
+                buttonTextStyles={styles.buttonText} 
+                disabled={
+                  !(userInfo.firstName &&
+                  userInfo.email)
                 }
-              </View>
+                onPress={() => navigation.navigate('SignUpScreen2', {routeFirstName: userInfo.firstName, routeEmail: userInfo.email})}
+                // onPress={() => handleSignUp()}
+              />
             </View>
-              
-
-            <AppButton 
-              title="Create Account" 
-              buttonStyles={styles.blueButton} 
-              buttonTextStyles={styles.buttonText} 
-              disabled={
-                !(userInfo.isValidFirstName &&
-                userInfo.isValidEmail &&
-                userInfo.isValidPassword &&
-                userInfo.isPasswordMatch)
-              }
-              // onPress={() => navigation.navigate('UserWelcomeScreen')}
-              onPress={() => handleSignUp()}
-            />
           </View>
         </View>
     </View>
@@ -384,7 +314,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     paddingVertical: 50,
     paddingHorizontal: 45,
-    justifyContent: "space-evenly",
+    // justifyContent: "center",
     alignItems: "center"
   },
   inputsWhole: {
@@ -421,8 +351,17 @@ const styles = StyleSheet.create({
   },
   blueButton: {
     backgroundColor: "#3681C7",
-    height: 69,
-    width: 327,
+    height: 62,
+    width: 313,
+    borderRadius: 24,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  disabledButton: {
+    backgroundColor: "#3681C7",
+    opacity: 0.5,
+    height: 62,
+    width: 313,
     borderRadius: 24,
     alignItems: "center",
     justifyContent: "center",
