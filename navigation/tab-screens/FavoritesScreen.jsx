@@ -7,7 +7,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { useFonts } from 'expo-font';
-import { AppLoading } from 'expo';
+// import { AppLoading } from 'expo';
 
 const { width, height } = Dimensions.get('window');
 
@@ -59,7 +59,8 @@ export default function FavoritesScreen() {
 
         </View>
 
-        : <AppLoading />
+        : null
+        // <AppLoading />
         }
         
       </ScrollView>

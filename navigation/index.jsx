@@ -1,5 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, CardStyleInterpolators, TransitionSpecs, TransitionPresets, HeaderStyleInterpolators } from '@react-navigation/stack';
 import BottomTabNavigator from './BottomTabNavigator';
 import React, { useEffect, useState, useMemo } from 'react';
 
@@ -9,6 +9,9 @@ import { View, ActivityIndicator } from 'react-native';
 import { AuthContext } from '../components/context';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+
 
 export default function Navigation({navigation}) {
   // Going with useReducer global state instead, this was just simple demonstration.
@@ -134,7 +137,6 @@ export default function Navigation({navigation}) {
     )
   }
 
-
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
@@ -154,19 +156,20 @@ import UserWelcomeScreen from './UserWelcomeScreen';
 import MeditateExerciseScreen from '../navigation/tab-screens/meditate-screens-more/MeditateExerciseScreen';
 import ExerciseVideo from '../components/ExerciseVideo';
 
+
 const Stack = createStackNavigator();
 
 function RootNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen options={{headerShown:false}} name="SplashScreen" component={SplashScreen} />
-      <Stack.Screen options={{headerShown:false}} name="Memoir" component={BottomTabNavigator} />
-      <Stack.Screen options={{headerShown:false}} name="MeditateExerciseScreen" component={MeditateExerciseScreen} />
-      <Stack.Screen options={{headerShown:false}} name="ExerciseVideo" component={ExerciseVideo} />
-      <Stack.Screen options={{headerShown:false}} name="SignUpScreen" component={SignUpScreen} />
-      <Stack.Screen options={{headerShown:false}} name="SignUpScreen2" component={SignUpScreen2} />
-      <Stack.Screen options={{headerShown:false}} name="SignInScreen" component={SignInScreen} />
-      <Stack.Screen options={{headerShown:false}} name="UserWelcomeScreen" component={UserWelcomeScreen} />
+      <Stack.Screen options={{headerShown:false, ...TransitionPresets.ScaleFromCenterAndroid }} name="SplashScreen" component={SplashScreen} />
+      <Stack.Screen options={{headerShown:false, ...TransitionPresets.ScaleFromCenterAndroid }} name="Memoir" component={BottomTabNavigator} />
+      <Stack.Screen options={{headerShown:false, ...TransitionPresets.ScaleFromCenterAndroid }} name="MeditateExerciseScreen" component={MeditateExerciseScreen} />
+      <Stack.Screen options={{headerShown:false, ...TransitionPresets.RevealFromBottomAndroid }} name="ExerciseVideo" component={ExerciseVideo} />
+      <Stack.Screen options={{headerShown:false, ...TransitionPresets.ModalTransition }} name="SignUpScreen" component={SignUpScreen} />
+      <Stack.Screen options={{headerShown:false, ...TransitionPresets.ModalTransition }} name="SignUpScreen2" component={SignUpScreen2} />
+      <Stack.Screen options={{headerShown:false, ...TransitionPresets.RevealFromBottomAndroid }} name="SignInScreen" component={SignInScreen} />
+      <Stack.Screen options={{headerShown:false, ...TransitionPresets.FadeFromBottomAndroid }} name="UserWelcomeScreen" component={UserWelcomeScreen} />
     </Stack.Navigator>
   )
 }

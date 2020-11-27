@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Text, View, StatusBar, Image, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 const { width, height } = Dimensions.get('window');
+import { Asset } from 'expo-asset';
 
 import Exercise from '../../components/Exercise';
 import { useIsFocused } from '@react-navigation/native';
@@ -12,9 +13,35 @@ import { useFonts } from 'expo-font';
 import { AppLoading } from 'expo';
 
 
+// https://docs.expo.io/guides/preloading-and-caching-assets/?redirected#publishing-assets
+function cacheImages(images) {
+  return images.map(image => Asset.fromModule(image).downloadAsync());
+}
+
 
 export default function BreatheScreen({navigation}) {
   const isFocused = useIsFocused();
+
+  const [isReady, setIsReady] = useState(false);
+
+  async function _loadAssetsAsync() {
+    const imageAssets = cacheImages([
+      require("../../assets/exercises-images/flower-4x.png"),
+      require("../../assets/exercises-images/breathe-4x.png"),
+      require("../../assets/exercises-images/minute-break-4x.png"),
+      require("../../assets/exercises-images/jungle-green.png"),
+      require("../../assets/exercises-images/forest-orange.png"),
+      require("../../assets/exercises-images/horiz-deep-breaths.png"),
+      require('../../assets/exercises-images/daily-exhale-4x.png'),
+      require("../../assets/exercises-images/redrock-4x.png"),
+      require("../../assets/exercises-images/aurora-4x.png"),
+      require("../../assets/exercises-images/moon-4x.png"),
+      require("../../assets/exercises-images/forest-dawn-4x.png"),
+      require("../../assets/exercises-images/purple-4x.png"),
+    ]);
+    await Promise.all([...imageAssets]);
+  }
+
 
   let [fontsLoaded] = useFonts({
     'Assistant': require('../../assets/fonts/Assistant/Assistant-VariableFont_wght.ttf'),
@@ -62,7 +89,7 @@ export default function BreatheScreen({navigation}) {
     <ScrollView style={{backgroundColor: "white"}}>
       {isFocused ? <StatusBar hidden={false} barStyle="dark-content"/> : null} 
       {
-        fontsLoaded ? 
+        isReady ? 
         <View>
           
           <View style={{marginTop: 50, justifyContent: "center", alignItems: "center"}}>
@@ -125,11 +152,15 @@ export default function BreatheScreen({navigation}) {
             : null
           }
           
-
         </View>
   
-        :
-        <AppLoading />
+        : 
+        // null
+        <AppLoading 
+          startAsync={_loadAssetsAsync}
+          onFinish={() => setIsReady(true)}
+          onError={console.warn}
+        />
       }
      
 

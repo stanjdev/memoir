@@ -6,6 +6,13 @@ import OnboardingStackScreen from './navigation/OnboardingStackScreen';
 
 import Navigation from './navigation';
 
+// Firebase
+import * as firebase from 'firebase';
+import "firebase/auth";
+import { firebaseConfig } from './config';
+firebase.initializeApp(firebaseConfig);
+
+
 export default function App() {
   return (
     <SafeAreaProvider>
