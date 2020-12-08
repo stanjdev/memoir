@@ -6,6 +6,7 @@ import { Asset } from 'expo-asset';
 import Exercise from '../../components/Exercise';
 import { useIsFocused } from '@react-navigation/native';
 
+import { Exercises } from '../../model/exercise-store';
 
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -49,12 +50,12 @@ export default function BreatheScreen({navigation}) {
     'Assistant-SemiBold': require('../../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   });
 
-  const [selectedCategory, setSelectedCategory] = useState("Popular");
+  const [selectedCategory, setSelectedCategory] = useState("Sleep");
 
   const categoryOptions = {
-    "Popular": "Popular",
-    "New": "New",
     "Sleep": "Sleep",
+    "New": "New",
+    "Popular": "Popular",
   }
 
   const renderCategoryOptions = () => {
@@ -93,13 +94,7 @@ export default function BreatheScreen({navigation}) {
         <View>
           
           <View style={{marginTop: 50, justifyContent: "center", alignItems: "center"}}>
-            <TouchableOpacity onPress={() => navigation.navigate("ExerciseVideo", { videoFile: require('../../assets/video-exercises/daily-exhale.mp4') })}>
-              <Image 
-                source={require('../../assets/exercises-images/daily-exhale-4x.png')}
-                style={{ height: height * 0.4, width: width * 0.9, }}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
+            <Exercise uniqueSize="topBanner" navigation={navigation} image={Exercises[7].image} videoFile={Exercises[7].videoFile} modalIcon={Exercises[7].modalIcon} id={Exercises[7].id} autoCountDown={"2m"}/> 
           </View>
           
           <View style={{marginLeft: 25}}>
@@ -107,17 +102,15 @@ export default function BreatheScreen({navigation}) {
           </View>
           
           <ScrollView horizontal={true} style={{flexDirection: "row", marginLeft: 25}} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
-            <Exercise image={require("../../assets/exercises-images/flower-4x.png")} title="Flower of Life" subTitle="Relax Your Mind" onPress={() => navigation.navigate("ExerciseVideo", { videoFile: require('../../assets/video-exercises/flower-of-life.mp4') })} />
-            <Exercise image={require("../../assets/exercises-images/breathe-4x.png")} title="Breathe for Focus" subTitle="Get in the Zone" onPress={() => navigation.navigate("ExerciseVideo", { videoFile: require('../../assets/video-exercises/circles.mp4') })} />
-            <Exercise image={require("../../assets/exercises-images/minute-break-4x.png")} title="1 Minute Break" subTitle="60 Seconds of Zen" onPress={() => navigation.navigate("ExerciseVideo", { videoFile: require('../../assets/video-exercises/4-7-9-wheel.mp4') })} />
-            <Exercise image={require("../../assets/exercises-images/jungle-green.png")} title="Box Breathing" subTitle="4 Second Box Pattern" onPress={() => navigation.navigate("ExerciseVideo", { videoFile: require('../../assets/video-exercises/box-breathing.mp4') })} />
-            <Exercise image={require("../../assets/exercises-images/forest-orange.png")} title="Ride the Wave" subTitle="Slow Deep Breathing" onPress={() => navigation.navigate("ExerciseVideo", { videoFile: require('../../assets/video-exercises/yin-yang.mp4') })} />
+            <Exercise id={Exercises[1].id} navigation={navigation} image={Exercises[1].image} title={Exercises[1].title} subTitle={Exercises[1].subTitle} videoFile={Exercises[1].videoFile} modalIcon={Exercises[1].modalIcon} iconHeight={Exercises[1].iconHeight} />
+            <Exercise id={Exercises[2].id} navigation={navigation} image={Exercises[2].image} title={Exercises[2].title} subTitle={Exercises[2].subTitle} videoFile={Exercises[2].videoFile} modalIcon={Exercises[2].modalIcon} iconHeight={Exercises[2].iconHeight} />
+            <Exercise id={Exercises[3].id} navigation={navigation} image={Exercises[3].image} title={Exercises[3].title} subTitle={Exercises[3].subTitle} videoFile={Exercises[3].videoFile} modalIcon={Exercises[3].modalIcon} iconHeight={Exercises[3].iconHeight} />
+            <Exercise id={Exercises[4].id} navigation={navigation} image={Exercises[4].image} title={Exercises[4].title} subTitle={Exercises[4].subTitle} videoFile={Exercises[4].videoFile} modalIcon={Exercises[4].modalIcon} iconHeight={Exercises[4].iconHeight} />
+            <Exercise id={Exercises[5].id} navigation={navigation} image={Exercises[5].image} title={Exercises[5].title} subTitle={Exercises[5].subTitle} videoFile={Exercises[5].videoFile} modalIcon={Exercises[5].modalIcon} iconHeight={Exercises[5].iconHeight} />
           </ScrollView>
         
           <View style={{alignItems: "center", }}>
-            <TouchableOpacity>
-              <Image source={require("../../assets/exercises-images/horiz-focus-session.png")} resizeMode="contain" style={{width: width * 0.855, height: height * 0.17 }}/>
-            </TouchableOpacity>
+            <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[8].image} videoFile={Exercises[8].videoFile} modalIcon={Exercises[8].modalIcon} id={Exercises[8].id} autoCountDown={"30m"}/> 
           </View>
           <View style={{alignItems: "center", }}>
             <TouchableOpacity>
@@ -130,24 +123,24 @@ export default function BreatheScreen({navigation}) {
           </View>
  
           { 
-            selectedCategory === "Popular" ? 
+            selectedCategory === "Sleep" ? 
             <ScrollView horizontal={true} style={{flexDirection: "row", marginLeft: 25}} showsHorizontalScrollIndicator={false}>
-              <Exercise image={require("../../assets/exercises-images/redrock-4x.png")} title="1 Minute Break" subTitle="60 Seconds of Zen"/>
-              <Exercise image={require("../../assets/exercises-images/aurora-4x.png")} title="Breathe for Focus" subTitle="Get in the Zone"/>
-              <Exercise image={require("../../assets/exercises-images/moon-4x.png")} title="Good Night" subTitle="For Better Sleep" onPress={() => navigation.navigate("ExerciseVideo", {videoFile: require("../../assets/video-exercises/crescent-moon.mp4")})}/>
-              <Exercise image={require("../../assets/exercises-images/forest-dawn-4x.png")} title="Box Breathing" subTitle="4 Second Box Pattern"/>
+              <Exercise id={Exercises[6].id} navigation={navigation} image={Exercises[6].image} title={Exercises[6].title} subTitle={Exercises[6].subTitle} videoFile={Exercises[6].videoFile} modalIcon={Exercises[6].modalIcon} iconHeight={Exercises[6].iconHeight} />
               <Exercise image={require("../../assets/exercises-images/purple-4x.png")} title="Cosmos" subTitle="Relax with the Universe"/>    
             </ScrollView>
             : selectedCategory === "New" ? 
             <ScrollView horizontal={true} style={{flexDirection: "row", marginLeft: 25}} showsHorizontalScrollIndicator={false}>
-              <Exercise image={require("../../assets/exercises-images/redrock-4x.png")} title="1 Minute Break" subTitle="60 Seconds of Zen"/>
-              <Exercise image={require("../../assets/exercises-images/aurora-4x.png")} title="Breathe for Focus" subTitle="Get in the Zone"/>
               <Exercise image={require("../../assets/exercises-images/forest-dawn-4x.png")} title="Box Breathing" subTitle="4 Second Box Pattern"/>
+              <Exercise image={require("../../assets/exercises-images/redrock-4x.png")} title="1 Minute Break" subTitle="60 Seconds of Zen"/>
+              <Exercise image={require("../../assets/exercises-images/aurora-4x.png")} title="No More Anxiety" subTitle="4-7-8 Tension Relief"/>
             </ScrollView>
-            : selectedCategory === "Sleep" ? 
+            : selectedCategory === "Popular" ? 
             <ScrollView horizontal={true} style={{flexDirection: "row", marginLeft: 25}} showsHorizontalScrollIndicator={false}>
-              <Exercise image={require("../../assets/exercises-images/moon-4x.png")} title="Good Night" subTitle="For Better Sleep" onPress={() => navigation.navigate("ExerciseVideo", {videoFile: require("../../assets/video-exercises/crescent-moon.mp4")})}/>
-              <Exercise image={require("../../assets/exercises-images/purple-4x.png")} title="Cosmos" subTitle="Relax with the Universe"/>    
+              <Exercise navigation={navigation} image={require("../../assets/exercises-images/aurora-4x.png")} title="No More Anxiety" subTitle="4-7-8 Tension Relief"/>
+              <Exercise id={Exercises[6].id} navigation={navigation} image={Exercises[6].image} title={Exercises[6].title} subTitle={Exercises[6].subTitle} videoFile={Exercises[6].videoFile} modalIcon={Exercises[6].modalIcon} iconHeight={Exercises[6].iconHeight} />
+              <Exercise navigation={navigation} image={require("../../assets/exercises-images/redrock-4x.png")} title="1 Minute Break" subTitle="60 Seconds of Zen"/>
+              <Exercise navigation={navigation} image={require("../../assets/exercises-images/forest-dawn-4x.png")} title="Box Breathing" subTitle="4 Second Box Pattern"/>
+              <Exercise navigation={navigation} image={require("../../assets/exercises-images/purple-4x.png")} title="Cosmos" subTitle="Relax with the Universe"/>    
             </ScrollView>
             : null
           }

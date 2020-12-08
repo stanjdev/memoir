@@ -30,7 +30,7 @@ export default function UserWelcomeScreen ({navigation}) {
     <View style={styles.container}>
       <StatusBar hidden={true}/>
       <ImageBackground source={bgImage} style={styles.bgImage}>
-      <Text style={{textAlign: "center", color: "#FFFFFF", fontSize: 40, fontFamily: "Assistant"}}>welcome {userFirstName.toLowerCase()}</Text>
+      <Text style={{textAlign: "center", color: "#FFFFFF", fontSize: 40, fontFamily: "Assistant"}}>welcome {userFirstName ? userFirstName.toLowerCase() : null}</Text>
       </ImageBackground>
       <View>
         <AppButton

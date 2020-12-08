@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createStackNavigator, CreateStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, CreateStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { BottomTabView, createBottomTabNavigator, CreateBottomTagNavigator } from '@react-navigation/bottom-tabs';
 
 
@@ -14,6 +14,7 @@ import MeditateExerciseScreen from './tab-screens/meditate-screens-more/Meditate
 import FavoritesScreen from './tab-screens/FavoritesScreen';
 
 import ProfileScreen from './tab-screens/ProfileScreen';
+import ProMemberScreen from './tab-screens/ProMemberScreen';
 import SettingsScreen from './tab-screens/profile-screens-more/SettingsScreen';
 
 // Custom Tab Icons
@@ -154,6 +155,7 @@ function ProfileStackScreen() {
   return(
     <ProfileStack.Navigator>
       <ProfileStack.Screen name="Profile" component={ProfileScreen} options={{headerShown: false}}/>
+      <ProfileStack.Screen name="ProMemberScreen" component={ProMemberScreen} options={{headerShown: false, ...TransitionPresets.ScaleFromCenterAndroid}}/>
       <ProfileStack.Screen name="SettingsScreen" component={SettingsScreen} options={{headerShown: false}}/>
     </ProfileStack.Navigator>
   )

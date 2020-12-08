@@ -175,20 +175,6 @@ export default function SignUpScreen ({navigation}) {
   }
 
 
-
-  const handleSignUp = (inputFirstName, inputEmail, inputPassword, inputConfirmPassword) => {
-    if (userInfo.firstName.length == 0 || userInfo.email.length == 0 || userInfo.password.length == 0 || userInfo.passwordConfirm.length == 0) {
-      Alert.alert("Missing Info!", "Must fill every field", [
-        {text: "Okay"}
-      ]);
-      return;
-    };
-    
-    Alert.alert("Valid!")
-
-  }
-
-
   return (
     <View style={styles.container}>
       <StatusBar hidden={false}/>
@@ -277,7 +263,6 @@ export default function SignUpScreen ({navigation}) {
                   userInfo.email)
                 }
                 onPress={() => navigation.navigate('SignUpScreen2', {routeFirstName: userInfo.firstName, routeEmail: userInfo.email})}
-                // onPress={() => handleSignUp()}
               />
             </View>
           </View>

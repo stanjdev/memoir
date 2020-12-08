@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { AuthContext } from '../components/context';
 import { Text, View, StyleSheet, StatusBar, Image, Dimensions, ImageBackground, TextInput, TouchableOpacity, Alert } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
@@ -9,6 +9,7 @@ import { useFonts } from 'expo-font';
 
 const { width, height } = Dimensions.get('window');
 
+
 export default function SignUpScreen ({navigation, route}) {
   let [fontsLoaded] = useFonts({
     'Assistant': require('../assets/fonts/Assistant/Assistant-VariableFont_wght.ttf'),
@@ -16,7 +17,7 @@ export default function SignUpScreen ({navigation, route}) {
     'Assistant-SemiBold': require('../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   });
 
-  const { userToken } = useContext(AuthContext);
+  const { signUp, userToken } = useContext(AuthContext);
 
   useEffect(() => {
     if (userToken) {
@@ -41,70 +42,6 @@ export default function SignUpScreen ({navigation, route}) {
     isPasswordMatch: true
   })
 
-  const firstNameInputChange = (val) => {
-    if (val.length !== 0) {
-      setUserInfo({
-        ...userInfo,
-        firstName: val,
-        isValidFirstName: true
-      })
-    } else {
-      setUserInfo({
-        ...userInfo,
-        firstName: "",
-        isValidFirstName: false
-      })
-    }
-  }
-
-  // includes validation check when user unfocuses on the firstName TextInput:
-  const handleValidFirstName = (val) => {
-    if (val.length !== 0) {
-      setUserInfo({
-        ...userInfo,
-        isValidFirstName: true
-      })
-    } else {
-      setUserInfo({
-        ...userInfo,
-        isValidFirstName: false
-      })
-    }
-  }
-
-  const emailInputChange = (val) => {
-    // if (val.length !== 0) {
-    if (/[@]/gi.test(val.trim())) {
-      setUserInfo({
-        ...userInfo,
-        email: val,
-        check_textInputChange: true,
-        isValidEmail: true
-      })
-    } else {
-      setUserInfo({
-        ...userInfo,
-        email: "",
-        check_textInputChange: false,
-        isValidEmail: false
-      })
-    }
-  }
-
-  // includes validation check when user unfocuses on the email TextInput:
-  const handleValidEmail = (val) => {
-    if (/[@]/gi.test(val.trim())) {
-      setUserInfo({
-        ...userInfo,
-        isValidEmail: true
-      })
-    } else {
-      setUserInfo({
-        ...userInfo,
-        isValidEmail: false
-      })
-    }
-  }
 
   const handlePasswordChange = (val) => {
     // if (val.length !== 0) {
@@ -172,25 +109,36 @@ export default function SignUpScreen ({navigation, route}) {
     })
   }
 
+  // // OG unfinished way:
+  // const handleSignUp = (inputFirstName, inputEmail, inputPassword, inputConfirmPassword) => {
+  //   if (inputFirstName.length == 0 || inputEmail.length == 0 || inputPassword.length == 0 || inputConfirmPassword.length == 0) {
+  //     Alert.alert("Missing Info!", "Must fill every field", [
+  //       {text: "Okay"}
+  //     ]);
+  //     return;
+  //   };
+  //   Alert.alert("Valid!", 
+  //   `firstName: ${inputFirstName}, 
+  //   email: ${inputEmail}, 
+  //   pass: ${inputPassword} 
+  //   confirmPass: ${inputConfirmPassword}`,
+  //    [{
+  //     text: "Dope"
+  //   }])
+  // }
 
-
-  const handleSignUp = (inputFirstName, inputEmail, inputPassword, inputConfirmPassword) => {
-    if (routeFirstName.length == 0 || routeEmail.length == 0 || userInfo.password.length == 0 || userInfo.passwordConfirm.length == 0) {
+  const handleSignUp = useCallback(async (inputFirstName, inputEmail, inputPassword, inputConfirmPassword) => {
+    if (inputFirstName.length == 0 || inputEmail.length == 0 || inputPassword.length == 0 || inputConfirmPassword.length == 0) {
       Alert.alert("Missing Info!", "Must fill every field", [
         {text: "Okay"}
       ]);
       return;
     };
-    
-    Alert.alert("Valid!", 
-    `firstName: ${inputFirstName}, 
-    email: ${inputEmail}, 
-    pass: ${inputPassword} 
-    confirmPass: ${inputConfirmPassword}`,
-     [{
-      text: "Dope"
-    }])
-  }
+    await signUp(inputEmail, inputPassword, inputFirstName);
+  });
+
+
+
 
 
   return (

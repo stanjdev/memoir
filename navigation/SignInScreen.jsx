@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { Text, View, StyleSheet, StatusBar, Image, Dimensions, ImageBackground, TextInput, TouchableOpacity, Alert } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import * as Animatable from 'react-native-animatable';
@@ -9,7 +9,7 @@ import { useFonts } from 'expo-font';
 
 const { width, height } = Dimensions.get('window');
 
-import SavedUsers from '../model/users-example';
+// import SavedUsers from '../model/users-example';
 
 export default function SignInScreen ({navigation}) {
   let [fontsLoaded] = useFonts({
@@ -105,28 +105,38 @@ export default function SignInScreen ({navigation}) {
     }
   }
 
+  // // OG LOCAL WAY:
+  // const handleLogin = (inputEmail, inputPassword) => {
+  //   console.log("signin!")
+  //   const foundUser = SavedUsers.filter(user => {
+  //     return inputEmail == user.email && inputPassword == user.password;
+  //   })
 
-  const handleLogin = (inputEmail, inputPassword) => {
-    console.log("signin!")
-    const foundUser = SavedUsers.filter(user => {
-      return inputEmail == user.email && inputPassword == user.password;
-    })
+  //   if (userInfo.email.length === 0 || userInfo.password.length === 0) {
+  //     Alert.alert("Wrong Input!", "Email or password field cannot be empty.", [
+  //       {text: "Okay"}
+  //     ]);
+  //     return;
+  //   }
 
+  //   if (foundUser.length == 0) {
+  //     Alert.alert("Invalid User!", "Email or password is incorrect.", [
+  //       {text: "Okay"}
+  //     ]);
+  //     return;
+  //   }
+  //   signIn(foundUser);
+  // }
+
+  const handleLogin = useCallback( async (inputEmail, inputPassword) => {
     if (userInfo.email.length === 0 || userInfo.password.length === 0) {
       Alert.alert("Wrong Input!", "Email or password field cannot be empty.", [
         {text: "Okay"}
       ]);
       return;
-    }
-
-    if (foundUser.length == 0) {
-      Alert.alert("Invalid User!", "Email or password is incorrect.", [
-        {text: "Okay"}
-      ]);
-      return;
-    }
-    signIn(foundUser);
-  }
+    };
+    await signIn(inputEmail, inputPassword);
+  });
 
 
 

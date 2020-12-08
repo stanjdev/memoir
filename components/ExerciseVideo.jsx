@@ -11,9 +11,9 @@ import { setAudioModeAsync } from 'expo-av/build/Audio';
 
 // import Video from 'react-native-video';
 import FlowerOfLife from "../assets/video-exercises/flower-of-life.mp4";
+import { fireApp } from '../firebase';
 
 const { width, height } = Dimensions.get('window');
-
 
 
 
@@ -27,7 +27,8 @@ export default function ExerciseVideo({ route, navigation }) {
     'Assistant-SemiBold': require('../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   });
 
-  const { videoFile } = route.params;
+  const { id, videoFile, modalIcon, iconHeight, autoCountDown } = route.params;
+
 
   const [modalVisible, setModalVisible] = useState(true);
   const [exerciseFinished, setExerciseFinished] = useState(false);
@@ -119,6 +120,13 @@ export default function ExerciseVideo({ route, navigation }) {
     // toggleClock();
   };
 
+  const runAutoCountDown = (time) => {
+    setTimerDuration(timerDurationsOptions[time]);
+    setDisplayTimerDuration(true);
+    // toggleShowTimerScroller();
+    setTimerRunning(true);
+  }
+
 
   useEffect(() => {
     if (timerDuration) {
@@ -134,8 +142,8 @@ export default function ExerciseVideo({ route, navigation }) {
   
   useEffect(() => {
     // MOUNT
-    console.log("exercise screen mounted!");
-    console.log(videoFile);
+    // console.log("exercise screen mounted!");
+    console.log(`Video File: ${videoFile}`);
 
     // UNMOUNT
     return () => clearInterval(exerciseInterv.current);
@@ -169,16 +177,17 @@ export default function ExerciseVideo({ route, navigation }) {
       setSecs(59);
       setMins(mins - 1);
     } else {
-      Alert.alert("Congratulations!", "You've completed your exercise!", [{text: "Okay"}]);
+      Alert.alert("Timer Complete", "Great job, you’ve completed your breath work session!", [{text: "Keep Going", onPress: () => setExerciseFinished(false)}, {text: "Finish", style: "cancel"}], );
       setTimerDuration(null);
       setTimerRunning(false);
-      setBellMuted(true);
+      // setBellMuted(true);
       setExerciseFinished(true);
       touchScreenToggleControls();
       console.log('else hit!');
       loadFinishedSound();
       clearInterval(exerciseInterv.current);
       bellSound.unloadAsync();
+      playingAudio.current.stopAsync();
       // setTimeout(() => {
       //   navigation.navigate("Memoir");
       // }, 2000);
@@ -309,11 +318,6 @@ export default function ExerciseVideo({ route, navigation }) {
     // if (fadeEffect) clearInterval(fadeEffect);
   };
 
-  useEffect(() => {
-    // console.log("bellVolume: " + bellVolume);
-    // console.log("volumeOn: " + volumeOn);
-  });
-
 
 
 
@@ -326,15 +330,15 @@ export default function ExerciseVideo({ route, navigation }) {
   // MAY BE USEFUL FOR MUSIC / WHITE NOISE audio
   // BELL SOUND - useInterval()
   const bellSound = new Audio.Sound();
+  const music = new Audio.Sound();
   Audio.setAudioModeAsync({playsInSilentModeIOS: true});
 
-  const playBell = async () => await bellSound.replayAsync();
-  const playBellFirst = async () => await bellSound.playAsync();
+  const playingAudio = useRef();
 
   const loadFinishedSound = async () => {
     try {
       await bellSound.loadAsync(require('../assets/audio/meditation-finished-sound.mp3'));
-      await bellSound.playAsync()
+      await bellSound.playAsync();
       console.log("load sound!");
     } catch (error) {
       console.log(error);
@@ -342,11 +346,125 @@ export default function ExerciseVideo({ route, navigation }) {
     // // https://docs.expo.io/versions/latest/sdk/audio/?redirected#parameters
   }
 
+  const loadAndPlayMusic = async () => {
+    try {
+      await music.loadAsync(require('../assets/audio/bg-music.mp3'));
+      await music.playAsync();
+      playingAudio.current = music;
+      // console.log("music loaded and playing!");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    if (!modalVisible && !exerciseFinished && !paused) {
+      loadAndPlayMusic();
+      if (autoCountDown) {
+        console.log("autoCountdown!");
+        console.log(autoCountDown);
+        runAutoCountDown(autoCountDown)
+      }
+    }
+
+    return () => music.unloadAsync();
+  }, [modalVisible]);
+
+  useEffect(() => {
+    if (playingAudio.current && !exerciseFinished) {
+      playingAudio.current.setIsMutedAsync(musicMuted);
+      if (paused) {
+        playingAudio.current.pauseAsync();
+      } else {
+        playingAudio.current.playAsync();
+      }
+    }
+  });
+
+
+  const currUser = fireApp.auth().currentUser;
+  
+  const favRef = currUser ? fireApp.database().ref(currUser.uid).child('favorites') : null;
+
+  let favIds = [];
+  if (currUser) {
+    favRef.on("value", snapshot => {
+      snapshot.forEach(node => {
+        favIds.push(node.val().id)
+      })
+      console.log(favIds.includes(id))
+    })
+  }
+
+  const toggleFavorite = async () => {
+    
+    // get a unique key
+    if (currUser !== null) {
+      const databaseRef = await fireApp.database().ref(currUser.uid).child('favorites').push();
+      const key = databaseRef.key
+      
+
+
+      
+      // databaseRef.set({
+      //   "id": id,
+      //   // "videoFile": videoFile
+      // }).then(() => console.log(`added video ${id}`))
+
+      let favs = [];
+      favRef.on("value", snapshot => {
+        snapshot.forEach(node => {
+          favs.push(node.val().id)
+        })
+        // console.log(favs.includes(id))
+      })
+      
+      favRef.once("value", (snapshot) => {
+        
+        // // // if no favs, add one:
+        // if (snapshot.numChildren() == 0) {
+        //   databaseRef.set({
+        //     "id": id,
+        //   }).then(() => console.log(`added video ${id}`))
+        // }
+
+        // if vidID not found in database, add it
+        console.log(favs);
+        if (!favs.includes(id)) {
+          databaseRef.set({
+            "id": id,
+          }).then(() => console.log(`added video ${id}!`))
+          toggleLike(favs.includes(id))
+        } else {
+        // Remove from favorites
+          snapshot.forEach(child => {
+            let exId = child.val().id
+            let key = child.key;
+  
+            // console.log(key);
+            if (id === exId) {
+              fireApp.database().ref(currUser.uid).child(`favorites/${key}`).remove().then(() => console.log(`deleted video ${exId}!`))
+            }
+          })
+          toggleLike(!favs.includes(id))
+        }
+      })
+    }
+  }
+
+  useEffect(() => {
+    console.log(`fav ids: ${favIds} and id: ${id} = ${favIds.includes(id)}`);
+    setLiked(favIds.includes(id));
+
+    // return () => favRef.off()
+  }, [])
+
 
 
   const [liked, setLiked] = useState(false);
-  const toggleLike = () => {
-    setLiked(!liked);
+  const toggleLike = (bool) => {
+    // setLiked(!liked);
+    setLiked(bool);
   }
 
   // simple bell mute function
@@ -366,6 +484,7 @@ export default function ExerciseVideo({ route, navigation }) {
 
     }
   }
+
 
 
   return (
@@ -431,7 +550,7 @@ export default function ExerciseVideo({ route, navigation }) {
 
 
           <View style={{...styles.borderControl}, {  position: "absolute", bottom: 0, flexDirection: "row", justifyContent: "space-evenly", width: width, height: height * 0.12}}>
-            <TouchableOpacity style={styles.exerciseControls, {padding: 13, paddingLeft: 11} } onPress={ toggleLike }>
+            <TouchableOpacity style={styles.exerciseControls, {padding: 13, paddingLeft: 11} } onPress={ toggleFavorite }>
               {liked ? 
               <Image source={require('../assets/screen-icons/1-like-heart-filled.png')} resizeMode="contain" style={{margin: 4, height: 27, width: 27, }}/>
               : <Image source={require('../assets/screen-icons/1-like-heart.png')} resizeMode="contain" style={{margin: 4, height: 27, width: 27, }}/>
@@ -466,9 +585,12 @@ export default function ExerciseVideo({ route, navigation }) {
           visible={modalVisible}
           onRequestClose={() => { Alert.alert("Modal has been closed.") }}
         >
+          {/* <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 15, width: width * 0.2, position: "absolute", top: 50, borderWidth: 1, borderColor: "white" }}>
+            <Image source={require('../assets/screen-icons/back-arrow-white.png')} style={{height: 20, marginLeft: 0}} resizeMode="contain"/>
+          </TouchableOpacity> */}
           <View style={{backgroundColor: "white", height: height * 0.74, borderRadius: 20, justifyContent: "space-between", alignItems: "center", width: width * 0.9, ...styles.modalView }}>
             <View style={{width: width * 0.63, height: height * 0.45, justifyContent: "space-between", alignItems: "center" }}>
-              <Image source={require('../assets/screen-icons/breathe-waves.png')} style={{height: 31, }} resizeMode="contain"/>
+              <Image source={ modalIcon } style={{height: iconHeight || 31, }} resizeMode="contain"/>
               <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 28, textAlign: "center", width: 205}}>Inhale, Hold, Exhale, Repeat</Text>
               <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>This breathing exercise is designed to bring you calmness, relaxation, and inner peace.</Text>
               <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>Repeat the loop at least 6 times for maximum benefit, or set a timer on the next page to make it a full session.</Text>

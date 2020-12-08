@@ -1,15 +1,66 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, Image, Dimensions, StyleSheet } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 import { useFonts } from 'expo-font';
 import { AppLoading } from 'expo';
 
-export default function Exercise({image, title, subTitle, navigation, onPress}) {
-  return (
+import firebase from 'firebase';
+
+
+export default function Exercise({ uniqueSize, image, title, subTitle, navigation, onPress, videoFile, modalIcon, iconHeight, id, autoCountDown }) {
+  
+  const [liked, setLiked] = useState(false);
+
+  const currUser = firebase.auth().currentUser;
+  const favRef = currUser ? firebase.database().ref(currUser.uid).child('favorites') : null;
+
+  let favIds = [];
+  if (currUser) {
+    favRef.on("value", snapshot => {
+      snapshot.forEach(node => {
+        favIds.push(node.val().id)
+      })
+    })
+  }
+
+  useEffect(() => {
+    // console.log(`fav ids: ${favIds} includes id: ${id} = ${favIds.includes(id)} from Exercise.jsx!`);
+    setLiked(favIds.includes(id));
+
+    // return () => favRef.off()
+  },)
+
+
+  return ( 
+    uniqueSize == "topBanner" ? 
+    <TouchableOpacity onPress={() => navigation.navigate("ExerciseVideo", { videoFile, modalIcon, iconHeight, id, autoCountDown: autoCountDown || null })}>
+      <Image 
+        source={image}
+        style={{ height: height * 0.4, width: width * 0.9, }}
+        resizeMode="contain"
+      />
+    </TouchableOpacity> 
+    
+    : 
+
+    uniqueSize == "horizontal" ? 
+    <TouchableOpacity onPress={() => navigation.navigate("ExerciseVideo", { videoFile, modalIcon, iconHeight, id, autoCountDown: autoCountDown || null })}>
+      <Image 
+        source={image} 
+        style={{width: width * 0.855, height: height * 0.17 }}
+        resizeMode="contain" 
+      />
+    </TouchableOpacity>
+    
+    : 
+
     <View style={styles.imageSmallContainer}>
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity onPress={() => navigation.navigate("ExerciseVideo", { videoFile, modalIcon, iconHeight, id })}>
         <Image source={image} style={styles.imageSmall} resizeMode="contain"/>
+        {liked ? 
+        <Image source={require('../assets/exercises-images/liked-heart.png')} style={styles.heart} resizeMode="contain"/>
+        : null}
       </TouchableOpacity>
       <Text style={styles.exerciseTitleFont}>{title}</Text>
       <Text style={styles.exerciseSubTitleFont}>{subTitle}</Text>
@@ -42,4 +93,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#737373"
   },
+  heart: {
+    height: 26,
+    width: 26,
+    position: "absolute",
+    bottom: "13%",
+    right: "18%"
+  }
 }) 

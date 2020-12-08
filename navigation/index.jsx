@@ -4,13 +4,13 @@ import BottomTabNavigator from './BottomTabNavigator';
 import React, { useEffect, useState, useMemo } from 'react';
 
 import OnboardingStackScreen from './OnboardingStackScreen';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Alert } from 'react-native';
 
 import { AuthContext } from '../components/context';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
+import { fireApp } from '../firebase';
 
 
 export default function Navigation({navigation}) {
@@ -18,6 +18,8 @@ export default function Navigation({navigation}) {
   // const [userToken, setUserToken] = React.useState(null);
   // const [isLoading, setIsLoading] = React.useState(true);
   
+
+
   const initialLoginState = {
     userEmail: null,
     userToken: null,
@@ -31,6 +33,7 @@ export default function Navigation({navigation}) {
         return {
           ...prevState,
           userToken: action.token,
+          userFirstName: action.firstName,
           isLoading: false
         }
       case 'SIGNIN':
@@ -81,34 +84,96 @@ export default function Navigation({navigation}) {
     //   }
     //   dispatch({ type: "SIGNIN", email: userEmail, token: userToken })
     // },
-    signIn: async (foundUser) => {
-      // setUserToken('asdf');
-      // setIsLoading(false);
 
-      const userToken = String(foundUser[0].userToken);
-      const userEmail = foundUser[0].email;
-      const userFirstName = foundUser[0].firstName;
+    /* 2nd version with async local storage: */
+    // signIn: async (foundUser) => {
+    //   // setUserToken('asdf');
+    //   // setIsLoading(false);
 
+    //   const userToken = String(foundUser[0].userToken);
+    //   const userEmail = foundUser[0].email;
+    //   const userFirstName = foundUser[0].firstName;
+
+    //   try {
+    //     await AsyncStorage.setItem('userToken', userToken);
+    //   } catch(e) {
+    //     console.log(e);
+    //   }
+    //   dispatch({ type: "SIGNIN", email: userEmail, token: userToken, firstName: userFirstName })
+    // },
+
+    signIn: async (inputEmail, inputPassword) => {
       try {
-        await AsyncStorage.setItem('userToken', userToken);
+        await fireApp
+          .auth()
+          .signInWithEmailAndPassword(inputEmail, inputPassword);
       } catch(e) {
         console.log(e);
+        // alert("Your Account Info Does Not Match Our Records. Please Enter a Valid Username/Password.");
+        Alert.alert("User Not Found", "Your Account Info Does Not Match Our Records. Please Enter a Valid Username/Password.", [
+          {text: "Okay"}, {style: "destructive"}
+        ]);
       }
-      dispatch({ type: "SIGNIN", email: userEmail, token: userToken, firstName: userFirstName })
+
+      const currUser = fireApp.auth().currentUser;
+      let userFirstName, userEmail, userToken;
+      if (currUser !== null) {
+        // console.log(currUser);
+        userFirstName = currUser.displayName;
+        userEmail = currUser.email;
+        userToken = currUser.uid
+        AsyncStorage.setItem('userToken', userToken);  
+        dispatch({ type: "SIGNIN", email: userEmail, token: userToken, firstName: userFirstName })
+      }
+
+      // fireApp.auth().onAuthStateChanged(function(user) {
+      //   const userFirstName = user.displayName;
+      //   const userToken = user.uid;
+      //   AsyncStorage.setItem('userToken', userToken);
+      //   dispatch({ type: "SIGNIN", email: inputEmail, token: userToken, firstName: userFirstName })
+      // })
+
     },
     signOut: async () => {
       // setUserToken(null);
       // setIsLoading(false);
       try {
+        await fireApp.auth().signOut()
         await AsyncStorage.removeItem('userToken');
       } catch(e) {
         console.log(e);
       }
       dispatch({ type: "SIGNOUT" })
     },
-    signUp: () => {
-      setUserToken('asdf');
-      setIsLoading(false);
+    signUp: async (inputEmail, inputPassword, inputFirstName) => {
+      try {
+        const result = await fireApp
+          .auth()
+          .createUserWithEmailAndPassword(inputEmail, inputPassword)
+        await result.user.updateProfile({
+          displayName: inputFirstName
+        });
+      } catch (error) {
+        console.log(error);
+      }
+
+      const currUser = fireApp.auth().currentUser;
+      let userFirstName, userEmail, userToken;
+      if (currUser !== null) {
+        // console.log(currUser);
+        userFirstName = currUser.displayName;
+        userToken = currUser.uid
+        dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
+      }
+
+      // fireApp.auth().onAuthStateChanged(function(user) {
+      //   const userFirstName = user.displayName;
+      //   const userToken = user.uid;
+      //   dispatch({ type: "SIGNUP", email: inputEmail, token: userToken, firstName: userFirstName })
+      // })
+
+      // setUserToken('asdf');
+      // setIsLoading(false);
     },
     userToken: loginState.userToken,
     userFirstName: loginState.userFirstName
@@ -118,14 +183,31 @@ export default function Navigation({navigation}) {
   useEffect(() => {
     setTimeout( async () => {
       // setIsLoading(false);
-      let userToken;
+
+      const currUser = fireApp.auth().currentUser;
+      let userFirstName, userEmail, userToken;
+      // if (currUser !== null) {
+      //   // console.log(currUser);
+      //   userFirstName = currUser.displayName;
+      //   userEmail = currUser.email;
+      //   userToken = currUser.uid
+      //   AsyncStorage.setItem('userToken', userToken);  
+      //   dispatch({ type: "SIGNIN", email: userEmail, token: userToken, firstName: userFirstName })
+      // }
+
+      // let userToken;
       userToken = null;
       try {
-        userToken = await AsyncStorage.getItem('userToken');
+        // userToken = await AsyncStorage.getItem('userToken');
+        userToken = currUser ? currUser.uid : null;
+        if (currUser !== null) userFirstName = currUser.displayName;
       } catch(e) {
+        console.log("useEffect hit!")
         console.log(e);
       }
-      dispatch({ type: "RETRIEVE_TOKEN", token: userToken })
+      dispatch({ type: "RETRIEVE_TOKEN", token: userToken, firstName: userFirstName })
+      console.log(userToken)
+      console.log(userFirstName)
     }, 0)
   }, [])
   
@@ -145,7 +227,8 @@ export default function Navigation({navigation}) {
       </NavigationContainer>
     </AuthContext.Provider>
   );
-}
+};
+
 
 
 import SplashScreen from './SplashScreen';

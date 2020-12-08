@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text, View, Button, StyleSheet, StatusBar, Image, Dimensions, ImageBackground, TouchableOpacity } from 'react-native';
 import AppButton from './AppButton';
 const { width, height } = Dimensions.get('window');
@@ -8,8 +8,72 @@ import { useFonts } from 'expo-font';
 import { useNavigation } from '@react-navigation/native';
 
 
+// Firebase setup for FB
+import * as firebase from 'firebase';
+const provider = new firebase.auth.FacebookAuthProvider();
+
+
+// Expo way
+import * as Facebook from 'expo-facebook';
+
+
+
+
 export default function CreateAccountPopup() {
   const navigation = useNavigation();
+
+
+  // Not working with latest Expo SDK? 
+  // async function fbSignIn () {
+  //   try {
+  //     await Facebook.initializeAsync({
+  //       appId: '200817071551403',
+  //     });
+  //     const {type, token} = await Facebook.logInWithReadPermissionsAsync('200817071551403', { permissions: ['public_profile'] });
+
+  //     if (type == "success") {
+  //       const credential = firebase.auth.FacebookAuthProvider.credential(token)
+    
+  //       await firebase.auth().signUpWithCredential(credential).catch((error) => {
+  //         console.log(error)
+  //       })
+  //     }
+  //   } catch (error) {
+  //     console.log(`Facebook Login Error: ${error}`)
+  //   }
+  // };
+
+
+
+
+/* 
+auth/operation-not-supported-in-this-environment 
+This operation is not supported in the environment this application is runningon. 
+"location.protocol" must be http, https or chrome-extension and web storage must be enabled.
+*/
+  async function fbSignIn () {
+    firebase.auth().signInWithPopup(provider)
+
+    .then(function(result) {
+      var token = result.credential.accessToken;
+      var user = result.user;
+
+      // console.log(token)
+      // console.log(user)
+    }).catch(function(error) {
+      console.log(error.code);
+      console.log(error.message);
+    })
+  };
+  
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user !== null) {
+        // console.log(user)
+      }
+    })
+  }, )
 
   let [fontsLoaded] = useFonts({
     'Assistant': require('../assets/fonts/Assistant/Assistant-VariableFont_wght.ttf'),
@@ -27,7 +91,7 @@ export default function CreateAccountPopup() {
           title="Sign up with Facebook" 
           buttonStyles={styles.facebookButton} 
           buttonTextStyles={styles.buttonText} 
-          onPress={() => navigation.navigate('')}
+          onPress={fbSignIn}
           icon={"FontAwesome"}
           name={"facebook-square"}
           size={28}
@@ -37,7 +101,7 @@ export default function CreateAccountPopup() {
           title="Sign up with Apple" 
           buttonStyles={styles.appleButton} 
           buttonTextStyles={styles.buttonText} 
-          onPress={() => navigation.navigate('')}
+          onPress={""}
           icon={"Fontisto"}
           name={"apple"}
           size={28}

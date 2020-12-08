@@ -10,6 +10,9 @@ import { Picker } from '@react-native-picker/picker';
 
 const { width, height } = Dimensions.get('window');
 
+import { LinearGradient } from 'expo-linear-gradient';
+
+
 export default function MeditateTimerSetScreen({navigation}) {
   const [minutes, setMinutes] = React.useState(10);
   const [bellIntervDisplay, setBellIntervDisplay] = React.useState("30s");
@@ -26,7 +29,8 @@ export default function MeditateTimerSetScreen({navigation}) {
   const renderMinsPickerItems = () => {
     let items = [];
     for (let i = 1; i <= 60; i++) {
-      items.push(<Text key={i}> | </Text>)
+      items.push(<Image key={i} source={require('../../../assets/meditate-timer-set/bar-1.png')} resizeMode="contain" style={{margin: 3, height: 15}} />)
+      // items.push(<Text key={i}> | </Text>)
     }
     return items;
   }
@@ -67,8 +71,8 @@ export default function MeditateTimerSetScreen({navigation}) {
       setBellIntervDisplay(bellArray[value])
       setBellInterv(bellOptions[bellArray[value]])
     }
-    console.log(bellIntervDisplay)
-    console.log(bellInterv)
+    // console.log(bellIntervDisplay)
+    // console.log(bellInterv)
   }
 
   const isFocused = useIsFocused();
@@ -104,6 +108,23 @@ export default function MeditateTimerSetScreen({navigation}) {
                   {renderMinsPickerItems()}
                 </Picker> */}
 
+                <View >
+                </View>
+
+                {/* <LinearGradient 
+                  colors={['#fff', 'transparent']}
+                  start={[0.2, 0.9]}
+                  // end={[0.1, 1]}
+                  // locations={[0, 1]}
+                  style={{
+                    borderWidth: 1, 
+                    height: height * 0.05, 
+                    width: 100, 
+                    position: "absolute", 
+                    top: 100, 
+                    right: 100, 
+                  }}
+                /> */}
 
                 <ScrollView 
                   horizontal={true} 
@@ -111,7 +132,7 @@ export default function MeditateTimerSetScreen({navigation}) {
                   onScroll={(e) => onChange(Math.floor(1 + e.nativeEvent.contentOffset.x / (e.nativeEvent.contentSize.width - e.nativeEvent.layoutMeasurement.width) * 59)) }
                   /* OG 1.00 = e.nativeEvent.contentOffset.x / (e.nativeEvent.contentSize.width - e.nativeEvent.layoutMeasurement.width) */
                   scrollEventThrottle={16}
-                  style={{borderWidth: 1,  width: 200, maxHeight: 50}} 
+                  style={{ width: 200, maxHeight: 50 }} 
                 >
                   <View style={{flexDirection: "row", alignItems: "center",}}>
                     {renderMinsPickerItems()}

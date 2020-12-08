@@ -40,56 +40,32 @@ export default function SettingsScreen({navigation}) {
   });
 
   return (
-    <ImageBackground source={bgImage} style={{ flex: 1, resizeMode: "cover", justifyContent: "flex-start",}}>
-      {isFocused ? <StatusBar barStyle="light-content" hidden={false}/> : null}
+    // <ImageBackground source={bgImage} style={{ flex: 1, resizeMode: "cover", justifyContent: "flex-start",}}>
+    <View style={{ flex: 1, resizeMode: "cover", justifyContent: "flex-start", backgroundColor: "white"}}>
+      {isFocused ? <StatusBar barStyle="dark-content" hidden={false}/> : null}
       <TouchableOpacity onPress={() => navigation.goBack()} style={{position: "absolute", top: height * 0.045,  zIndex: 100, padding: 15}}>
-        <Image source={require('../../../assets/screen-icons/back-arrow-white.png')} style={{height: 20, }} resizeMode="contain"/>
+        <Image source={require('../../../assets/screen-icons/back-arrow.png')} style={{height: 20, }} resizeMode="contain"/>
       </TouchableOpacity>
 
 
-      <Text style={{textAlign: "center", fontSize: 23, fontFamily: "Assistant-SemiBold", position: "absolute", width: width, top: height * 0.055, color: 'white'}}>Settings</Text>
+      {/* <Text style={{textAlign: "center", fontSize: 23, fontFamily: "Assistant-SemiBold", position: "absolute", width: width, top: height * 0.055, color: 'black'}}>Settings</Text> */}
     
 
       <View style={{height: height, marginTop: Math.min(height * 0.05, 20)}}>
         {/* <ScrollView> */}
           <View style={{ height: height, justifyContent: "center", flexDirection:"column", alignItems: "center", }}>
-  
 
-            <View style={{ alignItems: "center", height: height, justifyContent: "center"}}> 
-
-
-
-              {/* <AppButton 
-                  title="Account Info &rsaquo;" 
-                  buttonStyles={styles.blueButton}
-                  buttonTextStyles={styles.buttonText}
-                  onPress={() => ""}
-                />
-              <AppButton 
-                  title="Change Password &rsaquo;" 
-                  buttonStyles={styles.blueButton}
-                  buttonTextStyles={styles.buttonText}
-                  onPress={() => ""}
-                />
-              <AppButton 
-                  title="Terms &amp; Conditions &rsaquo;" 
-                  buttonStyles={styles.blueButton}
-                  buttonTextStyles={styles.buttonText}
-                  onPress={() => ""}
-                />
-              <AppButton 
-                  title="Privacy Policy &rsaquo;" 
-                  buttonStyles={styles.blueButton}
-                  buttonTextStyles={styles.buttonText}
-                  onPress={() => ""}
-                /> */}
-                
-              <AppButton 
-                  title="Log Out &rsaquo;" 
-                  buttonStyles={styles.blueButton}
-                  buttonTextStyles={styles.buttonText}
-                  onPress={() => signOutToHome()}
-                />
+            <View style={{ alignItems: "center", height: height, justifyContent: "center",}}> 
+              <SettingOption text={"Account Info"} action={() => console.log("nothing yet!")}/>
+              <SettingOption text={"Notifications"} action={() => console.log("nothing yet!")}/>
+              <SettingOption text={"Billing Info"} action={() => console.log("nothing yet!")}/>
+              <SettingOption text={"Subscriptions"} action={() => console.log("nothing yet!")}/>
+              <SettingOption text={"Restore Purchase"} action={() => console.log("nothing yet!")}/>
+              <SettingOption text={"Support"} action={() => console.log("nothing yet!")}/>
+              <SettingOption text={"Change Password"} action={() => console.log("nothing yet!")}/>
+              <SettingOption text={"Terms & Conditions"} action={() => console.log("nothing yet!")}/>
+              <SettingOption text={"Privacy Policy"} action={() => console.log("nothing yet!")}/>
+              <SettingOption text={"Log Out"} action={signOutToHome}/>
             </View>
           </View>
 
@@ -99,29 +75,36 @@ export default function SettingsScreen({navigation}) {
 
       { showPopUp ? <CreateAccountPopup /> : null }
 
-    </ImageBackground>
+    </View>
+    // </ImageBackground>
   )
 }
 
+const SettingOption = ({ text, action }) => (
+  <TouchableOpacity style={styles.item} onPress={action}>
+    <Text style={styles.text}>{text}</Text>
+    <Image style={styles.arrow} source={require("../../../assets/screen-icons/settings-arrow.png")} resizeMode="contain" />
+  </TouchableOpacity>
+)
+
 
 const styles = StyleSheet.create({
-  blueButton: {
-    backgroundColor: "#3681C7",
+  item: {
+    width: 290,
     height: Math.min(height * 0.07, 58),
-    width: 283,
-    borderRadius: 15,
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    justifyContent: "center",
-    shadowRadius: 7,
-    shadowColor: "black",
-    shadowOpacity: 0.2,
-    shadowOffset: {width: 3, height: 3}
+    // borderWidth: 1,
+    margin: 5
   },
-  buttonText: {    
-    color: "#fff",
-    flex: 1,
+  text: {
+    color: "#535353",
     textAlign: "center",
     fontSize: 21,
     fontFamily: "Assistant-SemiBold"
+  },
+  arrow: {
+    height: 14
   }
 })
