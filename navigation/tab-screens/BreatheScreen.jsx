@@ -110,12 +110,13 @@ export default function BreatheScreen({navigation}) {
           </ScrollView>
         
           <View style={{alignItems: "center", }}>
-            <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[8].image} videoFile={Exercises[8].videoFile} modalIcon={Exercises[8].modalIcon} id={Exercises[8].id} autoCountDown={"30m"}/> 
+            <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[8].image} videoFile={Exercises[8].videoFile} modalIcon={Exercises[8].modalIcon} id={Exercises[8].id} autoCountDown={"30m"}customWidth={Exercises[8].customWidth}/> 
           </View>
           <View style={{alignItems: "center", }}>
-            <TouchableOpacity>
+            <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[9].image} videoFile={Exercises[9].videoFile} modalIcon={Exercises[9].modalIcon} id={Exercises[9].id} customWidth={Exercises[9].customWidth}/> 
+            {/* <TouchableOpacity>
               <Image source={require("../../assets/exercises-images/horiz-deep-breaths.png")} resizeMode="contain" style={{width: width * 0.9, height: height * 0.17 }}/>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
 
           <View style={{marginLeft: 25, flexDirection: "row", }}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { PanResponder, Text, Modal, View, ScrollView, StatusBar, Button, Alert, Vibration, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, Animated } from 'react-native';
 import AppButton from './AppButton';
 import { useIsFocused } from '@react-navigation/native';
@@ -12,6 +12,11 @@ import { setAudioModeAsync } from 'expo-av/build/Audio';
 // import Video from 'react-native-video';
 import FlowerOfLife from "../assets/video-exercises/flower-of-life.mp4";
 import { fireApp } from '../firebase';
+import { firestore } from 'firebase';
+
+import { AuthContext } from '../components/context';
+
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -29,6 +34,7 @@ export default function ExerciseVideo({ route, navigation }) {
 
   const { id, videoFile, modalIcon, iconHeight, autoCountDown } = route.params;
 
+  const { signOut, userToken, userFirstName } = useContext(AuthContext);
 
   const [modalVisible, setModalVisible] = useState(true);
   const [exerciseFinished, setExerciseFinished] = useState(false);
@@ -38,6 +44,7 @@ export default function ExerciseVideo({ route, navigation }) {
   const [showTimerScroller, setShowTimerScroller] = useState(true);
   const [displayTimerDuration, setDisplayTimerDuration] = useState(false);
   const [overlay, setOverlay] = useState(true);
+  const [sessionSecs, setSessionSecs] = useState(0);
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const overlayFade = useRef(new Animated.Value(0)).current;
@@ -158,7 +165,8 @@ export default function ExerciseVideo({ route, navigation }) {
       else setTimerRunning(true);
     }
     if (timerRunning) {
-      console.log("timerRunning: " + timerRunning)
+      console.log("timerRunning: " + timerRunning);
+      console.log("tracked sessionSecs: " + sessionSecs);
       setExerciseFinished(false);
       exerciseInterv.current = setInterval(() => runExerciseClock(), 1000);
     } 
@@ -177,6 +185,8 @@ export default function ExerciseVideo({ route, navigation }) {
       setSecs(59);
       setMins(mins - 1);
     } else {
+      updateUserTime();
+      incrementSessionsCompleted();
       Alert.alert("Timer Complete", "Great job, you’ve completed your breath work session!", [{text: "Keep Going", onPress: () => setExerciseFinished(false)}, {text: "Finish", style: "cancel"}], );
       setTimerDuration(null);
       setTimerRunning(false);
@@ -193,6 +203,7 @@ export default function ExerciseVideo({ route, navigation }) {
       // }, 2000);
     }
     console.log("runExerciseClock secs: " + secs);
+    setSessionSecs(sessionSecs => sessionSecs += 1);
   }
 
   // Add leading zero to numbers 9 or below (purely for aesthetics):
@@ -363,7 +374,7 @@ export default function ExerciseVideo({ route, navigation }) {
       if (autoCountDown) {
         console.log("autoCountdown!");
         console.log(autoCountDown);
-        runAutoCountDown(autoCountDown)
+        runAutoCountDown(autoCountDown);
       }
     }
 
@@ -384,6 +395,99 @@ export default function ExerciseVideo({ route, navigation }) {
 
   const currUser = fireApp.auth().currentUser;
   
+  const progressRef = currUser ? fireApp.database().ref(currUser.uid).child('progress') : null;
+
+  // Increment User Practice Time - THIS WAY POST REQUESTS THE DB EVERY SECOND. NOT OPTIMAL
+  async function incrementUserTime() {
+    if (currUser) {
+      let timeSoFar;
+      progressRef.once('value', snapshot => {
+        timeSoFar = snapshot.val().practiceTime;
+      })
+
+      await progressRef.update({
+        practiceTime: timeSoFar += sessionSecs
+      })
+    } 
+  }
+
+
+  // WITH SAFETY CHECK ADDED - for users with no existing progress data objects
+  // INSTEAD OF DB POST REQUESTING EVERY SECOND with incrementUserTime(), THIS INCREMENTS LOCALLY, THEN WHEN USER FINISHES EXERCISE WITH ALERT POPUP ORRR UNMOUNTS EXERCISE, THEN UPDATE THE PRACTICE TIME BY ADDING THE SO FAR WITH THIS LOCALLY INCREMENTED SECONDS TRACKER.
+  async function updateUserTime() {
+    if (currUser && userToken) {
+      let timeSoFar;
+      await progressRef.once('value', async snapshot => {
+        if (snapshot.val() === null) {
+          progressRef.set({
+            practiceTime: 0,
+            sessionsCompleted: 0,
+            currentStreak: 0,
+            bestStreak: 0
+          })
+          timeSoFar = await snapshot.val() !== null ? snapshot.val().practiceTime : 0;
+        } else {
+          timeSoFar = await snapshot.val() !== null ? snapshot.val().practiceTime : 0;
+        }
+
+        await progressRef.update({
+          practiceTime: timeSoFar += sessionSecs
+        })
+      })
+
+      setSessionSecs(0);
+    } 
+  }
+
+  // // DOES NOT WORK after it's unmounted.
+  // useEffect(() => {
+  //   return () => updateUserTime()
+  // }, [])
+
+
+
+
+  // WITH SAFETY CHECK ADDED - for users with no existing progress data objects
+  // Increment sessions user completed - triggers when that 'finish' popup modal comes out
+  async function incrementSessionsCompleted() {
+    if (currUser && userToken) {
+      let sessionsCompletedSoFar;
+      await progressRef.once('value', async snapshot => {
+        if (snapshot.val() === null) {
+          progressRef.set({
+            practiceTime: 0,
+            sessionsCompleted: 0,
+            currentStreak: 0,
+            bestStreak: 0
+          })
+          sessionsCompletedSoFar = await snapshot.val() !== null ? snapshot.val().sessionsCompleted : 0;
+        } else {
+          sessionsCompletedSoFar = await snapshot.val() !== null ? snapshot.val().sessionsCompleted : 0;
+        }
+
+        await progressRef.update({
+          sessionsCompleted: sessionsCompletedSoFar += 1
+        })
+      });
+    } 
+  };
+
+
+  // const fakeAddProgressData = async () => {
+  //   const progressPushRef = await firebase.database().ref(currUser.uid).child('progress');
+
+  //   progressPushRef.set({
+  //     practiceTime: 2.7,
+  //     sessionsCompleted: 21,
+  //     currentStreak: 5,
+  //     bestStreak: 7
+  //   })
+  // }
+
+
+
+
+
   const favRef = currUser ? fireApp.database().ref(currUser.uid).child('favorites') : null;
 
   let favIds = [];
@@ -392,7 +496,7 @@ export default function ExerciseVideo({ route, navigation }) {
       snapshot.forEach(node => {
         favIds.push(node.val().id)
       })
-      console.log(favIds.includes(id))
+      // console.log("favIds includes the id!" + favIds.includes(id))
     })
   }
 
@@ -485,7 +589,12 @@ export default function ExerciseVideo({ route, navigation }) {
     }
   }
 
+  
 
+
+
+
+  
 
   return (
     

@@ -77,13 +77,32 @@ export const Exercises = {
     subTitle: "",
     videoFile: require('../assets/video-exercises/crescent-moon.mp4'),
     modalIcon: require('../assets/exercises-images/modal-icons/moon.png'),
-    /* 
-      <TouchableOpacity>
-        <Image source={require("../../assets/exercises-images/horiz-focus-session.png")} resizeMode="contain" style={{width: width * 0.855, height: height * 0.17 }}/>
-      </TouchableOpacity>
-    */
+    iconHeight: 38,
+    customWidth: 0.855
   },
   9: {
+    id: 9,
+    image: require("../assets/exercises-images/horiz-deep-breaths.png"),
+    title: "6 Deep Breathes PLACEHOLDER",
+    subTitle: "",
+    videoFile: require('../assets/video-exercises/crescent-moon.mp4'),
+    modalIcon: require('../assets/exercises-images/modal-icons/breathe-waves.png'),
+    iconHeight: 38,
+    customWidth: 0.89,
+  },
+  10: {
+
+  },
+  11: {
+
+  },
+  12: {
+
+  },
+  13: {
+
+  },
+  14: {
 
   },
 }

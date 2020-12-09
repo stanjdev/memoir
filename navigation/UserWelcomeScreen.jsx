@@ -5,7 +5,7 @@ import AppButton from '../components/AppButton';
 import { useFonts } from 'expo-font';
 
 const { width, height } = Dimensions.get('window');
-const bgImage = require('../assets/splash/user-welcome-bg.png')
+const bgImage = require('../assets/splash/user-welcome-bg-4x.png')
 // const bgImage = require('../assets/splash/memoir-splash-thin.png')
 // const bgImage = { uri: "https://reactjs.org/logo-og.png" }
 

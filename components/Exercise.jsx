@@ -8,7 +8,7 @@ import { AppLoading } from 'expo';
 import firebase from 'firebase';
 
 
-export default function Exercise({ uniqueSize, image, title, subTitle, navigation, onPress, videoFile, modalIcon, iconHeight, id, autoCountDown }) {
+export default function Exercise({ uniqueSize, image, title, subTitle, navigation, onPress, videoFile, modalIcon, iconHeight, id, autoCountDown, customWidth }) {
   
   const [liked, setLiked] = useState(false);
 
@@ -48,7 +48,7 @@ export default function Exercise({ uniqueSize, image, title, subTitle, navigatio
     <TouchableOpacity onPress={() => navigation.navigate("ExerciseVideo", { videoFile, modalIcon, iconHeight, id, autoCountDown: autoCountDown || null })}>
       <Image 
         source={image} 
-        style={{width: width * 0.855, height: height * 0.17 }}
+        style={{width: width * customWidth, height: height * 0.17 }}
         resizeMode="contain" 
       />
     </TouchableOpacity>

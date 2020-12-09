@@ -127,7 +127,7 @@ export default function ProfileScreen({navigation}) {
           <View style={{ height: height, justifyContent: "center", flexDirection:"column", alignItems: "center", }}>
             { userToken ? 
             <View style={{flexDirection:"row", flexWrap: "wrap", justifyContent: "center",}}>
-              <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={practiceTime} subtitle="Hours" subText="5hr Goal" progress={practiceTime / 5}/>
+              <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(2)} subtitle="Hours" subText="5hr Goal" progress={(practiceTime / 60 / 60) / 5}/>
               <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-hash.png')} title="Sessions Completed" number={sessionsCompleted} subtitle="Sessions" subText="30 Session Goal" progress={sessionsCompleted / 30}/>
               <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-arrow.png')} title="Current Streak" number={currentStreak} subtitle="Days" subText="10 Day Streak Goal" progress={currentStreak / 10}/>
               <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-rocket.png')} title="Best Streak" number={bestStreak} subtitle="Days" subText="Achieved 10/30/2020" />
