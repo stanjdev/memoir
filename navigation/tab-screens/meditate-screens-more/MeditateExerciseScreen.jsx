@@ -7,10 +7,13 @@ const bgImage = require('../../../assets/splash/memoir-splash-thin-4x.png')
 import { useNavigation } from '@react-navigation/native';
 
 import { Audio } from 'expo-av';
+import { useKeepAwake } from 'expo-keep-awake';
 
 const { width, height } = Dimensions.get('window');
 
+
 export default function MeditateExerciseScreen({ route, navigation }) {
+  useKeepAwake();
   const isFocused = useIsFocused();
   
   let [fontsLoaded] = useFonts({

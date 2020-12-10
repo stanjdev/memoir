@@ -127,13 +127,13 @@ export default function BreatheScreen({navigation}) {
             selectedCategory === "Sleep" ? 
             <ScrollView horizontal={true} style={{flexDirection: "row", marginLeft: 25}} showsHorizontalScrollIndicator={false}>
               <Exercise id={Exercises[6].id} navigation={navigation} image={Exercises[6].image} title={Exercises[6].title} subTitle={Exercises[6].subTitle} videoFile={Exercises[6].videoFile} modalIcon={Exercises[6].modalIcon} iconHeight={Exercises[6].iconHeight} />
-              <Exercise image={require("../../assets/exercises-images/purple-4x.png")} title="Cosmos" subTitle="Relax with the Universe"/>    
+              <Exercise navigation={navigation} image={require("../../assets/exercises-images/purple-4x.png")} title="Cosmos" subTitle="Relax with the Universe"/>    
             </ScrollView>
             : selectedCategory === "New" ? 
             <ScrollView horizontal={true} style={{flexDirection: "row", marginLeft: 25}} showsHorizontalScrollIndicator={false}>
-              <Exercise image={require("../../assets/exercises-images/forest-dawn-4x.png")} title="Box Breathing" subTitle="4 Second Box Pattern"/>
-              <Exercise image={require("../../assets/exercises-images/redrock-4x.png")} title="1 Minute Break" subTitle="60 Seconds of Zen"/>
-              <Exercise image={require("../../assets/exercises-images/aurora-4x.png")} title="No More Anxiety" subTitle="4-7-8 Tension Relief"/>
+              <Exercise navigation={navigation} image={require("../../assets/exercises-images/forest-dawn-4x.png")} title="Box Breathing" subTitle="4 Second Box Pattern"/>
+              <Exercise navigation={navigation} image={require("../../assets/exercises-images/redrock-4x.png")} title="1 Minute Break" subTitle="60 Seconds of Zen"/>
+              <Exercise navigation={navigation} image={require("../../assets/exercises-images/aurora-4x.png")} title="No More Anxiety" subTitle="4-7-8 Tension Relief"/>
             </ScrollView>
             : selectedCategory === "Popular" ? 
             <ScrollView horizontal={true} style={{flexDirection: "row", marginLeft: 25}} showsHorizontalScrollIndicator={false}>

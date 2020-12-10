@@ -16,6 +16,7 @@ import { firestore } from 'firebase';
 
 import { AuthContext } from '../components/context';
 
+import { useKeepAwake } from 'expo-keep-awake';
 
 
 const { width, height } = Dimensions.get('window');
@@ -24,6 +25,8 @@ const { width, height } = Dimensions.get('window');
 
 
 export default function ExerciseVideo({ route, navigation }) {
+  useKeepAwake();
+  
   const isFocused = useIsFocused();
 
   let [fontsLoaded] = useFonts({
@@ -52,7 +55,7 @@ export default function ExerciseVideo({ route, navigation }) {
   const fade = () => {
     Animated.timing(fadeAnim, {
       toValue: showTimerScroller ? 1 : 0,
-      duration: 200,
+      duration: 500,
       useNativeDriver: true
     }).start();
   };
@@ -60,7 +63,7 @@ export default function ExerciseVideo({ route, navigation }) {
   const overlayFader = () => {
     Animated.timing(overlayFade, {
       toValue: overlay ? 1 : 0,
-      duration: 200,
+      duration: 500,
       useNativeDriver: true
     }).start();
   };
@@ -387,10 +390,14 @@ export default function ExerciseVideo({ route, navigation }) {
       if (paused) {
         playingAudio.current.pauseAsync();
       } else {
+        // loadAndPlayMusic();
         playingAudio.current.playAsync();
       }
     }
   });
+
+
+
 
 
   const currUser = fireApp.auth().currentUser;
@@ -471,6 +478,29 @@ export default function ExerciseVideo({ route, navigation }) {
       });
     } 
   };
+
+
+  const startExercise = () => {
+    setModalVisible(!modalVisible);
+    console.log("exercise started!");
+
+    // if (currUser) {
+
+    // }
+  }
+
+
+
+  // DATE OBJECT for 24 hour attempt
+  // https://stackoverflow.com/questions/51405133/check-if-a-date-is-24-hours-old/51405252
+  let today = new Date()
+  console.log(today)
+  let oneDay = new Date().getTime() + (1 * 24 * 60 * 60 * 1000);
+  console.log(oneDay)
+  console.log(today < oneDay)
+
+
+
 
 
   // const fakeAddProgressData = async () => {
@@ -584,12 +614,11 @@ export default function ExerciseVideo({ route, navigation }) {
 
   const pause = () => {
     setPaused(!paused);
-    if (timerDuration) {
-
-    }
+    // Alert.alert("paused: " + paused)
   }
 
   
+
 
 
 
@@ -616,11 +645,12 @@ export default function ExerciseVideo({ route, navigation }) {
       <TouchableWithoutFeedback 
         onPress={touchScreenToggleControls} 
         onLongPress={pause}
+        delayPressIn={5}
       >
         <View 
-          style={{  height: height * 0.63, width: width, position: "absolute", top: height * 0.15, zIndex: 10, }} 
+          style={{ height: height * 0.67, width: width, position: "absolute", top: height * 0.15, zIndex: 10, }} 
         >
-          {/* <Text style={{color: "orange"}}>TOUCH!</Text> */}
+          {/* <Text style={{color: "orange", borderWidth: 1}}>TOUCH!</Text> */}
         </View>
       </TouchableWithoutFeedback>
 
@@ -709,7 +739,7 @@ export default function ExerciseVideo({ route, navigation }) {
               title="Start" 
               buttonStyles={{...styles.blueButton, }}
               buttonTextStyles={styles.buttonText}
-              onPress={() => setModalVisible(!modalVisible)}
+              onPress={startExercise}
             />
           </View>
         </Modal>
