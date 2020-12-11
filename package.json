@@ -37,7 +37,8 @@
     "react-native-video": "^5.1.0-alpha8",
     "react-native-web": "~0.13.7",
     "expo-linear-gradient": "~8.3.0",
-    "expo-keep-awake": "~8.3.0"
+    "expo-keep-awake": "~8.3.0",
+    "expo-apple-authentication": "~2.2.1"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"

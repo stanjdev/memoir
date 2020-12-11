@@ -192,7 +192,7 @@ export default function SignUpScreen ({navigation}) {
             <View style={{ height: 300, justifyContent: "space-around", alignItems: "center", }}>
               <View>
                 <View style={{marginBottom: 15}}>
-                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>First Name, {String(userInfo.isValidFirstName)}</Text>
+                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>First Name</Text>
                   <View style={styles.inputsWhole}>
                     <TextInput 
                       placeholder="Your First Name"
@@ -220,7 +220,7 @@ export default function SignUpScreen ({navigation}) {
                   }
                 </View>
                 <View>
-                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>Email Address, {String(userInfo.isValidEmail)}</Text>
+                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>Email Address</Text> 
                   <View style={styles.inputsWhole}>
                     <TextInput 
                       placeholder="Your Email Address"

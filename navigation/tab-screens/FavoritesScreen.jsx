@@ -39,6 +39,8 @@ export default function FavoritesScreen({navigation}) {
       setTimeout(() => {
         isFocused ? setShowPopup(true) : setShowPopup(false)
       }, 500);
+    } else {
+      setShowPopup(false);
     }
   }, [isFocused])
 
@@ -175,6 +177,7 @@ export default function FavoritesScreen({navigation}) {
       </ScrollView>
 
       {showPopUp ? <CreateAccountPopup /> : null}
+
     </View>
   )
 }

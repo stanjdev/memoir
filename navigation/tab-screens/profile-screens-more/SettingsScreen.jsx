@@ -55,7 +55,7 @@ export default function SettingsScreen({navigation}) {
         {/* <ScrollView> */}
           <View style={{ height: height, justifyContent: "center", flexDirection:"column", alignItems: "center", }}>
 
-            <View style={{ alignItems: "center", height: height, justifyContent: "center",}}> 
+            <View style={{ alignItems: "center", height: height * 0.75, justifyContent: "space-evenly",}}> 
               <SettingOption text={"Account Info"} action={() => console.log("nothing yet!")}/>
               <SettingOption text={"Notifications"} action={() => console.log("nothing yet!")}/>
               <SettingOption text={"Billing Info"} action={() => console.log("nothing yet!")}/>
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     // borderWidth: 1,
-    margin: 5
+    // margin: 5
   },
   text: {
     color: "#535353",

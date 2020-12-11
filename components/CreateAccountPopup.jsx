@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Text, View, Button, StyleSheet, StatusBar, Image, Dimensions, ImageBackground, TouchableOpacity } from 'react-native';
+import React, { useEffect, useContext } from 'react';
+import { Text, View, Button, StyleSheet, StatusBar, Image, Dimensions, ImageBackground, TouchableOpacity, Alert } from 'react-native';
 import AppButton from './AppButton';
 const { width, height } = Dimensions.get('window');
 
@@ -7,6 +7,7 @@ import * as Animatable from 'react-native-animatable';
 import { useFonts } from 'expo-font';
 import { useNavigation } from '@react-navigation/native';
 
+import { AuthContext } from '../components/context';
 
 // Firebase setup for FB
 import * as firebase from 'firebase';
@@ -15,12 +16,46 @@ const provider = new firebase.auth.FacebookAuthProvider();
 
 // Expo way
 import * as Facebook from 'expo-facebook';
-
+import * as AppleAuthentication from 'expo-apple-authentication';
 
 
 
 export default function CreateAccountPopup() {
   const navigation = useNavigation();
+
+  let [fontsLoaded] = useFonts({
+    'Assistant': require('../assets/fonts/Assistant/Assistant-VariableFont_wght.ttf'),
+    'Assistant-Regular': require('../assets/fonts/Assistant/static/Assistant-Regular.ttf'),
+    'Assistant-SemiBold': require('../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
+  });
+
+  const { appleSignUp, appleTokenIn, userToken } = useContext(AuthContext);
+
+
+
+
+
+  const fbAppId = "200817071551403";
+  const fbAppName = 'memoir'
+
+  const signInWithFacebook = async () => {
+    await Facebook.initializeAsync({fbAppId, fbAppName});
+    const {type, token} =  await Facebook.logInWithReadPermissionsAsync({ permissions: ['public_profile', 'email', 'user_friends'] })
+    if (type === "success") {
+      const response = await fetch(`https://graph.facebook.com/me?access_token${token}&fields=id,name,first_name,last_name,email,about,picture`)
+      const json = await response.json();
+      console.log("facebook success! ", json);
+
+      try {
+        // await firebase.auth().signInWithCredential(token);
+      } catch (error) {
+        console.log(error);
+      }
+
+    } else {
+      alert(type);
+    }
+  }
 
 
   // Not working with latest Expo SDK? 
@@ -47,6 +82,7 @@ export default function CreateAccountPopup() {
 
 
 /* 
+GOOGLE FIREBASE WEB APP FB WAY
 auth/operation-not-supported-in-this-environment 
 This operation is not supported in the environment this application is runningon. 
 "location.protocol" must be http, https or chrome-extension and web storage must be enabled.
@@ -67,19 +103,70 @@ This operation is not supported in the environment this application is runningon
   };
   
 
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user !== null) {
-        // console.log(user)
+
+// Firebase way failed
+// const provider = new firebase.auth.OAuthProvider('apple.com');
+
+// const signInWithAppleFireBase = () => {
+//   firebase.auth().signInWithRedirect(provider);
+// }
+
+
+
+
+
+
+
+// EXPO AppleAuthentication + FIREBASE WEB APP WORKAROUND
+const signInWithApple = async () => {
+  try {
+    const credential = await AppleAuthentication.signInAsync({
+      requestedScopes: [
+        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+        AppleAuthentication.AppleAuthenticationScope.EMAIL,
+      ],
+    });
+
+    // signed in
+    console.log(credential);
+    if (credential.email !== null || credential.fullName.givenName !== null) {
+      // create a new account with SignUp method with email, name, and userIdtoken.
+      await appleSignUp(credential.email, credential.fullName.givenName, credential.fullName.familyName, credential.user)
+      console.log("signUpWithAPple!")
+    } else {
+      // just send over the userToken
+      await appleTokenIn(credential.user);
+      console.log("tokenwithApple!")
+    }
+
+    const appleUserInfoRef = await firebase.database().ref(credential.user).child('appleUserInfo');
+    await appleUserInfoRef.once('value', async snapshot => {
+      if (snapshot.val() === null) {
+        console.log("no appleUserInfo Object!")
       }
     })
-  }, )
 
-  let [fontsLoaded] = useFonts({
-    'Assistant': require('../assets/fonts/Assistant/Assistant-VariableFont_wght.ttf'),
-    'Assistant-Regular': require('../assets/fonts/Assistant/static/Assistant-Regular.ttf'),
-    'Assistant-SemiBold': require('../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
-  });
+  } catch (e) {
+    if (e.code === 'ERR_CANCELED') {
+      // alert(e);
+      // handle that the user canceled the sign-in flow
+    } else {
+      // handle other errors
+    }
+  }
+}
+
+
+useEffect(() => {
+  if (userToken) {
+    navigation.navigate('UserWelcomeScreen')
+  }
+}, [userToken])
+
+
+
+
+
 
   return (
     <Animatable.View style={styles.footerIntro} animation="fadeInUpBig">
@@ -88,25 +175,35 @@ This operation is not supported in the environment this application is runningon
       </View>
       <View style={{ height: 250, justifyContent: "space-between"}}>
         <AppButton 
-          title="Sign up with Facebook" 
+          title="Sign in with Facebook" 
           buttonStyles={styles.facebookButton} 
           buttonTextStyles={styles.buttonText} 
-          onPress={fbSignIn}
+          onPress={signInWithFacebook}
           icon={"FontAwesome"}
           name={"facebook-square"}
           size={28}
           color={"white"}
         />
         <AppButton 
-          title="Sign up with Apple" 
+          title="Sign in with Apple" 
           buttonStyles={styles.appleButton} 
           buttonTextStyles={styles.buttonText} 
-          onPress={""}
+          onPress={signInWithApple}
           icon={"Fontisto"}
           name={"apple"}
           size={28}
           color={"white"}
         />
+
+      {/* <AppleAuthentication.AppleAuthenticationButton
+        buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+        buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+        cornerRadius={5}
+        style={{ width: 327, height: 63 }}
+        onPress={}
+      /> */}
+
+        
         <AppButton 
           title="Sign up with Email" 
           buttonStyles={styles.emailButton} 
@@ -123,7 +220,9 @@ This operation is not supported in the environment this application is runningon
         <TouchableOpacity onPress={() => navigation.navigate('SignInScreen')}>
           <Text style={{fontSize: 20, color: "#535353", fontFamily: "Assistant-SemiBold", padding: 10, paddingLeft: 20, paddingRight: 20, }}>Log-In</Text>
         </TouchableOpacity>
+
         {/* <Button style={{fontSize: 20, color: "#535353", fontFamily: "Assistant-SemiBold"}} title="Log-In" onPress={() => navigation.navigate('SignInScreen')}></Button> */}
+      
       </View>
     </Animatable.View>
   )

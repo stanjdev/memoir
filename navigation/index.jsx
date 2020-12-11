@@ -176,8 +176,59 @@ export default function Navigation({navigation}) {
       // setIsLoading(false);
     },
     userToken: loginState.userToken,
-    userFirstName: loginState.userFirstName
+    userFirstName: loginState.userFirstName,
+
+    appleSignUp: async (inputEmail, givenName, familyName, credentialUserID) => {
+      try {
+        const result = await fireApp
+          .auth()
+          .createUserWithEmailAndPassword(`${credentialUserID}@appleid.com`, credentialUserID)
+        await result.user.updateProfile({
+          displayName: givenName,
+          lastName: familyName,
+          privateRelayEmail: inputEmail // just to hold to onto just in case
+        });
+      } catch (error) {
+        console.log(error);
+      }
+
+      const currUser = fireApp.auth().currentUser;
+      let userFirstName, userEmail, userToken;
+      if (currUser !== null) {
+        userFirstName = currUser.displayName;
+        userEmail = inputEmail;
+        userToken = currUser.uid;
+        // userToken = credentialUserID
+        dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
+      }
+    },
+
+    appleTokenIn: async (credentialUserID) => {
+      try {
+        await fireApp
+          .auth()
+          .signInWithEmailAndPassword(`${credentialUserID}@appleid.com`, credentialUserID);
+      } catch(e) {
+        console.log(e);
+        // alert("Your Account Info Does Not Match Our Records. Please Enter a Valid Username/Password.");
+        Alert.alert("User Not Found", "Your Account Info Does Not Match Our Records. Please Enter a Valid Username/Password.", [
+          {text: "Okay"}, {style: "destructive"}
+        ]);
+      }
+
+      const currUser = fireApp.auth().currentUser;
+      let userFirstName, userToken;
+      if (currUser !== null) {
+        userFirstName = currUser.displayName;
+        // userEmail = currUser.email;
+        userToken = currUser.uid;
+        AsyncStorage.setItem('userToken', userToken);  
+        dispatch({ type: "SIGNIN", token: userToken, firstName: userFirstName })
+      }
+    },
   }));
+
+
 
   // LOADING WHEEL INTRO - if user was already previously logged in
   useEffect(() => {

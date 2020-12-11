@@ -158,8 +158,8 @@ export default function SignUpScreen ({navigation, route}) {
             <View style={{ height: 300, justifyContent: "space-around", alignItems: "center", }}>
             <View>
               <View style={{marginBottom: 15}}>
-                <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>firstName: {routeFirstName}, email: {routeEmail}</Text>
-                <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>Password, {String(userInfo.isValidPassword)}</Text>
+                {/* <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>firstName: {routeFirstName}, email: {routeEmail}</Text> */}
+                <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>Password</Text>
                 <View style={styles.inputsWhole}>
                   <TextInput 
                     placeholder="Choose a Password"
@@ -203,7 +203,7 @@ export default function SignUpScreen ({navigation, route}) {
               </View>
 
               <View>
-                <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>Confirm Password, {String(userInfo.isPasswordMatch)}</Text>
+                <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>Confirm Password</Text>
                 <View style={styles.inputsWhole}>
                   <TextInput 
                     placeholder="Confirm Password"

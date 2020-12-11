@@ -1,8 +1,11 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { Text, View, StatusBar, ScrollView, Button, Alert, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, NativeEventEmitter } from 'react-native';
 import AppButton from '../../../components/AppButton';
 import { useIsFocused } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
+import { AuthContext } from '../../../components/context';
+
+
 const bgImage = require('../../../assets/splash/memoir-splash-thin-4x.png')
 
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -13,10 +16,16 @@ const { width, height } = Dimensions.get('window');
 import { LinearGradient } from 'expo-linear-gradient';
 
 
+
+import firebase from 'firebase';
+
+
 export default function MeditateTimerSetScreen({navigation}) {
   const [minutes, setMinutes] = React.useState(10);
   const [bellIntervDisplay, setBellIntervDisplay] = React.useState("30s");
   const [bellInterv, setBellInterv] = React.useState(30000);
+
+  const { userToken } = useContext(AuthContext);
 
   // const renderMinsPickerItems = () => {
   //   let items = [];
@@ -82,6 +91,81 @@ export default function MeditateTimerSetScreen({navigation}) {
     'Assistant-Regular': require('../../../assets/fonts/Assistant/static/Assistant-Regular.ttf'),
     'Assistant-SemiBold': require('../../../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   });
+
+
+
+  const currUser = firebase.auth().currentUser;
+  const progressRef = currUser ? firebase.database().ref(currUser.uid).child('progress') : null;
+
+// WITH SAFETY CHECK ADDED - for users with no existing progress data objects
+  // Increment current and best streaks - triggers when blue 'Start' button is pressed
+  const incrementStreak = async () => {
+    if (currUser && userToken) {
+      let currentStreakSoFar;
+      let lastDateExercised;
+      let bestStreakSoFar;
+
+      await progressRef.once('value', async snapshot => {
+        if (snapshot.val() === null) {
+          progressRef.set({
+            practiceTime: 0,
+            sessionsCompleted: 0,
+            currentStreak: 1,
+            bestStreak: 1,
+            lastDateExercised: new Date().getDate(),
+            bestStreakDate: new Date().getDate(),
+            bestStreakMonth: new Date().getMonth() + 1,
+            bestStreakYear: new Date().getFullYear()
+          })
+          currentStreakSoFar = await snapshot.val() !== null ? snapshot.val().currentStreak : 0;
+          lastDateExercised = await snapshot.val() !== null ? snapshot.val().lastDateExercised : new Date().getDate();
+          bestStreakSoFar = await snapshot.val() !== null ? snapshot.val().bestStreak : 1;
+        } else {
+          currentStreakSoFar = await snapshot.val() !== null ? snapshot.val().currentStreak : 0;
+          lastDateExercised = await snapshot.val() !== null ? snapshot.val().lastDateExercised : new Date().getDate();
+          bestStreakSoFar = await snapshot.val() !== null ? snapshot.val().bestStreak : 1;
+        }
+
+        let dateNow = new Date().getDate();
+
+        if (dateNow - lastDateExercised == 1 || dateNow - lastDateExercised == -30 || dateNow - lastDateExercised == -29 || dateNow - lastDateExercised == -28 || dateNow - lastDateExercised == -27 || dateNow - lastDateExercised == -26) {
+          await progressRef.update({
+            currentStreak: currentStreakSoFar += 1,
+          })
+        } else if (dateNow - lastDateExercised > 1 || currentStreakSoFar == 0) {
+          await progressRef.update({
+            currentStreak: 1,
+            bestStreak: Math.max(bestStreakSoFar, 1)
+          })
+        } else null
+
+        if (bestStreakSoFar < currentStreakSoFar) {
+          await progressRef.update({
+            lastDateExercised: dateNow,
+            bestStreak: Math.max(bestStreakSoFar, currentStreakSoFar),
+            bestStreakDate: new Date().getDate(),
+            bestStreakMonth: new Date().getMonth() + 1,
+            bestStreakYear: new Date().getFullYear()
+          })
+        }
+
+      });
+    } 
+  }
+
+
+  const startMeditation = () => {
+    // console.log("started meditation!");
+    incrementStreak();
+    setTimeout(() => {
+      navigation.navigate('MeditateExerciseScreen', { minutes, bellInterv });
+    }, 0);
+  }
+
+
+
+
+
 
   return (
     <ImageBackground source={bgImage} style={{ flex: 1, resizeMode: "cover", justifyContent: "center" }}>
@@ -153,7 +237,7 @@ export default function MeditateTimerSetScreen({navigation}) {
                   onScroll={(e) => onChangeSecs(Math.floor(e.nativeEvent.contentOffset.x / (e.nativeEvent.contentSize.width - e.nativeEvent.layoutMeasurement.width) * 7)) }
                   // OG 1.00 = e.nativeEvent.contentOffset.x / (e.nativeEvent.contentSize.width - e.nativeEvent.layoutMeasurement.width)
                   scrollEventThrottle={16}
-                  style={{borderWidth: 1, width: 200, maxHeight: 50 }} 
+                  style={{ width: 200, maxHeight: 50 }} 
                 >
                   <View style={{flexDirection: "row", alignItems: "center",  }}>
                     {renderMinsPickerItems()}
@@ -181,7 +265,7 @@ export default function MeditateTimerSetScreen({navigation}) {
               title="Start" 
               buttonStyles={styles.blueButton}
               buttonTextStyles={styles.buttonText}
-              onPress={() => navigation.navigate('MeditateExerciseScreen', { minutes, bellInterv })}
+              onPress={startMeditation}
             />
 
           </View>

@@ -95,7 +95,8 @@ export default function ExerciseVideo({ route, navigation }) {
   const [ timerDuration, setTimerDuration ] = useState(null);
 
   const timerDurationsOptions = {
-    "30s": {mins: 0, secs: 2},
+    // "30s": {mins: 0, secs: 2},
+    "30s": {mins: 0, secs: 30},
     "1m": {mins: 1, secs: 0},
     "2m": {mins: 2, secs: 0},
     "3m": {mins: 3, secs: 0},
@@ -400,6 +401,10 @@ export default function ExerciseVideo({ route, navigation }) {
 
 
 
+
+
+
+
   const currUser = fireApp.auth().currentUser;
   
   const progressRef = currUser ? fireApp.database().ref(currUser.uid).child('progress') : null;
@@ -480,24 +485,86 @@ export default function ExerciseVideo({ route, navigation }) {
   };
 
 
+
+  // WITH SAFETY CHECK ADDED - for users with no existing progress data objects
+  // Increment current and best streaks - triggers when blue 'Start' button is pressed
+  const incrementStreak = async () => {
+    if (currUser && userToken) {
+      let currentStreakSoFar;
+      let lastDateExercised;
+      let bestStreakSoFar;
+
+      await progressRef.once('value', async snapshot => {
+        if (snapshot.val() === null) {
+          progressRef.set({
+            practiceTime: 0,
+            sessionsCompleted: 0,
+            currentStreak: 1,
+            bestStreak: 1,
+            lastDateExercised: new Date().getDate(),
+            bestStreakDate: new Date().getDate(),
+            bestStreakMonth: new Date().getMonth() + 1,
+            bestStreakYear: new Date().getFullYear()
+          })
+          currentStreakSoFar = await snapshot.val() !== null ? snapshot.val().currentStreak : 0;
+          lastDateExercised = await snapshot.val() !== null ? snapshot.val().lastDateExercised : new Date().getDate();
+          bestStreakSoFar = await snapshot.val() !== null ? snapshot.val().bestStreak : 1;
+        } else {
+          currentStreakSoFar = await snapshot.val() !== null ? snapshot.val().currentStreak : 0;
+          lastDateExercised = await snapshot.val() !== null ? snapshot.val().lastDateExercised : new Date().getDate();
+          bestStreakSoFar = await snapshot.val() !== null ? snapshot.val().bestStreak : 1;
+        }
+
+        let dateNow = new Date().getDate();
+
+        if (dateNow - lastDateExercised == 1 || dateNow - lastDateExercised == -30 || dateNow - lastDateExercised == -29 || dateNow - lastDateExercised == -28 || dateNow - lastDateExercised == -27 || dateNow - lastDateExercised == -26) {
+          await progressRef.update({
+            currentStreak: currentStreakSoFar += 1,
+          })
+        } else if (dateNow - lastDateExercised > 1 || currentStreakSoFar == 0) {
+          await progressRef.update({
+            currentStreak: 1,
+            bestStreak: Math.max(bestStreakSoFar, 1)
+          })
+        } else null
+
+        if (bestStreakSoFar < currentStreakSoFar) {
+          await progressRef.update({
+            lastDateExercised: dateNow,
+            bestStreak: Math.max(bestStreakSoFar, currentStreakSoFar),
+            bestStreakDate: new Date().getDate(),
+            bestStreakMonth: new Date().getMonth() + 1,
+            bestStreakYear: new Date().getFullYear()
+          })
+        }
+
+      });
+    } 
+  }
+
+
+
+
   const startExercise = () => {
     setModalVisible(!modalVisible);
     console.log("exercise started!");
-
-    // if (currUser) {
-
-    // }
+    incrementStreak();
   }
+
+
+
+
+
 
 
 
   // DATE OBJECT for 24 hour attempt
   // https://stackoverflow.com/questions/51405133/check-if-a-date-is-24-hours-old/51405252
-  let today = new Date()
-  console.log(today)
-  let oneDay = new Date().getTime() + (1 * 24 * 60 * 60 * 1000);
-  console.log(oneDay)
-  console.log(today < oneDay)
+
+  // let now = Date.now();
+  // console.log(now)
+  // let oneDay = new Date().getTime() + (1 * 24 * 60 * 60 * 1000);
+  // console.log(oneDay)
 
 
 
