@@ -23,9 +23,11 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "usesAppleSignIn": true
+      "usesAppleSignIn": true,
+      "bundleIdentifier": "com.memoir.memoir-app"
     },
     "android": {
+      "package": "com.memoir.memoir-app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

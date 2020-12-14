@@ -29,7 +29,7 @@ export default function CreateAccountPopup() {
     'Assistant-SemiBold': require('../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   });
 
-  const { appleSignUp, appleTokenIn, userToken } = useContext(AuthContext);
+  const { appleSignUp, appleTokenIn, userToken, fbSignUp, fbTokenIn } = useContext(AuthContext);
 
 
 
@@ -41,13 +41,20 @@ export default function CreateAccountPopup() {
   const signInWithFacebook = async () => {
     await Facebook.initializeAsync({fbAppId, fbAppName});
     const {type, token} =  await Facebook.logInWithReadPermissionsAsync({ permissions: ['public_profile', 'email', 'user_friends'] })
+    // console.log("Token: ", token)
     if (type === "success") {
-      const response = await fetch(`https://graph.facebook.com/me?access_token${token}&fields=id,name,first_name,last_name,email,about,picture`)
+      const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,first_name,last_name,email`)
       const json = await response.json();
-      console.log("facebook success! ", json);
-
+      console.log("facebook response: ", json);
+      
+      const first_name = json["first_name"];
+      const last_name = json["last_name"];
+      const email = json["email"] ? json["email"] : null;
+      const userId = json["id"];
+      
+      // console.log("name!: ", first_name, last_name, email, userId, token);
       try {
-        // await firebase.auth().signInWithCredential(token);
+        fbSignUp(email, first_name, last_name, userId, token);
       } catch (error) {
         console.log(error);
       }
@@ -56,6 +63,26 @@ export default function CreateAccountPopup() {
       alert(type);
     }
   }
+
+/* 
+From sign in with FB:
+facebook response:  Object {
+  "email": "yumdrums@gmail.com",
+  "first_name": "Art",
+  "id": "167275698465108",
+  "last_name": "Boshy",
+  "name": "Art Boshy",
+  "picture": Object {
+    "data": Object {
+      "height": 50,
+      "is_silhouette": true,
+      "url": "https://scontent-lax3-1.xx.fbcdn.net/v/t1.30497-1/cp0/c15.0.50.50a/p50x50/84628273_176159830277856_972693363922829312_n.jpg?_nc_cat=1&ccb=2&_nc_sid=12b3be&_nc_ohc=tX0DMIu28LgAX-oIMMJ&_nc_ht=scontent-lax3-1.xx&tp=27&oh=3563f373140aacb411c7ef6bcb49a7b1&oe=5FFBD3B8",
+      "width": 50,
+    },
+  },
+}
+*/
+
 
 
   // Not working with latest Expo SDK? 
@@ -132,7 +159,7 @@ const signInWithApple = async () => {
     if (credential.email !== null || credential.fullName.givenName !== null) {
       // create a new account with SignUp method with email, name, and userIdtoken.
       await appleSignUp(credential.email, credential.fullName.givenName, credential.fullName.familyName, credential.user)
-      console.log("signUpWithAPple!")
+      console.log("signUpWithApple!")
     } else {
       // just send over the userToken
       await appleTokenIn(credential.user);

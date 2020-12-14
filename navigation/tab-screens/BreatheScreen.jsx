@@ -13,12 +13,13 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useFonts } from 'expo-font';
 import { AppLoading } from 'expo';
 
+import firebase from 'firebase';
+
 
 // https://docs.expo.io/guides/preloading-and-caching-assets/?redirected#publishing-assets
 function cacheImages(images) {
   return images.map(image => Asset.fromModule(image).downloadAsync());
 }
-
 
 export default function BreatheScreen({navigation}) {
   const isFocused = useIsFocused();
@@ -82,6 +83,23 @@ export default function BreatheScreen({navigation}) {
   const toggleUnderline = (optionName) => {
     return selectedCategory === optionName ? styles.underline : null;
   }
+
+
+
+  // SIGN IN ANONYMOUS USER IF NOT SIGNED IN!
+  // const currUser = firebase.auth().currentUser;
+  // if (currUser === null) {
+
+  // }
+
+  // const progressRef = currUser ? firebase.database().ref(currUser.uid).child('progress') : null;
+
+
+
+
+
+
+
 
 
 

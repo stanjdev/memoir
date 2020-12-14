@@ -1,15 +1,18 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useContext } from 'react';
 import { Animated, Text, View, StatusBar, Button, Alert, Vibration, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
 import AppButton from '../../../components/AppButton';
 import { useIsFocused } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 const bgImage = require('../../../assets/splash/memoir-splash-thin-4x.png')
 import { useNavigation } from '@react-navigation/native';
+import { AuthContext } from '../../../components/context';
 
 import { Audio } from 'expo-av';
 import { useKeepAwake } from 'expo-keep-awake';
 
 const { width, height } = Dimensions.get('window');
+
+import firebase from 'firebase';
 
 
 export default function MeditateExerciseScreen({ route, navigation }) {
@@ -22,6 +25,7 @@ export default function MeditateExerciseScreen({ route, navigation }) {
     'Assistant-SemiBold': require('../../../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   });
   
+  const { userToken } = useContext(AuthContext);
   
   const [ overlay, setOverlay ] = useState(true);
   const overlayFade = useRef(new Animated.Value(0)).current;
@@ -147,10 +151,10 @@ export default function MeditateExerciseScreen({ route, navigation }) {
   const { minutes, bellInterv } = route.params;
   const [ timerRunning, setTimerRunning ] = useState(true);
 
-  const [ mins, setMins ] = useState(minutes);
-  const [ secs, setSecs ] = useState(0);
-  // const [ mins, setMins ] = useState(0);
-  // const [ secs, setSecs ] = useState(2);
+  // const [ mins, setMins ] = useState(minutes);
+  // const [ secs, setSecs ] = useState(0);
+  const [ mins, setMins ] = useState(0);
+  const [ secs, setSecs ] = useState(2);
 
   // Add leading zero to numbers 9 or below (purely for aesthetics):
   function leadingZero(time) {
@@ -170,7 +174,8 @@ export default function MeditateExerciseScreen({ route, navigation }) {
       setSecs(59);
       setMins(mins - 1);
     } else {
-      Alert.alert("Meditation Completed");
+      incrementSessionsCompleted();
+      Alert.alert("Timer Complete", "Great job, you’ve completed your meditation session!", [{text: "Back"}, {text: "Finish", style: "cancel"}], );
       setTimerRunning(false);
       bellSound.unloadAsync();
       // console.log('else');
@@ -178,8 +183,8 @@ export default function MeditateExerciseScreen({ route, navigation }) {
       clear();
       setTimeout(() => {
         finishedSound.unloadAsync(); // cuts off the sound
-        navigation.navigate("MeditateTimerSetScreen");
-      }, 3000);
+        // navigation.navigate("MeditateTimerSetScreen");
+      }, 4000);
     }
   }
 
@@ -254,10 +259,34 @@ export default function MeditateExerciseScreen({ route, navigation }) {
 
 
 
+  const currUser = firebase.auth().currentUser;
+  const progressRef = currUser ? firebase.database().ref(currUser.uid).child('progress') : null;
 
 
+  // WITH SAFETY CHECK ADDED - for users with no existing progress data objects
+  // Increment sessions user completed - triggers when that 'finish' popup modal comes out
+  async function incrementSessionsCompleted() {
+    if (currUser && userToken) {
+      let sessionsCompletedSoFar;
+      await progressRef.once('value', async snapshot => {
+        if (snapshot.val() === null) {
+          progressRef.set({
+            practiceTime: 0,
+            sessionsCompleted: 0,
+            currentStreak: 0,
+            bestStreak: 0
+          })
+          sessionsCompletedSoFar = await snapshot.val() !== null ? snapshot.val().sessionsCompleted : 0;
+        } else {
+          sessionsCompletedSoFar = await snapshot.val() !== null ? snapshot.val().sessionsCompleted : 0;
+        }
 
-
+        await progressRef.update({
+          sessionsCompleted: sessionsCompletedSoFar += 1
+        })
+      });
+    } 
+  };
 
 
 

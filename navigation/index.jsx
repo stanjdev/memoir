@@ -226,7 +226,36 @@ export default function Navigation({navigation}) {
         dispatch({ type: "SIGNIN", token: userToken, firstName: userFirstName })
       }
     },
+
+    fbSignUp: async (email, first_name, last_name, userId, token) => {
+      try {
+        await fireApp
+          .auth()
+          .signInWithEmailAndPassword(email ? email : `${userId}@fbid.com`, userId);
+      } catch (error) {
+        const result = await fireApp
+          .auth()
+          .createUserWithEmailAndPassword(email ? email : `${userId}@fbid.com`, userId);
+          await result.user.updateProfile({
+            displayName: first_name,
+            lastName: last_name,
+            privateRelayEmail: email ? email : `${userId}@fbid.com` // just to hold to onto just in case
+          });
+          console.log("no user found for FB sign up, so created new user! ", error)
+      }
+      const currUser = fireApp.auth().currentUser;
+      let userFirstName, userEmail, userToken;
+      if (currUser !== null) {
+        userFirstName = currUser.displayName;
+        userEmail = currUser.privateRelayEmail;
+        userToken = token;
+        // userToken = currUser.uid;
+        AsyncStorage.setItem('userToken', userToken); 
+        dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
+      }
+    },
   }));
+
 
 
 

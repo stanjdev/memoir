@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
-import { PanResponder, Text, Modal, View, ScrollView, StatusBar, Button, Alert, Vibration, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, Animated } from 'react-native';
+import { PanResponder, Text, Modal, View, ScrollView, StatusBar, Button, Alert, Vibration, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, Animated, AppState } from 'react-native';
 import AppButton from './AppButton';
 import { useIsFocused } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -12,12 +12,11 @@ import { setAudioModeAsync } from 'expo-av/build/Audio';
 // import Video from 'react-native-video';
 import FlowerOfLife from "../assets/video-exercises/flower-of-life.mp4";
 import { fireApp } from '../firebase';
-import { firestore } from 'firebase';
+import { app, apps, firestore } from 'firebase';
 
 import { AuthContext } from '../components/context';
 
 import { useKeepAwake } from 'expo-keep-awake';
-
 
 const { width, height } = Dimensions.get('window');
 
@@ -406,7 +405,6 @@ export default function ExerciseVideo({ route, navigation }) {
 
 
   const currUser = fireApp.auth().currentUser;
-  
   const progressRef = currUser ? fireApp.database().ref(currUser.uid).child('progress') : null;
 
   // Increment User Practice Time - THIS WAY POST REQUESTS THE DB EVERY SECOND. NOT OPTIMAL
@@ -455,6 +453,46 @@ export default function ExerciseVideo({ route, navigation }) {
   // useEffect(() => {
   //   return () => updateUserTime()
   // }, [])
+
+  const goBack = () => {
+    updateUserTime();
+    navigation.goBack();
+  }
+
+
+
+
+
+
+  // AppState attempt for when user leaves app, NOT WORKING
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
+  useEffect(() => {
+    AppState.addEventListener("change", _handleAppStateChange);
+    return () => AppState.removeEventListener("change", _handleAppStateChange);
+  }, []);
+
+  const _handleAppStateChange = (nextAppState) => {
+    if (
+      appState.current.match(/inactive|background/) && 
+      nextAppState === "active"
+    ) {
+      console.log("App has come to the foreground!");
+    }
+    appState.current = nextAppState;
+    setAppStateVisible(appState.current);
+    console.log("AppState", appState.current);
+    console.log(appStateVisible)
+  }
+
+
+
+
+
+
+
+
 
 
 
@@ -604,9 +642,6 @@ export default function ExerciseVideo({ route, navigation }) {
       const databaseRef = await fireApp.database().ref(currUser.uid).child('favorites').push();
       const key = databaseRef.key
       
-
-
-      
       // databaseRef.set({
       //   "id": id,
       //   // "videoFile": videoFile
@@ -725,7 +760,7 @@ export default function ExerciseVideo({ route, navigation }) {
       <Animated.View style={{ height: height, width: width, position: "absolute", opacity: overlayFade }}>
         <View style={{ borderColor: "white", position: "absolute", height: height}}>
           <View style={{ width: width, flexDirection: "row", alignItems: "center", marginTop: height * 0.07, zIndex: 100}}>
-            <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 15, }}>
+            <TouchableOpacity onPress={goBack} style={{ padding: 15, }}>
               <Image source={require('../assets/screen-icons/back-arrow-white.png')} style={{height: 20, marginLeft: 0}} resizeMode="contain"/>
             </TouchableOpacity>
           </View>
