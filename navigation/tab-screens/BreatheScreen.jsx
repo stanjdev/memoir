@@ -128,7 +128,7 @@ export default function BreatheScreen({navigation}) {
           </ScrollView>
         
           <View style={{alignItems: "center", }}>
-            <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[8].image} videoFile={Exercises[8].videoFile} modalIcon={Exercises[8].modalIcon} id={Exercises[8].id} autoCountDown={"30m"}customWidth={Exercises[8].customWidth}/> 
+            <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[8].uniqueImg} videoFile={Exercises[8].videoFile} modalIcon={Exercises[8].modalIcon} id={Exercises[8].id} autoCountDown={"30m"} customWidth={Exercises[8].customWidth}/> 
           </View>
           <View style={{alignItems: "center", }}>
             <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[9].image} videoFile={Exercises[9].videoFile} modalIcon={Exercises[9].modalIcon} id={Exercises[9].id} customWidth={Exercises[9].customWidth}/> 

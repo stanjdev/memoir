@@ -27,7 +27,7 @@
       "bundleIdentifier": "com.memoir.memoir-app"
     },
     "android": {
-      "package": "com.memoir.memoir-app",
+      "package": "com.memoir.memoir",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

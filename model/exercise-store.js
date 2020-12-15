@@ -56,6 +56,7 @@ export const Exercises = {
   7: {
     id: 7,
     image: require("../assets/exercises-images/daily-exhale.png"),
+    uniqueImg: require("../assets/exercises-images/daily-exhale.png"),
     title: "Daily Exhale",
     subTitle: "Tap to Begin",
     videoFile: require('../assets/video-exercises/daily-exhale.mp4'),
@@ -72,7 +73,8 @@ export const Exercises = {
   },
   8: {
     id: 8,
-    image: require("../assets/exercises-images/horiz-focus-session.png"),
+    image: require("../assets/exercises-images/moon-4x.png"),
+    uniqueImg: require("../assets/exercises-images/horiz-focus-session.png"),
     title: "30 Minute Sleep Session",
     subTitle: "",
     videoFile: require('../assets/video-exercises/crescent-moon.mp4'),
@@ -83,7 +85,7 @@ export const Exercises = {
   9: {
     id: 9,
     image: require("../assets/exercises-images/horiz-deep-breaths.png"),
-    title: "6 Deep Breathes PLACEHOLDER",
+    title: "6 Deep Breaths PLACEHOLDER",
     subTitle: "",
     videoFile: require('../assets/video-exercises/crescent-moon.mp4'),
     modalIcon: require('../assets/exercises-images/modal-icons/breathe-waves.png'),

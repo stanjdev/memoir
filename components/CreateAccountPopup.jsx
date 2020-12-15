@@ -45,7 +45,7 @@ export default function CreateAccountPopup() {
     if (type === "success") {
       const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,first_name,last_name,email`)
       const json = await response.json();
-      console.log("facebook response: ", json);
+      // console.log("facebook response: ", json);
       
       const first_name = json["first_name"];
       const last_name = json["last_name"];
@@ -64,24 +64,7 @@ export default function CreateAccountPopup() {
     }
   }
 
-/* 
-From sign in with FB:
-facebook response:  Object {
-  "email": "yumdrums@gmail.com",
-  "first_name": "Art",
-  "id": "167275698465108",
-  "last_name": "Boshy",
-  "name": "Art Boshy",
-  "picture": Object {
-    "data": Object {
-      "height": 50,
-      "is_silhouette": true,
-      "url": "https://scontent-lax3-1.xx.fbcdn.net/v/t1.30497-1/cp0/c15.0.50.50a/p50x50/84628273_176159830277856_972693363922829312_n.jpg?_nc_cat=1&ccb=2&_nc_sid=12b3be&_nc_ohc=tX0DMIu28LgAX-oIMMJ&_nc_ht=scontent-lax3-1.xx&tp=27&oh=3563f373140aacb411c7ef6bcb49a7b1&oe=5FFBD3B8",
-      "width": 50,
-    },
-  },
-}
-*/
+
 
 
 
