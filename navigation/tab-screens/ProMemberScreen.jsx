@@ -11,7 +11,7 @@ const { width, height } = Dimensions.get('window');
 const bgImage = require('../../assets/splash/memoir-splash-thin-4x.png')
 import ProfileStatsBlock from '../../components/ProfileStatsBlock';
 
-
+ 
 
 export default function ProMemberScreen({navigation}) {
   const isFocused = useIsFocused();
@@ -43,7 +43,7 @@ export default function ProMemberScreen({navigation}) {
 
       <View style={{ height: height, justifyContent: "center" }}>
           <View style={{ justifyContent: "space-between", alignItems: "center", height: 250 }}>
-            <Image source={require('../../assets/screen-icons/hexagon.png')} style={{height: 91}} resizeMode="contain"/>
+            <Image source={require('../../assets/screen-icons/ellipses.png')} style={{height: 91}} resizeMode="contain"/>
             <Text style={{fontSize: 29, fontFamily: "Assistant-SemiBold", color: "#fff", textAlign: "center"}}>Access All 30+ Exercises</Text>
             <View style={{ width: 287, justifyContent:"space-between", height: 100}}>
               <CheckItem text="Unlock All Content with Memoir Unlimited"/>
@@ -60,14 +60,14 @@ export default function ProMemberScreen({navigation}) {
 
           <TouchableOpacity style={styles.blueButton} onPress={() => console.log("stuff")}>
             <View style={{flexDirection: "row", alignItems: "flex-end"}}>
-              <Text style={{fontFamily: "Assistant-SemiBold", color: "#fff", fontSize: 21, marginBottom: -3}}>$69.99 Annual</Text>
-              <Text style={{fontFamily: "Assistant-SemiBold", color: "#fff", fontSize: 14, marginLeft: 5}}>(Save 53%)</Text>
+              <Text style={{fontFamily: "Assistant-SemiBold", color: "#fff", fontSize: 21, marginBottom: -3}}>$59.99 Annual</Text>
+              <Text style={{fontFamily: "Assistant-SemiBold", color: "#fff", fontSize: 14, marginLeft: 5}}>(Save 50%)</Text>
             </View>
-            <Text style={{fontFamily: "Assistant-SemiBold", color: "#fff", fontSize: 14}}>$5.83/month  |  First 14 Days Free</Text>
+            <Text style={{fontFamily: "Assistant-SemiBold", color: "#fff", fontSize: 14}}>$5.00/month  |  First 14 Days Free</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={{...styles.blueButton, backgroundColor: "#F2F2F2"}} onPress={() => console.log("stuff")}>
-            <Text style={{fontFamily: "Assistant-SemiBold", color: "#535353", fontSize: 21}}>$12.99 Monthly</Text>
+            <Text style={{fontFamily: "Assistant-SemiBold", color: "#535353", fontSize: 21}}>$9.99 Monthly</Text>
             <Text style={{fontFamily: "Assistant-SemiBold", color: "#535353", fontSize: 14}}>No Commitment  |  First 7 Days Free</Text>
           </TouchableOpacity>
 

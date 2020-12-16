@@ -141,7 +141,7 @@ export default function ProfileScreen({navigation}) {
     let remainder = 10 - rightMostNum;
     let ceil = sessionsCompleted + remainder;
 
-    return <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-hash.png')} title="Sessions Completed" number={sessionsCompleted} subtitle="Sessions" subText={`${ceil} Session Goal`} progress={sessionsCompleted / ceil}/>
+    return <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-hash.png')} title="Sessions Completed" number={sessionsCompleted} subtitle={sessionsCompleted === 1 ? "Session" : "Sessions"} subText={`${ceil} Session Goal`} progress={sessionsCompleted / ceil}/>
   }
 
   const renderMovingStreakGoal = (currentStreak) => {
@@ -150,7 +150,7 @@ export default function ProfileScreen({navigation}) {
     let remainder = 10 - rightMostNum;
     let ceil = currentStreak + remainder;
 
-    return <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-arrow.png')} title="Current Streak" number={currentStreak} subtitle="Days" subText={`${ceil} Day Streak Goal`} progress={currentStreak / ceil}/>
+    return <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-arrow.png')} title="Current Streak" number={currentStreak} subtitle={currentStreak === 1 ? "Day" : "Days"} subText={`${ceil} Day Streak Goal`} progress={currentStreak / ceil}/>
   }
 
 
@@ -177,7 +177,7 @@ export default function ProfileScreen({navigation}) {
               {renderPracticeTime()}
               {renderMovingSessionsGoal(sessionsCompleted)}
               {renderMovingStreakGoal(currentStreak)}
-              <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-rocket.png')} title="Best Streak" number={bestStreak} subtitle="Days" subText={`Achieved ${bestStreakMonth}/${bestStreakDate}/${bestStreakYear}`} />
+              <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-rocket.png')} title="Best Streak" number={bestStreak} subtitle={bestStreak === 1 ? "Day" : "Days"} subText={`Achieved ${bestStreakMonth}/${bestStreakDate}/${bestStreakYear}`} />
             </View>
                 :
             <View style={{flexDirection:"row", flexWrap: "wrap", justifyContent: "center",}}>

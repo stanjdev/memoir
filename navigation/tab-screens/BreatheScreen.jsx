@@ -34,7 +34,6 @@ export default function BreatheScreen({navigation}) {
       require("../../assets/exercises-images/jungle-green.png"),
       require("../../assets/exercises-images/forest-orange.png"),
       require("../../assets/exercises-images/horiz-deep-breaths.png"),
-      require('../../assets/exercises-images/daily-exhale-4x.png'),
       require("../../assets/exercises-images/redrock-4x.png"),
       require("../../assets/exercises-images/aurora-4x.png"),
       require("../../assets/exercises-images/moon-4x.png"),
@@ -120,7 +119,7 @@ export default function BreatheScreen({navigation}) {
           </View>
           
           <ScrollView horizontal={true} style={{flexDirection: "row", marginLeft: 25}} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
-            <Exercise id={Exercises[1].id} navigation={navigation} image={Exercises[1].image} title={Exercises[1].title} subTitle={Exercises[1].subTitle} videoFile={Exercises[1].videoFile} modalIcon={Exercises[1].modalIcon} iconHeight={Exercises[1].iconHeight} />
+            <Exercise id={Exercises[1].id} navigation={navigation} image={Exercises[1].image} title={Exercises[1].title} subTitle={Exercises[1].subTitle} videoFile={Exercises[1].videoFile} modalIcon={Exercises[1].modalIcon} iconHeight={Exercises[1].iconHeight} customVolume={Exercises[1].customVolume}/>
             <Exercise id={Exercises[2].id} navigation={navigation} image={Exercises[2].image} title={Exercises[2].title} subTitle={Exercises[2].subTitle} videoFile={Exercises[2].videoFile} modalIcon={Exercises[2].modalIcon} iconHeight={Exercises[2].iconHeight} />
             <Exercise id={Exercises[3].id} navigation={navigation} image={Exercises[3].image} title={Exercises[3].title} subTitle={Exercises[3].subTitle} videoFile={Exercises[3].videoFile} modalIcon={Exercises[3].modalIcon} iconHeight={Exercises[3].iconHeight} />
             <Exercise id={Exercises[4].id} navigation={navigation} image={Exercises[4].image} title={Exercises[4].title} subTitle={Exercises[4].subTitle} videoFile={Exercises[4].videoFile} modalIcon={Exercises[4].modalIcon} iconHeight={Exercises[4].iconHeight} />

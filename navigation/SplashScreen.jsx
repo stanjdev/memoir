@@ -4,9 +4,6 @@ import { Text, View, StyleSheet, StatusBar, Image, Dimensions, ImageBackground }
 import AppButton from '../components/AppButton';
 
 const { width, height } = Dimensions.get('window');
-// const bgImage = require('../assets/splash/memoir-splash.png')
-// const bgImage = require('../assets/splash/memoir-splash-thin.png')
-// const bgImage = { uri: "https://reactjs.org/logo-og.png" }
 
 
 export default function SplashScreen ({navigation}) {
@@ -30,7 +27,7 @@ export default function SplashScreen ({navigation}) {
           onPress={() => navigation.navigate('Memoir')}
         />
         <Image 
-          source={require('../assets/splash/memoir-splash-4x.png')}
+          source={require('../assets/splash/memoir-splash.png')}
           style={styles.image}
         />
       </View>

@@ -1,3 +1,28 @@
+import firebase from 'firebase';
+// import fireApp from '../firebase';
+
+// const retrieveFile = async (fileName) => {
+//   let fileRef = fireApp.storage().ref('/' + fileName);
+//   const url = await fileRef.getDownloadURL().then(url => {
+//     // console.log(url);
+//     return url;
+//   });
+// }
+
+const retrieveFile = async (fileName) => {
+  let fileRef = firebase.storage().ref('/' + fileName);
+  const url = await fileRef.getDownloadURL();
+  return url;
+}
+
+// firebase.storage().ref('/' + fileName).getDownloadURL().then(url => url)
+
+const loadFile = (fileName) => {
+  setTimeout(() => {
+    return retrieveFile(fileName).then(response => response["_W"])
+  }, 0);
+}
+
 export const Exercises = {
   1: {
     id: 1,
@@ -6,7 +31,8 @@ export const Exercises = {
     subTitle: "Relax Your Mind",
     videoFile: require('../assets/video-exercises/flower-of-life.mp4'),
     modalIcon: require('../assets/exercises-images/modal-icons/flower.png'),
-    iconHeight: 60
+    iconHeight: 60,
+    customVolume: 0.23
   },
   2: {
     id: 2,
@@ -41,6 +67,16 @@ export const Exercises = {
     title: "Ride the Wave",
     subTitle: "Slow Deep Breathing",
     videoFile: require('../assets/video-exercises/yin-yang.mp4'),
+    
+    // videoFile: retrieveFile('videos/yin-yang.mp4'),
+    // videoFile: retrieveFile('videos/yin-yang.mp4'),
+
+    // videoFile: {uri: retrieveFile('videos/yin-yang.mp4')},
+    /* returns:
+    video file: {"uri":{"_U":0,"_V":1,"_W":"https://firebasestorage.googleapis.com/v0/b/memoir-mobile.appspot.com/o/videos%2Fyin-yang.mp4?alt=media&token=6a78b856-dfb9-430d-879e-c5ca5df9a31a","_X":null}}
+    */
+
+    // videoFile: loadFile('videos/yin-yang.mp4'),
     modalIcon: require('../assets/exercises-images/modal-icons/wave.png'),
     iconHeight: 35
   },
@@ -58,9 +94,10 @@ export const Exercises = {
     image: require("../assets/exercises-images/daily-exhale.png"),
     uniqueImg: require("../assets/exercises-images/daily-exhale.png"),
     title: "Daily Exhale",
-    subTitle: "Tap to Begin",
+    subTitle: "2 Min Session",
     videoFile: require('../assets/video-exercises/daily-exhale.mp4'),
     modalIcon: require('../assets/exercises-images/modal-icons/breathe-waves.png'),
+    autoCountDown: "2m"
     /* 
       <TouchableOpacity onPress={() => navigation.navigate("ExerciseVideo", { videoFile: require('../../assets/video-exercises/daily-exhale.mp4'), modalIcon: require('../../assets/exercises-images/modal-icons/breathe-waves.png') })}>
         <Image 
@@ -75,12 +112,13 @@ export const Exercises = {
     id: 8,
     image: require("../assets/exercises-images/moon-4x.png"),
     uniqueImg: require("../assets/exercises-images/horiz-focus-session.png"),
-    title: "30 Minute Sleep Session",
-    subTitle: "",
+    title: "Sweet Dreams",
+    subTitle: "30 Min Session",
     videoFile: require('../assets/video-exercises/crescent-moon.mp4'),
     modalIcon: require('../assets/exercises-images/modal-icons/moon.png'),
     iconHeight: 38,
-    customWidth: 0.855
+    customWidth: 0.855,
+    autoCountDown: "30m"
   },
   9: {
     id: 9,

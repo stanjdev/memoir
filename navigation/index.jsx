@@ -162,7 +162,8 @@ export default function Navigation({navigation}) {
       if (currUser !== null) {
         // console.log(currUser);
         userFirstName = currUser.displayName;
-        userToken = currUser.uid
+        userToken = currUser.uid;
+        AsyncStorage.setItem('userToken', userToken); 
         dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
       }
 
@@ -222,7 +223,7 @@ export default function Navigation({navigation}) {
         userFirstName = currUser.displayName;
         // userEmail = currUser.email;
         userToken = currUser.uid;
-        AsyncStorage.setItem('userToken', userToken);  
+        AsyncStorage.setItem('userToken', userToken);
         dispatch({ type: "SIGNIN", token: userToken, firstName: userFirstName })
       }
     },
@@ -266,20 +267,20 @@ export default function Navigation({navigation}) {
 
       const currUser = fireApp.auth().currentUser;
       let userFirstName, userEmail, userToken;
-      // if (currUser !== null) {
+      if (currUser !== null) {
       //   // console.log(currUser);
       //   userFirstName = currUser.displayName;
       //   userEmail = currUser.email;
       //   userToken = currUser.uid
-      //   AsyncStorage.setItem('userToken', userToken);  
+        AsyncStorage.setItem('userToken', currUser.uid);  
       //   dispatch({ type: "SIGNIN", email: userEmail, token: userToken, firstName: userFirstName })
-      // }
+      }
 
       // let userToken;
-      userToken = null;
+      // userToken = null;
       try {
-        // userToken = await AsyncStorage.getItem('userToken');
-        userToken = currUser ? currUser.uid : null;
+        userToken = await AsyncStorage.getItem('userToken');
+        // userToken = currUser ? currUser.uid : null;
         if (currUser !== null) userFirstName = currUser.displayName;
       } catch(e) {
         console.log("useEffect hit!")

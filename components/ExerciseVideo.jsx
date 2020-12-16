@@ -9,8 +9,6 @@ import { useNavigation } from '@react-navigation/native';
 import { Audio, Video } from 'expo-av';
 import { setAudioModeAsync } from 'expo-av/build/Audio';
 
-// import Video from 'react-native-video';
-import FlowerOfLife from "../assets/video-exercises/flower-of-life.mp4";
 import { fireApp } from '../firebase';
 import { app, apps, firestore } from 'firebase';
 
@@ -34,7 +32,7 @@ export default function ExerciseVideo({ route, navigation }) {
     'Assistant-SemiBold': require('../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   });
 
-  const { id, videoFile, modalIcon, iconHeight, autoCountDown } = route.params;
+  const { id, videoFile, modalIcon, iconHeight, autoCountDown, customVolume } = route.params;
 
   const { signOut, userToken, userFirstName } = useContext(AuthContext);
 
@@ -153,7 +151,7 @@ export default function ExerciseVideo({ route, navigation }) {
   useEffect(() => {
     // MOUNT
     // console.log("exercise screen mounted!");
-    console.log(`Video File: ${videoFile}`);
+    // console.log(`Video File: ${videoFile}`);
 
     // UNMOUNT
     return () => clearInterval(exerciseInterv.current);
@@ -464,27 +462,27 @@ export default function ExerciseVideo({ route, navigation }) {
 
 
 
-  // AppState attempt for when user leaves app, NOT WORKING
-  const appState = useRef(AppState.currentState);
-  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  // // AppState attempt for when user leaves app, NOT WORKING
+  // const appState = useRef(AppState.currentState);
+  // const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
-  useEffect(() => {
-    AppState.addEventListener("change", _handleAppStateChange);
-    return () => AppState.removeEventListener("change", _handleAppStateChange);
-  }, []);
+  // useEffect(() => {
+  //   AppState.addEventListener("change", _handleAppStateChange);
+  //   return () => AppState.removeEventListener("change", _handleAppStateChange);
+  // }, []);
 
-  const _handleAppStateChange = (nextAppState) => {
-    if (
-      appState.current.match(/inactive|background/) && 
-      nextAppState === "active"
-    ) {
-      console.log("App has come to the foreground!");
-    }
-    appState.current = nextAppState;
-    setAppStateVisible(appState.current);
-    console.log("AppState", appState.current);
-    console.log(appStateVisible)
-  }
+  // const _handleAppStateChange = (nextAppState) => {
+  //   if (
+  //     appState.current.match(/inactive|background/) && 
+  //     nextAppState === "active"
+  //   ) {
+  //     console.log("App has come to the foreground!");
+  //   }
+  //   appState.current = nextAppState;
+  //   setAppStateVisible(appState.current);
+  //   console.log("AppState", appState.current);
+  //   console.log(appStateVisible)
+  // }
 
 
 
@@ -719,13 +717,10 @@ export default function ExerciseVideo({ route, navigation }) {
     // Alert.alert("paused: " + paused)
   }
 
-  
 
 
 
-
-
-  
+  console.log("video file: " + JSON.stringify(videoFile))
 
   return (
     
@@ -733,7 +728,7 @@ export default function ExerciseVideo({ route, navigation }) {
       <Video
         source={ videoFile }
         rate={1.0}
-        volume={0.4}
+        volume={customVolume || 0.75}
         isMuted={bellMuted}
         // isMuted={true}
         resizeMode="cover"

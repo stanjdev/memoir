@@ -8,7 +8,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const { width, height } = Dimensions.get('window');
 const bgImage = require('../assets/splash/memoir-splash-thin-content-4x.png')
-// const bgImage = { uri: "https://reactjs.org/logo-og.png" }
 
 
 export default function CreateIntroScreen ({navigation}) {

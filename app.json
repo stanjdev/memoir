@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/app-icon.png",
     "splash": {
-      "image": "./assets/splash/memoir-splash-4x.png",
+      "image": "./assets/splash/memoir-splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -21,6 +21,10 @@
       "assets/video-exercises/*",
       "assets/screen-icons/*"
     ],
+    "facebookScheme": "fb200817071551403",
+    "facebookAppId": "200817071551403",
+    "facebookDisplayName": "memoir",
+    "scheme": "com.memoir.memoir-app",
     "ios": {
       "supportsTablet": true,
       "usesAppleSignIn": true,
@@ -29,7 +33,7 @@
     "android": {
       "package": "com.memoir.memoir",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/app-icon.png",
         "backgroundColor": "#FFFFFF"
       }
     },

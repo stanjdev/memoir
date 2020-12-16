@@ -87,7 +87,7 @@ export default function FavoritesScreen({navigation}) {
             console.log(favs.length)
             // if (favIds.length !== favs.length) {
               setFavs(favs => [...favs, 
-                <Exercise key={key} id={Exercises[exId].id} navigation={navigation} image={Exercises[exId].image} title={Exercises[exId].title} subTitle={Exercises[exId].subTitle} videoFile={Exercises[exId].videoFile} modalIcon={Exercises[exId].modalIcon} iconHeight={Exercises[exId].iconHeight} />
+                <Exercise key={key} id={Exercises[exId].id} navigation={navigation} image={Exercises[exId].image} title={Exercises[exId].title} subTitle={Exercises[exId].subTitle} videoFile={Exercises[exId].videoFile} modalIcon={Exercises[exId].modalIcon} iconHeight={Exercises[exId].iconHeight} autoCountDown={Exercises[exId].autoCountDown} customVolume={Exercises[exId].customVolume || null}/>
               ])
               // favs.push(
               //   <Exercise key={key} id={Exercises[exId].id} navigation={navigation} image={Exercises[exId].image} title={Exercises[exId].title} subTitle={Exercises[exId].subTitle} videoFile={Exercises[exId].videoFile} modalIcon={Exercises[exId].modalIcon} iconHeight={Exercises[exId].iconHeight} />

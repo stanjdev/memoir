@@ -22,7 +22,7 @@ import firebase from 'firebase';
 
 export default function MeditateTimerSetScreen({navigation}) {
   const [minutes, setMinutes] = React.useState(10);
-  const [bellIntervDisplay, setBellIntervDisplay] = React.useState("30s");
+  const [bellIntervDisplay, setBellIntervDisplay] = React.useState("30 Seconds");
   const [bellInterv, setBellInterv] = React.useState(30000);
 
   const { userToken } = useContext(AuthContext);
@@ -38,7 +38,7 @@ export default function MeditateTimerSetScreen({navigation}) {
   const renderMinsPickerItems = () => {
     let items = [];
     for (let i = 1; i <= 60; i++) {
-      items.push(<Image key={i} source={require('../../../assets/meditate-timer-set/bar-1.png')} resizeMode="contain" style={{margin: 3, height: 15}} />)
+      items.push(<Image key={i} source={require('../../../assets/meditate-timer-set/bar-1.png')} resizeMode="contain" style={{margin: 3, height: 17}} />)
       // items.push(<Text key={i}> | </Text>)
     }
     return items;
@@ -67,12 +67,12 @@ export default function MeditateTimerSetScreen({navigation}) {
 
   const onChangeSecs = (value) => {
     const bellOptions = {
-      "30s": 30000,
-      "60s": 60000,
-      "90s": 90000,
-      "2m": 120000,
-      "3m": 180000,
-      "5m": 300000,
+      "30 Seconds": 30000,
+      "60 Seconds": 60000,
+      "90 Seconds": 90000,
+      "2 Minutes": 120000,
+      "3 Minutes": 180000,
+      "5 Minutes": 300000,
       "OFF": null
     }
     let bellArray = Object.keys(bellOptions);
@@ -182,7 +182,7 @@ export default function MeditateTimerSetScreen({navigation}) {
               <View style={{alignItems: "center"}}>
                 <Image source={require('../../../assets/screen-icons/clock.png')} style={{height: 37, }} resizeMode="contain"/>
                 <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 20, textAlign: "center", color: "#535353"}}>Session Duration:</Text>
-                <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 25, textAlign: "center", color: "#535353"}}>{minutes} Minutes</Text>
+                <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 25, textAlign: "center", color: "#535353"}}>{minutes} {minutes === 1 ? "Minute" : "Minutes" }</Text>
                 
                 {/* <Picker
                   style={{borderWidth: 1, width: width * 0.9, height: height * 0.2}}

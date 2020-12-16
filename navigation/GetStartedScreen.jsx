@@ -9,8 +9,7 @@ import { AppLoading } from 'expo';
 
 const { width, height } = Dimensions.get('window');
 const bgImage = require('../assets/splash/memoir-splash-thin-content-4x.png')
-// const bgImage = require('../assets/splash/memoir-splash-thin.png')
-// const bgImage = { uri: "https://reactjs.org/logo-og.png" }
+// const bgImage = require('../assets/splash/memoir-splash-thin-4x.png')
 
 // let customFonts = {
 //   'Assistant-Regular': require('../assets/fonts/Assistant/static/Assistant-Regular.ttf'),

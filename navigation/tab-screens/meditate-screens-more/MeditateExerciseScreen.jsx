@@ -151,10 +151,10 @@ export default function MeditateExerciseScreen({ route, navigation }) {
   const { minutes, bellInterv } = route.params;
   const [ timerRunning, setTimerRunning ] = useState(true);
 
-  // const [ mins, setMins ] = useState(minutes);
-  // const [ secs, setSecs ] = useState(0);
-  const [ mins, setMins ] = useState(0);
-  const [ secs, setSecs ] = useState(2);
+  const [ mins, setMins ] = useState(minutes);
+  const [ secs, setSecs ] = useState(0);
+  // const [ mins, setMins ] = useState(0);
+  // const [ secs, setSecs ] = useState(2);
 
   // Add leading zero to numbers 9 or below (purely for aesthetics):
   function leadingZero(time) {
@@ -174,6 +174,7 @@ export default function MeditateExerciseScreen({ route, navigation }) {
       setSecs(59);
       setMins(mins - 1);
     } else {
+      updateUserTime();
       incrementSessionsCompleted();
       Alert.alert("Timer Complete", "Great job, you’ve completed your meditation session!", [{text: "Back"}, {text: "Finish", style: "cancel"}], );
       setTimerRunning(false);
@@ -186,6 +187,7 @@ export default function MeditateExerciseScreen({ route, navigation }) {
         // navigation.navigate("MeditateTimerSetScreen");
       }, 4000);
     }
+    setSessionSecs(sessionSecs => sessionSecs += 1);
   }
 
 
@@ -259,8 +261,41 @@ export default function MeditateExerciseScreen({ route, navigation }) {
 
 
 
+
+
+
+
   const currUser = firebase.auth().currentUser;
   const progressRef = currUser ? firebase.database().ref(currUser.uid).child('progress') : null;
+
+
+  const [sessionSecs, setSessionSecs] = useState(0);
+
+  // WITH SAFETY CHECK ADDED - for users with no existing progress data objects
+  // INSTEAD OF DB POST REQUESTING EVERY SECOND with incrementUserTime(), THIS INCREMENTS LOCALLY, THEN WHEN USER FINISHES EXERCISE WITH ALERT POPUP ORRR UNMOUNTS EXERCISE, THEN UPDATE THE PRACTICE TIME BY ADDING THE SO FAR WITH THIS LOCALLY INCREMENTED SECONDS TRACKER.
+  async function updateUserTime() {
+    if (currUser && userToken) {
+      let timeSoFar;
+      await progressRef.once('value', async snapshot => {
+        if (snapshot.val() === null) {
+          progressRef.set({
+            practiceTime: 0,
+            sessionsCompleted: 0,
+            currentStreak: 0,
+            bestStreak: 0
+          })
+          timeSoFar = await snapshot.val() !== null ? snapshot.val().practiceTime : 0;
+        } else {
+          timeSoFar = await snapshot.val() !== null ? snapshot.val().practiceTime : 0;
+        }
+
+        await progressRef.update({
+          practiceTime: timeSoFar += sessionSecs
+        })
+      })
+      setSessionSecs(0);
+    } 
+  };
 
 
   // WITH SAFETY CHECK ADDED - for users with no existing progress data objects
@@ -289,6 +324,10 @@ export default function MeditateExerciseScreen({ route, navigation }) {
   };
 
 
+  const goBack = () => {
+    updateUserTime();
+    navigation.goBack();
+  }
 
 
 
@@ -302,7 +341,7 @@ export default function MeditateExerciseScreen({ route, navigation }) {
       {isFocused ? <StatusBar hidden={false} barStyle="light-content"/> : null} 
 
       <Animated.View style={{ width: width, flexDirection: "row", alignItems: "center", marginTop: height * 0.07, position: "absolute", zIndex: 100, opacity: overlayFade}}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 15}}>
+        <TouchableOpacity onPress={goBack} style={{ padding: 15}}>
           <Image source={require('../../../assets/screen-icons/back-arrow-white.png')} style={{height: 20, marginLeft: 0}} resizeMode="contain"/>
         </TouchableOpacity>
         <Text style={{textAlign: "center", fontSize: 23, fontFamily: "Assistant-SemiBold", color: 'white', position: "absolute", zIndex: -1, width: width}}>Meditate</Text>
