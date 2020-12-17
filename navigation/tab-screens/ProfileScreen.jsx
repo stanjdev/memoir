@@ -45,8 +45,8 @@ export default function ProfileScreen({navigation}) {
     currentStreak: 0,
     bestStreak: 0,
     lastDateExercised: 0,
-    bestStreakDate: 5,
-    bestStreakMonth: 12,
+    bestStreakDate: 0,
+    bestStreakMonth: 0,
     bestStreakYear: 2020
   });
 
@@ -91,15 +91,11 @@ export default function ProfileScreen({navigation}) {
 
   
 
+  // useEffect(() => {
+  //   // console.log(userProgress)
 
-
-  useEffect(() => {
-
-    
-    console.log(userProgress)
-
-    // fakeAddProgressData();
-  }, [])
+  //   // fakeAddProgressData();
+  // }, [])
 
 
 
@@ -128,7 +124,7 @@ export default function ProfileScreen({navigation}) {
     }
     let ceil = (count * fiveHours / 60 / 60);
 
-    return practiceTime < 1800 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 ).toFixed(0)} subtitle="Minutes" subText="30 min Goal" progress={(practiceTime / 60 / 60) / 0.5}/> 
+    return practiceTime < 1800 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 ).toFixed(0)} subtitle="Minutes" subText="30 min Goal" progress={(Math.max(practiceTime, 0.01) / 60 / 60) / 0.5}/> 
     : practiceTime >= 1800 && practiceTime < 7200 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(2)} subtitle="Hours" subText="2hr Goal" progress={(practiceTime / 60 / 60) / 2}/> 
     : practiceTime >= 7200 && practiceTime < 18000 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(2)} subtitle="Hours" subText="5hr Goal" progress={(practiceTime / 60 / 60) / 5}/> 
     : practiceTime >= fiveHours ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(2)} subtitle="Hours" subText={`${ceil}hr Goal`} progress={(practiceTime / 60 / 60) / ceil}/> 
@@ -141,7 +137,7 @@ export default function ProfileScreen({navigation}) {
     let remainder = 10 - rightMostNum;
     let ceil = sessionsCompleted + remainder;
 
-    return <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-hash.png')} title="Sessions Completed" number={sessionsCompleted} subtitle={sessionsCompleted === 1 ? "Session" : "Sessions"} subText={`${ceil} Session Goal`} progress={sessionsCompleted / ceil}/>
+    return <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-hash.png')} title="Sessions Completed" number={sessionsCompleted} subtitle={sessionsCompleted === 1 ? "Session" : "Sessions"} subText={`${ceil} Session Goal`} progress={ Math.max(sessionsCompleted, 0.01) / ceil }/>
   }
 
   const renderMovingStreakGoal = (currentStreak) => {
@@ -150,7 +146,7 @@ export default function ProfileScreen({navigation}) {
     let remainder = 10 - rightMostNum;
     let ceil = currentStreak + remainder;
 
-    return <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-arrow.png')} title="Current Streak" number={currentStreak} subtitle={currentStreak === 1 ? "Day" : "Days"} subText={`${ceil} Day Streak Goal`} progress={currentStreak / ceil}/>
+    return <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-arrow.png')} title="Current Streak" number={currentStreak} subtitle={currentStreak === 1 ? "Day" : "Days"} subText={`${ceil} Day Streak Goal`} progress={ Math.max(currentStreak, 0.01) / ceil}/>
   }
 
 
@@ -177,7 +173,7 @@ export default function ProfileScreen({navigation}) {
               {renderPracticeTime()}
               {renderMovingSessionsGoal(sessionsCompleted)}
               {renderMovingStreakGoal(currentStreak)}
-              <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-rocket.png')} title="Best Streak" number={bestStreak} subtitle={bestStreak === 1 ? "Day" : "Days"} subText={`Achieved ${bestStreakMonth}/${bestStreakDate}/${bestStreakYear}`} />
+              <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-rocket.png')} title="Best Streak" number={bestStreak} subtitle={bestStreak === 1 ? "Day" : "Days"} subText={bestStreakDate === 0 ? "" : `Achieved ${bestStreakMonth}/${bestStreakDate}/${bestStreakYear}`} />
             </View>
                 :
             <View style={{flexDirection:"row", flexWrap: "wrap", justifyContent: "center",}}>

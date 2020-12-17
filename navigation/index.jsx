@@ -122,7 +122,8 @@ export default function Navigation({navigation}) {
         userFirstName = currUser.displayName;
         userEmail = currUser.email;
         userToken = currUser.uid
-        AsyncStorage.setItem('userToken', userToken);  
+        AsyncStorage.setItem('userToken', userToken);
+        AsyncStorage.setItem('userName', userFirstName);
         dispatch({ type: "SIGNIN", email: userEmail, token: userToken, firstName: userFirstName })
       }
 
@@ -140,6 +141,7 @@ export default function Navigation({navigation}) {
       try {
         await fireApp.auth().signOut()
         await AsyncStorage.removeItem('userToken');
+        await AsyncStorage.removeItem('userName');
       } catch(e) {
         console.log(e);
       }
@@ -163,7 +165,8 @@ export default function Navigation({navigation}) {
         // console.log(currUser);
         userFirstName = currUser.displayName;
         userToken = currUser.uid;
-        AsyncStorage.setItem('userToken', userToken); 
+        AsyncStorage.setItem('userToken', userToken);
+        AsyncStorage.setItem('userName', userFirstName);
         dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
       }
 
@@ -224,25 +227,31 @@ export default function Navigation({navigation}) {
         // userEmail = currUser.email;
         userToken = currUser.uid;
         AsyncStorage.setItem('userToken', userToken);
+        AsyncStorage.setItem('userName', userFirstName);
         dispatch({ type: "SIGNIN", token: userToken, firstName: userFirstName })
       }
     },
 
     fbSignUp: async (email, first_name, last_name, userId, token) => {
+      // console.log("fetchSignInMethodsForEmail: " + JSON.stringify(await fireApp.auth().fetchSignInMethodsForEmail(email)))
+      // console.log(userId);
       try {
-        await fireApp
-          .auth()
-          .signInWithEmailAndPassword(email ? email : `${userId}@fbid.com`, userId);
+        if ((await fireApp.auth().fetchSignInMethodsForEmail(email)).length > 0) {
+          await fireApp
+            .auth()
+            .signInWithEmailAndPassword(email || `${userId}@fbid.com`, userId);
+        } else {
+            const result = await fireApp
+              .auth()
+              .createUserWithEmailAndPassword(email || `${userId}@fbid.com`, userId);
+              await result.user.updateProfile({
+                displayName: first_name,
+                lastName: last_name,
+                privateRelayEmail: email || `${userId}@fbid.com` // just to hold to onto just in case
+            });
+        }
       } catch (error) {
-        const result = await fireApp
-          .auth()
-          .createUserWithEmailAndPassword(email ? email : `${userId}@fbid.com`, userId);
-          await result.user.updateProfile({
-            displayName: first_name,
-            lastName: last_name,
-            privateRelayEmail: email ? email : `${userId}@fbid.com` // just to hold to onto just in case
-          });
-          console.log("no user found for FB sign up, so created new user! ", error)
+          alert(error);
       }
       const currUser = fireApp.auth().currentUser;
       let userFirstName, userEmail, userToken;
@@ -252,6 +261,7 @@ export default function Navigation({navigation}) {
         userToken = token;
         // userToken = currUser.uid;
         AsyncStorage.setItem('userToken', userToken); 
+        AsyncStorage.setItem('userName', userFirstName);
         dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
       }
     },
@@ -269,9 +279,9 @@ export default function Navigation({navigation}) {
       let userFirstName, userEmail, userToken;
       if (currUser !== null) {
       //   // console.log(currUser);
-      //   userFirstName = currUser.displayName;
       //   userEmail = currUser.email;
       //   userToken = currUser.uid
+        AsyncStorage.setItem('userName', currUser.displayName);
         AsyncStorage.setItem('userToken', currUser.uid);  
       //   dispatch({ type: "SIGNIN", email: userEmail, token: userToken, firstName: userFirstName })
       }
@@ -280,15 +290,16 @@ export default function Navigation({navigation}) {
       // userToken = null;
       try {
         userToken = await AsyncStorage.getItem('userToken');
+        userFirstName = await AsyncStorage.getItem('userName');
         // userToken = currUser ? currUser.uid : null;
-        if (currUser !== null) userFirstName = currUser.displayName;
+        // if (currUser !== null) userFirstName = currUser.displayName;
       } catch(e) {
         console.log("useEffect hit!")
         console.log(e);
       }
       dispatch({ type: "RETRIEVE_TOKEN", token: userToken, firstName: userFirstName })
-      console.log(userToken)
-      console.log(userFirstName)
+      console.log("user token:", userToken)
+      console.log("user firstName:", userFirstName)
     }, 0)
   }, [])
   

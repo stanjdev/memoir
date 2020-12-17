@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Text, View, Image, Dimensions, StyleSheet } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { AuthContext } from '../components/context';
 
 import { useFonts } from 'expo-font';
 import { AppLoading } from 'expo';
@@ -8,25 +9,30 @@ import { AppLoading } from 'expo';
 import firebase from 'firebase';
 
 
-export default function Exercise({ uniqueSize, image, title, subTitle, navigation, onPress, videoFile, modalIcon, iconHeight, id, autoCountDown, customWidth, customVolume }) {
+export default function Exercise({ uniqueSize, image, title, subTitle, navigation, onPress, videoFile, modalIcon, iconHeight, id, autoCountDown, customWidth, customVolume, isLiked }) {
   
+  const { userToken, userFavs } = useContext(AuthContext);
+
   const [liked, setLiked] = useState(false);
 
   const currUser = firebase.auth().currentUser;
   const favRef = currUser ? firebase.database().ref(currUser.uid).child('favorites') : null;
 
-  let favIds = [];
-  if (currUser) {
-    favRef.on("value", snapshot => {
-      snapshot.forEach(node => {
-        favIds.push(node.val().id)
-      })
-    })
-  }
+  // console.log("is Liked:", isLiked)
+  // console.log("user Favs:", userFavs)
 
+  let favIds = [];
+  
   useEffect(() => {
+    if (currUser) {
+      favRef.on("value", snapshot => {
+        snapshot.forEach(node => {
+          favIds.push(node.val().id)
+        })
+      })
+      setLiked(favIds.includes(id));
+    }
     // console.log(`fav ids: ${favIds} includes id: ${id} = ${favIds.includes(id)} from Exercise.jsx!`);
-    setLiked(favIds.includes(id));
 
     // return () => favRef.off()
   },)

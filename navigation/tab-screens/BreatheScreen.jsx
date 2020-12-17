@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import { Text, View, StatusBar, Image, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { Text, View, StatusBar, Image, Dimensions, StyleSheet, TouchableOpacity, RefreshControl } from 'react-native';
 const { width, height } = Dimensions.get('window');
 import { Asset } from 'expo-asset';
+import { AuthContext } from '../../components/context';
 
 import Exercise from '../../components/Exercise';
 import { useIsFocused } from '@react-navigation/native';
@@ -23,6 +24,8 @@ function cacheImages(images) {
 
 export default function BreatheScreen({navigation}) {
   const isFocused = useIsFocused();
+
+  const { userToken } = useContext(AuthContext);
 
   const [isReady, setIsReady] = useState(false);
 
@@ -97,15 +100,48 @@ export default function BreatheScreen({navigation}) {
 
 
 
+  const currUser = firebase.auth().currentUser;
+  const favRef = currUser ? firebase.database().ref(currUser.uid).child('favorites') : null;
+
+  let favIds = [];
+  useEffect(() => {
+    if (currUser) {
+      favRef.on("value", snapshot => {
+        snapshot.forEach(node => {
+          favIds.push(node.val().id)
+        })
+      })
+    }
+
+  }, [])
+
+  const checkIfLiked = (exId) => {
+    console.log("Breathe Screen favs:", favIds.includes(exId))
+    return favIds.includes(exId);
+  }
 
 
 
+  // const [refreshing, setRefreshing] = React.useState(false);
+
+  // const onRefresh = React.useCallback(() => {
+  //   setRefreshing(true);
+
+  //   setTimeout(() => {
+  //     setRefreshing(false)
+  //   }, 0);
+  // }, []);
+
+  // useEffect(() => {
+  //   onRefresh();
+  // }, [])
 
 
-
+  
   return(
     <ScrollView style={{backgroundColor: "white"}}>
       {isFocused ? <StatusBar hidden={false} barStyle="dark-content"/> : null} 
+      {/* <RefreshControl refreshing={refreshing} /> */}
       {
         isReady ? 
         <View>
@@ -131,9 +167,6 @@ export default function BreatheScreen({navigation}) {
           </View>
           <View style={{alignItems: "center", }}>
             <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[9].image} videoFile={Exercises[9].videoFile} modalIcon={Exercises[9].modalIcon} id={Exercises[9].id} customWidth={Exercises[9].customWidth}/> 
-            {/* <TouchableOpacity>
-              <Image source={require("../../assets/exercises-images/horiz-deep-breaths.png")} resizeMode="contain" style={{width: width * 0.9, height: height * 0.17 }}/>
-            </TouchableOpacity> */}
           </View>
 
           <View style={{marginLeft: 25, flexDirection: "row", }}>

@@ -39,7 +39,6 @@ import { AppLoading } from 'expo';
 
 
 
-
 // ACTUAL TAB NAVIGATOR
 const BottomTab = createBottomTabNavigator();
 export default function BottomTabNavigator() {
