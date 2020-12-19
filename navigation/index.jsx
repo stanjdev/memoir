@@ -25,6 +25,7 @@ export default function Navigation({navigation}) {
     userToken: null,
     userFirstName: null,
     isLoading: true,
+    signInFail: null
   }
 
   const loginReducer = (prevState, action) => {
@@ -59,6 +60,16 @@ export default function Navigation({navigation}) {
           userToken: action.token,
           userFirstName: action.firstName,
           isLoading: false
+        }
+      case 'SIGNINFAIL':
+        return {
+          ...prevState,
+          signInFail: action.fail
+        }
+      case 'SIGNINFAILRESET':
+        return {
+          ...prevState,
+          signInFail: null
         }
     }
   }
@@ -108,8 +119,8 @@ export default function Navigation({navigation}) {
           .auth()
           .signInWithEmailAndPassword(inputEmail, inputPassword);
       } catch(e) {
-        console.log(e);
-        // alert("Your Account Info Does Not Match Our Records. Please Enter a Valid Username/Password.");
+        // console.log(e);
+        dispatch({ type: "SIGNINFAIL", fail: e })
         Alert.alert("User Not Found", "Your Account Info Does Not Match Our Records. Please Enter a Valid Username/Password.", [
           {text: "Okay"}, {style: "destructive"}
         ]);
@@ -126,15 +137,12 @@ export default function Navigation({navigation}) {
         AsyncStorage.setItem('userName', userFirstName);
         dispatch({ type: "SIGNIN", email: userEmail, token: userToken, firstName: userFirstName })
       }
-
-      // fireApp.auth().onAuthStateChanged(function(user) {
-      //   const userFirstName = user.displayName;
-      //   const userToken = user.uid;
-      //   AsyncStorage.setItem('userToken', userToken);
-      //   dispatch({ type: "SIGNIN", email: inputEmail, token: userToken, firstName: userFirstName })
-      // })
-
     },
+    signInFail: loginState.signInFail,
+    resetSignInFail: async () => {
+      dispatch({ type: "SIGNINFAILRESET" })
+    },
+
     signOut: async () => {
       // setUserToken(null);
       // setIsLoading(false);

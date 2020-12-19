@@ -11,7 +11,7 @@ export default function SplashScreen ({navigation}) {
   useEffect(() => {
     setTimeout(() => {
       navigation.navigate('Memoir')
-    }, 2000);
+    }, 1500);
   }, [])
 
   return (

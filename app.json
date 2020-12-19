@@ -2,12 +2,12 @@
   "expo": {
     "name": "Memoir",
     "slug": "Memoir",
-    "version": "1.0.1",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/app-icon.png",
     "splash": {
       "image": "./assets/splash/memoir-splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {

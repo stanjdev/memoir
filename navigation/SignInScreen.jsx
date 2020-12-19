@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { useCallback, useState, useContext, useEffect } from 'react';
 import { Text, View, StyleSheet, StatusBar, Image, Dimensions, ImageBackground, TextInput, TouchableOpacity, Alert } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import * as Animatable from 'react-native-animatable';
@@ -8,6 +8,9 @@ import { AuthContext } from '../components/context';
 import { useFonts } from 'expo-font';
 
 const { width, height } = Dimensions.get('window');
+
+// import * as admin from 'firebase-admin';
+import firebase from 'firebase';
 
 // import SavedUsers from '../model/users-example';
 
@@ -30,7 +33,7 @@ export default function SignInScreen ({navigation}) {
     isValidPassword: true
   })
   
-  const { signIn, userToken } = React.useContext(AuthContext);
+  const { signIn, userToken, signInFail, resetSignInFail } = React.useContext(AuthContext);
 
   useEffect(() => {
     if (userToken) {
@@ -135,8 +138,24 @@ export default function SignInScreen ({navigation}) {
       ]);
       return;
     };
-    await signIn(inputEmail, inputPassword);
+    await signIn(inputEmail, inputPassword)
   });
+
+
+
+  useEffect(() => {  
+    return async () => await resetSignInFail();
+  }, [])
+
+
+
+  const resetPassword = (email) => {
+    firebase.auth().sendPasswordResetEmail(email).then(error => error ? null : alert("Password email sent. Check your email!")).catch(error => alert(error))
+  }
+
+
+
+
 
 
 
@@ -191,7 +210,14 @@ export default function SignInScreen ({navigation}) {
               </View>
 
               <View>
-                <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>Password</Text>
+                <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
+                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>Password</Text>
+                  {signInFail ? 
+                    <TouchableOpacity onPress={() => resetPassword(userInfo.email)}>
+                      <Text style={{ fontFamily: "Assistant-Regular", fontSize: 15.21, textDecorationLine: "underline", ...styles.errorMsg }}>Forgot Password?</Text>
+                    </TouchableOpacity>
+                  : null}
+                </View>
                 <View style={styles.inputsWhole}>
                   <TextInput 
                     placeholder="Password"
@@ -288,6 +314,7 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     borderColor: "#BDBDBD",
     borderWidth: 1.5,
+    marginTop: 5
   },
   inputs: {
     // borderWidth: 1,d

@@ -113,7 +113,9 @@ export default function FavoritesScreen({navigation}) {
       setFavs([ 
         <View key={"noFavs"}>
           <View style={{ backgroundColor: "lavender", borderRadius: 7, height: height, width: width, marginLeft: -25}}>
-            <Text style={{textAlign: "center"}}>No Favorites</Text>
+            <Text style={{textAlign: "center"}}>You have no favorites.
+
+Tap the heart when viewing an exercise to add to this list.</Text>
           </View>
           {/* <Exercise image={require("../../assets/exercises-images/forest-orange.png")} title="Ride the Wave" subTitle="Slow Deep Breathing"/>
           <Exercise image={require("../../assets/exercises-images/forest-orange.png")} title="Ride the Wave" subTitle="Slow Deep Breathing"/>

@@ -11,6 +11,7 @@ const { width, height } = Dimensions.get('window');
 const bgImage = require('../../../assets/splash/memoir-splash-thin-4x.png')
 import ProfileStatsBlock from '../../../components/ProfileStatsBlock';
 
+import firebase from 'firebase';
 
 
 export default function SettingsScreen({navigation}) {
@@ -32,12 +33,22 @@ export default function SettingsScreen({navigation}) {
   }, [isFocused])
 
 
-
   let [fontsLoaded] = useFonts({
     'Assistant': require('../../../assets/fonts/Assistant/Assistant-VariableFont_wght.ttf'),
     'Assistant-Regular': require('../../../assets/fonts/Assistant/static/Assistant-Regular.ttf'),
     'Assistant-SemiBold': require('../../../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   });
+
+
+
+  // Change Password button
+  const currUser = firebase.auth().currentUser;
+  const currUserEmail = currUser ? currUser.email : null;
+
+  const resetPassword = (email) => {
+    firebase.auth().sendPasswordResetEmail(email).then(error => error ? null : alert("Password email sent. Check your email!")).catch(error => alert(error))
+  }
+
 
   return (
     // <ImageBackground source={bgImage} style={{ flex: 1, resizeMode: "cover", justifyContent: "flex-start",}}>
@@ -56,13 +67,13 @@ export default function SettingsScreen({navigation}) {
           <View style={{ height: height, justifyContent: "center", flexDirection:"column", alignItems: "center", }}>
 
             <View style={{ alignItems: "center", height: height * 0.75, justifyContent: "space-evenly",}}> 
-              <SettingOption text={"Account Info"} action={() => console.log("nothing yet!")}/>
+              <SettingOption text={"Account Info"} action={() => navigation.navigate("AccountInfoScreen")}/>
               <SettingOption text={"Notifications"} action={() => console.log("nothing yet!")}/>
               <SettingOption text={"Billing Info"} action={() => console.log("nothing yet!")}/>
               <SettingOption text={"Subscriptions"} action={() => console.log("nothing yet!")}/>
               <SettingOption text={"Restore Purchase"} action={() => console.log("nothing yet!")}/>
               <SettingOption text={"Support"} action={() => console.log("nothing yet!")}/>
-              <SettingOption text={"Change Password"} action={() => console.log("nothing yet!")}/>
+              <SettingOption text={"Change Password"} action={() => resetPassword(currUserEmail)}/>
               <SettingOption text={"Terms & Conditions"} action={() => console.log("nothing yet!")}/>
               <SettingOption text={"Privacy Policy"} action={() => console.log("nothing yet!")}/>
               <SettingOption text={"Log Out"} action={signOutToHome}/>
