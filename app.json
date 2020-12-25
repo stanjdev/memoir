@@ -28,7 +28,10 @@
     "ios": {
       "supportsTablet": true,
       "usesAppleSignIn": true,
-      "bundleIdentifier": "com.memoir.memoir-app"
+      "bundleIdentifier": "com.memoir.memoir-app",
+      "config": {
+        "usesNonExemptEncryption": false
+     }
     },
     "android": {
       "package": "com.memoir.memoir",

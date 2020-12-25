@@ -1,5 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator, CardStyleInterpolators, TransitionSpecs, TransitionPresets, HeaderStyleInterpolators } from '@react-navigation/stack';
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import BottomTabNavigator from './BottomTabNavigator';
 import React, { useEffect, useState, useMemo } from 'react';
 
@@ -11,6 +11,7 @@ import { AuthContext } from '../components/context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { fireApp } from '../firebase';
+import firebase, { auth } from 'firebase';
 
 
 export default function Navigation({navigation}) {
@@ -27,6 +28,8 @@ export default function Navigation({navigation}) {
     isLoading: true,
     signInFail: null
   }
+
+
 
   const loginReducer = (prevState, action) => {
     switch( action.type ) {
@@ -71,10 +74,25 @@ export default function Navigation({navigation}) {
           ...prevState,
           signInFail: null
         }
+      case 'UPDATEUSERNAME':
+        return {
+          ...prevState,
+          userFirstName: action.firstName,
+        }
+      case 'UPDATEUSEREMAIL':
+        return {
+          ...prevState,
+          userEmail: action.email
+        }
     }
   }
 
+
+
+
   const [loginState, dispatch] = React.useReducer(loginReducer, initialLoginState);
+
+
 
 
 
@@ -150,69 +168,125 @@ export default function Navigation({navigation}) {
         await fireApp.auth().signOut()
         await AsyncStorage.removeItem('userToken');
         await AsyncStorage.removeItem('userName');
+        
+        // sign in anonymously whenever user signs out
+        firebase.auth().signInAnonymously()
+          .then(user => {
+            console.log(user)
+          })
+          .catch(err => console.log(err.code, err.message));
       } catch(e) {
         console.log(e);
       }
       dispatch({ type: "SIGNOUT" })
     },
+
     signUp: async (inputEmail, inputPassword, inputFirstName) => {
+      // try {
+      //   const result = await fireApp
+      //     .auth()
+      //     .createUserWithEmailAndPassword(inputEmail, inputPassword)
+      //   await result.user.updateProfile({
+      //     displayName: inputFirstName
+      //   });
+      //   // console.log(result)
+      //   fireApp.auth().currentUser.linkWithCredential(result)
+      //   .then(usercred => {
+      //     const user = usercred.user;
+      //     console.log("Anonymous account successfully upgraded", user);
+      //   })
+      // } catch (error) {
+      //   console.log(error);
+      // }
+      
       try {
-        const result = await fireApp
-          .auth()
-          .createUserWithEmailAndPassword(inputEmail, inputPassword)
-        await result.user.updateProfile({
-          displayName: inputFirstName
-        });
+        const credential = firebase.auth.EmailAuthProvider.credential(inputEmail, inputPassword);
+        firebase.auth().currentUser.linkWithCredential(credential)
+          .then(async usercred => {
+            const user = usercred.user;
+            await user.updateProfile({
+              displayName: inputFirstName,
+              email: inputEmail
+            }).then(async results => {
+              const currUser = fireApp.auth().currentUser;
+              let userFirstName, userEmail, userToken;
+              if (currUser !== null) {
+                userFirstName = currUser.displayName;
+                userToken = currUser.uid;
+                userEmail = currUser.email;
+                AsyncStorage.setItem('userToken', userToken);
+                AsyncStorage.setItem('userName', userFirstName);
+                dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
+              }
+            })
+            console.log("Anonymous account successfully upgraded with Email!", user);
+          })
       } catch (error) {
-        console.log(error);
+        console.log("Error upgrading anonymous account with email", error);
       }
-
-      const currUser = fireApp.auth().currentUser;
-      let userFirstName, userEmail, userToken;
-      if (currUser !== null) {
-        // console.log(currUser);
-        userFirstName = currUser.displayName;
-        userToken = currUser.uid;
-        AsyncStorage.setItem('userToken', userToken);
-        AsyncStorage.setItem('userName', userFirstName);
-        dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
-      }
-
-      // fireApp.auth().onAuthStateChanged(function(user) {
-      //   const userFirstName = user.displayName;
-      //   const userToken = user.uid;
-      //   dispatch({ type: "SIGNUP", email: inputEmail, token: userToken, firstName: userFirstName })
-      // })
-
-      // setUserToken('asdf');
-      // setIsLoading(false);
     },
+
     userToken: loginState.userToken,
     userFirstName: loginState.userFirstName,
 
     appleSignUp: async (inputEmail, givenName, familyName, credentialUserID) => {
-      try {
-        const result = await fireApp
+      // try {
+      //   const result = await fireApp
+      //     .auth()
+      //     .createUserWithEmailAndPassword(`${credentialUserID}@appleid.com`, credentialUserID)
+      //   await result.user.updateProfile({
+      //     displayName: givenName,
+      //     lastName: familyName,
+      //     privateRelayEmail: inputEmail
+      //   });
+      // } catch (error) {
+      //   console.log(error);
+      // }
+      if ((await fireApp.auth().fetchSignInMethodsForEmail(`${credentialUserID}@appleid.com`)).length > 0) {
+        await fireApp
           .auth()
-          .createUserWithEmailAndPassword(`${credentialUserID}@appleid.com`, credentialUserID)
-        await result.user.updateProfile({
-          displayName: givenName,
-          lastName: familyName,
-          privateRelayEmail: inputEmail // just to hold to onto just in case
-        });
-      } catch (error) {
-        console.log(error);
+          .signInWithEmailAndPassword(`${credentialUserID}@appleid.com`, credentialUserID);
+
+          const currUser = fireApp.auth().currentUser;
+          let userFirstName, userEmail, userToken;
+          if (currUser !== null) {
+            userFirstName = currUser.displayName;
+            userEmail = inputEmail;
+            userToken = currUser.uid;
+            AsyncStorage.setItem('userToken', userToken);
+            AsyncStorage.setItem('userName', userFirstName);
+            dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
+          }
+
+      } else {
+        try {
+          const credential = firebase.auth.EmailAuthProvider.credential(`${credentialUserID}@appleid.com`, credentialUserID);
+          firebase.auth().currentUser.linkWithCredential(credential)
+            .then(async usercred => {
+              const user = usercred.user;
+              await user.updateProfile({
+                displayName: givenName,
+                lastName: familyName,
+                privateRelayEmail: inputEmail // just to hold onto just in case
+              }).then(async results => {
+                const currUser = fireApp.auth().currentUser;
+                let userFirstName, userEmail, userToken;
+                if (currUser !== null) {
+                  userFirstName = currUser.displayName;
+                  userEmail = inputEmail;
+                  userToken = currUser.uid;
+                  AsyncStorage.setItem('userToken', userToken);
+                  AsyncStorage.setItem('userName', userFirstName);
+                  dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
+                }
+              })
+              console.log("Anonymous account successfully upgraded with Apple!", user);
+            })
+        } catch (error) {
+          console.log("Error upgrading anonymous account with Apple", error);
+        }
       }
 
-      const currUser = fireApp.auth().currentUser;
-      let userFirstName, userEmail, userToken;
-      if (currUser !== null) {
-        userFirstName = currUser.displayName;
-        userEmail = inputEmail;
-        userToken = currUser.uid;
-        // userToken = credentialUserID
-        dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
-      }
     },
 
     appleTokenIn: async (credentialUserID) => {
@@ -243,37 +317,115 @@ export default function Navigation({navigation}) {
     fbSignUp: async (email, first_name, last_name, userId, token) => {
       // console.log("fetchSignInMethodsForEmail: " + JSON.stringify(await fireApp.auth().fetchSignInMethodsForEmail(email)))
       // console.log(userId);
-      try {
-        if ((await fireApp.auth().fetchSignInMethodsForEmail(email)).length > 0) {
-          await fireApp
-            .auth()
-            .signInWithEmailAndPassword(email || `${userId}@fbid.com`, userId);
-        } else {
-            const result = await fireApp
-              .auth()
-              .createUserWithEmailAndPassword(email || `${userId}@fbid.com`, userId);
-              await result.user.updateProfile({
-                displayName: first_name,
-                lastName: last_name,
-                privateRelayEmail: email || `${userId}@fbid.com` // just to hold to onto just in case
-            });
-        }
-      } catch (error) {
-          alert(error);
+
+      if ((await fireApp.auth().fetchSignInMethodsForEmail(email || `${userId}@fbid.com`)).length > 0) {
+        await fireApp
+          .auth()
+          .signInWithEmailAndPassword(email || `${userId}@fbid.com`, userId);
+      } else {
+        // do link with credential here instead since they will start as anonymous, then link.
+          // const result = await fireApp
+          //   .auth()
+          //   .createUserWithEmailAndPassword(email || `${userId}@fbid.com`, userId);
+          //   await result.user.updateProfile({
+          //     displayName: first_name,
+          //     lastName: last_name,
+          //     privateRelayEmail: email || `${userId}@fbid.com` // just to hold to onto just in case
+          // });
+
+          try {
+            const credential = firebase.auth.EmailAuthProvider.credential(email || `${userId}@fbid.com`, userId);
+            firebase.auth().currentUser.linkWithCredential(credential)
+              .then(async usercred => {
+                const user = usercred.user;
+                await user.updateProfile({
+                  displayName: first_name,
+                  lastName: last_name,
+                  privateRelayEmail: email || `${userId}@fbid.com` // just to hold to onto just in case
+                }).then(async results => {
+                  const currUser = fireApp.auth().currentUser;
+                  let userFirstName, userEmail, userToken;
+                  if (currUser !== null) {
+                    userFirstName = currUser.displayName;
+                    userToken = token;
+                    userEmail = currUser.privateRelayEmail;
+                    AsyncStorage.setItem('userToken', userToken);
+                    AsyncStorage.setItem('userName', userFirstName);
+                    dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
+                  }
+                })
+                console.log("Anonymous account successfully upgraded with Facebook!", user);
+              })
+          } catch (error) {
+            console.log("Error upgrading anonymous account with Facebook", error);
+          }
       }
       const currUser = fireApp.auth().currentUser;
       let userFirstName, userEmail, userToken;
       if (currUser !== null) {
         userFirstName = currUser.displayName;
-        userEmail = currUser.privateRelayEmail;
         userToken = token;
-        // userToken = currUser.uid;
-        AsyncStorage.setItem('userToken', userToken); 
+        userEmail = currUser.privateRelayEmail;
+        AsyncStorage.setItem('userToken', userToken);
         AsyncStorage.setItem('userName', userFirstName);
         dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
       }
     },
+
+    updateNameAndEmail: async (inputName, inputEmail, inputPassword) => {
+      const currUser = fireApp.auth().currentUser;
+      if (currUser) {
+        
+        // Updating first name
+        if (currUser.displayName !== inputName) {
+          currUser.updateProfile({
+            displayName: inputName,
+          }).then(() => {
+            dispatch({ type: "UPDATEUSERNAME", firstName: currUser.displayName })
+            console.log(`First name changed to ${currUser.displayName}!`)
+            Alert.alert("Success!", `First name changed to ${currUser.displayName}!`, [
+              {text: "Okay"}
+            ]);
+          })
+        }
+        
+        // updating email
+        let credential;
+        try {
+          credential = firebase.auth.EmailAuthProvider.credential(currUser.email, inputPassword)
+          // console.log("credential:", credential)
+        } catch (error) {
+          alert(error);
+        }
+  
+        if (currUser.email !== inputEmail && credential) {
+          currUser.reauthenticateWithCredential(credential).then(() => {
+            console.log("reauthenticated user!")
+          }).then(() => {
+            currUser.updateEmail(inputEmail).then(function() {
+              dispatch({ type: "UPDATEUSEREMAIL", email: currUser.email })
+              console.log(`email changed to ${inputEmail}!`)
+              Alert.alert("Success!", `email changed to ${inputEmail}!`, [
+                {text: "Okay"}
+              ]);
+            }).catch(function(error) {
+              alert(error)
+            })
+          })
+        }
+        // dispatch({ type: "UPDATEUSERINFO", email: currUser.email, firstName: currUser.displayName })
+      };
+    }
   }));
+
+
+
+
+
+
+
+
+
 
 
 
@@ -289,10 +441,19 @@ export default function Navigation({navigation}) {
       //   // console.log(currUser);
       //   userEmail = currUser.email;
       //   userToken = currUser.uid
-        AsyncStorage.setItem('userName', currUser.displayName);
-        AsyncStorage.setItem('userToken', currUser.uid);  
+        AsyncStorage.setItem('userName', currUser.displayName || '');
+        AsyncStorage.setItem('userToken', currUser.uid);
       //   dispatch({ type: "SIGNIN", email: userEmail, token: userToken, firstName: userFirstName })
-      }
+      } 
+      
+      // if (!currUser && !userToken) {
+      //   firebase.auth().signInAnonymously()
+      //     .then(user => {
+      //       console.log(user)
+      //     })
+      //     .catch(err => console.log(err.code, err.message));
+      // }
+      
 
       // let userToken;
       // userToken = null;
@@ -305,12 +466,21 @@ export default function Navigation({navigation}) {
         console.log("useEffect hit!")
         console.log(e);
       }
+
       dispatch({ type: "RETRIEVE_TOKEN", token: userToken, firstName: userFirstName })
       console.log("user token:", userToken)
+      console.log("user email:", currUser && currUser.email)
       console.log("user firstName:", userFirstName)
     }, 0)
   }, [])
   
+
+
+
+
+
+
+
   if (loginState.isLoading) {
     return (
       <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
@@ -318,6 +488,11 @@ export default function Navigation({navigation}) {
       </View>
     )
   }
+
+
+
+
+
 
   return (
     <AuthContext.Provider value={authContext}>
@@ -331,6 +506,8 @@ export default function Navigation({navigation}) {
 
 
 
+
+
 import SplashScreen from './SplashScreen';
 import SignInScreen from './SignInScreen';
 import SignUpScreen from './SignUpScreen';
@@ -341,6 +518,7 @@ import ExerciseVideo from '../components/ExerciseVideo';
 
 
 const Stack = createStackNavigator();
+
 
 function RootNavigator() {
   return (

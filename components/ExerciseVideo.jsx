@@ -32,7 +32,7 @@ export default function ExerciseVideo({ route, navigation }) {
     'Assistant-SemiBold': require('../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   });
 
-  const { id, videoFile, modalIcon, iconHeight, autoCountDown, customVolume } = route.params;
+  const { id, videoFile, videoUrl, cachedVideo, modalIcon, iconHeight, autoCountDown, customVolume, noFinishBell } = route.params;
 
   const { signOut, userToken, userFirstName } = useContext(AuthContext);
 
@@ -92,8 +92,8 @@ export default function ExerciseVideo({ route, navigation }) {
   const [ timerDuration, setTimerDuration ] = useState(null);
 
   const timerDurationsOptions = {
-    // "30s": {mins: 0, secs: 2},
-    "30s": {mins: 0, secs: 30},
+    "30s": {mins: 0, secs: 2},
+    // "30s": {mins: 0, secs: 30},
     "1m": {mins: 1, secs: 0},
     "2m": {mins: 2, secs: 0},
     "3m": {mins: 3, secs: 0},
@@ -348,6 +348,7 @@ export default function ExerciseVideo({ route, navigation }) {
   const playingAudio = useRef();
 
   const loadFinishedSound = async () => {
+    if (noFinishBell) return;
     try {
       await bellSound.loadAsync(require('../assets/audio/meditation-finished-sound.mp3'));
       await bellSound.playAsync();
@@ -621,7 +622,7 @@ export default function ExerciseVideo({ route, navigation }) {
 
 
 
-  const favRef = currUser ? fireApp.database().ref(currUser.uid).child('favorites') : null;
+  const favRef = currUser && fireApp.database().ref(currUser.uid).child('favorites');
 
   let favIds = [];
   if (currUser) {
@@ -677,7 +678,7 @@ export default function ExerciseVideo({ route, navigation }) {
   
             // console.log(key);
             if (id === exId) {
-              fireApp.database().ref(currUser.uid).child(`favorites/${key}`).remove().then(() => console.log(`deleted video ${exId}!`))
+              fireApp.database().ref(currUser.uid).child(`favorites/${key}`).remove().then(() => console.log(`Unfavorited video ${exId}!`))
             }
           })
           toggleLike(!favs.includes(id))
@@ -720,13 +721,17 @@ export default function ExerciseVideo({ route, navigation }) {
 
 
 
-  console.log("video file: " + JSON.stringify(videoFile))
+  // console.log("video file: " + JSON.stringify(videoFile))
+  // console.log("video url from firebase storage: " + JSON.stringify(videoUrl))
+
 
   return (
     
     <View style={{ flex: 1, resizeMode: "cover", position: "relative", zIndex: -10,}} >
       <Video
-        source={ videoFile }
+        // source={ videoFile }
+        // source={{ uri: videoUrl }}
+        source={ cachedVideo }
         rate={1.0}
         volume={customVolume || 0.75}
         isMuted={bellMuted}

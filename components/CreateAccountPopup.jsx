@@ -45,7 +45,7 @@ export default function CreateAccountPopup() {
     if (type === "success") {
       const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,first_name,last_name,email`)
       const json = await response.json();
-      // console.log("facebook response: ", json);
+      console.log("facebook response: ", json);
       
       const first_name = json["first_name"];
       const last_name = json["last_name"];
@@ -137,17 +137,23 @@ const signInWithApple = async () => {
       ],
     });
 
+
+    // if (credential.email !== null || credential.fullName.givenName !== null) {
+    //   // create a new account with SignUp method with email, name, and userIdtoken.
+    //   await appleSignUp(credential.email, credential.fullName.givenName, credential.fullName.familyName, credential.user)
+    //   console.log("signUpWithApple!")
+    // } else {
+    //   // just send over the userToken
+    //   await appleTokenIn(credential.user);
+    //   console.log("tokenwithApple!")
+    // }
+
+
     // signed in
     console.log(credential);
-    if (credential.email !== null || credential.fullName.givenName !== null) {
-      // create a new account with SignUp method with email, name, and userIdtoken.
-      await appleSignUp(credential.email, credential.fullName.givenName, credential.fullName.familyName, credential.user)
-      console.log("signUpWithApple!")
-    } else {
-      // just send over the userToken
-      await appleTokenIn(credential.user);
-      console.log("tokenwithApple!")
-    }
+    await appleSignUp(credential.email, credential.fullName.givenName, credential.fullName.familyName, credential.user)
+    console.log("signUpWithApple!")
+
 
     const appleUserInfoRef = await firebase.database().ref(credential.user).child('appleUserInfo');
     await appleUserInfoRef.once('value', async snapshot => {
@@ -167,8 +173,10 @@ const signInWithApple = async () => {
 }
 
 
+const currUser = firebase.auth().currentUser;
+
 useEffect(() => {
-  if (userToken) {
+  if (currUser && !currUser.isAnonymous) {
     navigation.navigate('UserWelcomeScreen')
   }
 }, [userToken])

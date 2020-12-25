@@ -10,7 +10,6 @@ import { useFonts } from 'expo-font';
 const { width, height } = Dimensions.get('window');
 
 import firebase from 'firebase';
-import { useGestureHandlerRef } from '@react-navigation/stack';
 
 
 export default function AccountInfoScreen ({navigation}) {
@@ -27,10 +26,11 @@ export default function AccountInfoScreen ({navigation}) {
     check_nameInputChange: false,
     check_emailInputChange: false,
     isValidEmail: true,
-    isValidFirstName: true
+    isValidFirstName: true,
+    password: ''
   })
   
-  const { signIn, userToken, } = React.useContext(AuthContext);
+  const { updateNameAndEmail, userToken, } = React.useContext(AuthContext);
 
   // useEffect(() => {
   //   if (userToken) {
@@ -78,6 +78,25 @@ export default function AccountInfoScreen ({navigation}) {
   }
 
 
+  const passwordInputChange = (val) => {
+    if (val.length > 0) {
+      setUserInfo({
+        ...userInfo,
+        password: val,
+        // check_emailInputChange: true,
+        // isValidEmail: true
+      })
+    } else {
+      setUserInfo({
+        ...userInfo,
+        password: "",
+        // check_emailInputChange: false,
+        // isValidEmail: false
+      })
+    }
+  }
+
+
 
   // includes validation check when user unfocuses on the firstName TextInput:
   const handleValidFirstName = (val) => {
@@ -111,24 +130,20 @@ export default function AccountInfoScreen ({navigation}) {
   }
 
 
-
-  const handleUpdate = useCallback( async (inputName, inputEmail) => {
-    if (userInfo.firstName.length === 0 || userInfo.email.length === 0) {
-      Alert.alert("Wrong Input!", "First name or email field cannot be empty.", [
+  
+  const handleUpdate = useCallback( async (inputName, inputEmail, inputPassword) => {
+    if (userInfo.firstName.length === 0 || userInfo.email.length === 0 || userInfo.password.length === 0) {
+      Alert.alert("Wrong Input!", "First name, email, or password field cannot be empty.", [
         {text: "Okay"}
       ]);
       return;
     };
-    // FIREBASE UPDATE STUFF .updateProfile? 
-/* 
-        await result.user.updateProfile({
-          displayName: givenName,
-          lastName: familyName,
-          privateRelayEmail: inputEmail // just to hold to onto just in case
-        });
-*/
-
-    await signIn(inputName, inputEmail)
+    
+    updateNameAndEmail(inputName, inputEmail, inputPassword);
+    
+    setTimeout(() => {
+      navigation.goBack();
+    }, 3000);
   });
 
 
@@ -150,10 +165,10 @@ export default function AccountInfoScreen ({navigation}) {
               <Text style={{fontSize: 26, color: "#717171", textAlign: "center", fontFamily: "Assistant-SemiBold", }}>Account Info</Text>
             </View>
 
-            <View style={{height: 300, justifyContent: "space-between", alignItems: "center",}}>
+            <View style={{height: 400, justifyContent: "space-around", alignItems: "center",}}>
 
               <View>
-                <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>First Name</Text>
+                <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>New First Name</Text>
                 <View style={styles.inputsWhole}>
                   <TextInput 
                     placeholder="Your First Name"
@@ -221,6 +236,20 @@ export default function AccountInfoScreen ({navigation}) {
                 }
               </View>
 
+              <View>
+                <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>Confirm Password</Text>
+                <View style={styles.inputsWhole}>
+                  <TextInput 
+                    placeholder="Confirm Your Password"
+                    style={styles.inputs} 
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    onChangeText={(val) => passwordInputChange(val)}
+                    secureTextEntry
+                  />
+                </View>
+              </View>
+
 
               <AppButton 
                 title="Update" 
@@ -232,8 +261,9 @@ export default function AccountInfoScreen ({navigation}) {
                 disabled={!(userInfo.firstName && userInfo.email)}
                 // onPress={() => navigation.navigate('UserWelcomeScreen')}
                 // onPress={() => {handleLogin(userInfo.email, userInfo.password)}}
+                onPress={() => handleUpdate(userInfo.firstName, userInfo.email, userInfo.password)}
                 // onPress={() => alert(loginState.useToken)}
-                onPress={() => alert(userInfo.firstName)}
+                // onPress={() => alert(userInfo.firstName)}
               />
             </View>
           </View>

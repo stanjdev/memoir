@@ -16,6 +16,8 @@ import { AppLoading } from 'expo';
 
 import firebase from 'firebase';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 // https://docs.expo.io/guides/preloading-and-caching-assets/?redirected#publishing-assets
 function cacheImages(images) {
@@ -31,17 +33,17 @@ export default function BreatheScreen({navigation}) {
 
   async function _loadAssetsAsync() {
     const imageAssets = cacheImages([
-      require("../../assets/exercises-images/flower-4x.png"),
-      require("../../assets/exercises-images/breathe-4x.png"),
-      require("../../assets/exercises-images/minute-break-4x.png"),
-      require("../../assets/exercises-images/jungle-green.png"),
-      require("../../assets/exercises-images/forest-orange.png"),
-      require("../../assets/exercises-images/horiz-deep-breaths.png"),
-      require("../../assets/exercises-images/redrock-4x.png"),
-      require("../../assets/exercises-images/aurora-4x.png"),
-      require("../../assets/exercises-images/moon-4x.png"),
-      require("../../assets/exercises-images/forest-dawn-4x.png"),
-      require("../../assets/exercises-images/purple-4x.png"),
+      // require("../../assets/exercises-images/flower-of-life.png"),
+      // require("../../assets/exercises-images/circles.png"),
+      // require("../../assets/exercises-images/4-7-9-wheel.png"),
+      // require("../../assets/exercises-images/box-breathing.png"),
+      // require("../../assets/exercises-images/yin-yang.png"),
+      // require("../../assets/exercises-images/horiz-deep-breaths.png"),
+      // require("../../assets/exercises-images/redrock-4x.png"),
+      // require("../../assets/exercises-images/aurora-4x.png"),
+      // require("../../assets/exercises-images/crescent-moon.png"),
+      // require("../../assets/exercises-images/forest-dawn-4x.png"),
+      // require("../../assets/exercises-images/cosmos.png"),
     ]);
     await Promise.all([...imageAssets]);
   }
@@ -137,7 +139,51 @@ export default function BreatheScreen({navigation}) {
   // }, [])
 
 
+  // this way doesn't shuffle it every time you move from tab to tab
+  const [recommendedToday, setRecommendedToday] = useState();
+  const [popular, setPopular] = useState();
+
+
+  useEffect(() => {
+    setRecommendedToday(shuffle([1, 2, 3, 4, 5]));
+    setPopular(shuffle([6, 10, 11, 12, 13]));
+
+    setTimeout(async () => {
+
+      
+    }, 0);
+  }, [])
+
+
+  function shuffle(arr) {
+    let currIdx = arr.length, tempValue, randomIdx;
+    while (currIdx !== 0) {
+      randomIdx = Math.floor(Math.random() * currIdx);
+      currIdx -= 1;
+
+      tempValue = arr[currIdx];
+      arr[currIdx] = arr[randomIdx];
+      arr[randomIdx] = tempValue;
+    }
+    return arr.map(x => 
+      <Exercise 
+        id={Exercises[x].id} 
+        key={Exercises[x].id}
+        navigation={navigation} 
+        image={Exercises[x].image || null} 
+        gif={Exercises[x].gif || undefined}
+        title={Exercises[x].title} 
+        subTitle={Exercises[x].subTitle} 
+        videoFile={Exercises[x].videoFile || null} 
+        modalIcon={Exercises[x].modalIcon || null} 
+        iconHeight={Exercises[x].iconHeight || null} 
+        customVolume={Exercises[x].customVolume || null}
+      />
+    );
+  }
+
   
+
   return(
     <ScrollView style={{backgroundColor: "white"}}>
       {isFocused ? <StatusBar hidden={false} barStyle="dark-content"/> : null} 
@@ -155,15 +201,19 @@ export default function BreatheScreen({navigation}) {
           </View>
           
           <ScrollView horizontal={true} style={{flexDirection: "row", marginLeft: 25}} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
-            <Exercise id={Exercises[1].id} navigation={navigation} image={Exercises[1].image} title={Exercises[1].title} subTitle={Exercises[1].subTitle} videoFile={Exercises[1].videoFile} modalIcon={Exercises[1].modalIcon} iconHeight={Exercises[1].iconHeight} customVolume={Exercises[1].customVolume}/>
-            <Exercise id={Exercises[2].id} navigation={navigation} image={Exercises[2].image} title={Exercises[2].title} subTitle={Exercises[2].subTitle} videoFile={Exercises[2].videoFile} modalIcon={Exercises[2].modalIcon} iconHeight={Exercises[2].iconHeight} />
+            {/* <Exercise id={Exercises[1].id} navigation={navigation} image={Exercises[1].image} title={Exercises[1].title} subTitle={Exercises[1].subTitle} videoFile={Exercises[1].videoFile} modalIcon={Exercises[1].modalIcon} iconHeight={Exercises[1].iconHeight} customVolume={Exercises[1].customVolume}/>
+            <Exercise id={Exercises[2].id} navigation={navigation} image={Exercises[2].image} gif={Exercises[2].gif || null} title={Exercises[2].title} subTitle={Exercises[2].subTitle} videoFile={Exercises[2].videoFile} modalIcon={Exercises[2].modalIcon} iconHeight={Exercises[2].iconHeight} />
             <Exercise id={Exercises[3].id} navigation={navigation} image={Exercises[3].image} title={Exercises[3].title} subTitle={Exercises[3].subTitle} videoFile={Exercises[3].videoFile} modalIcon={Exercises[3].modalIcon} iconHeight={Exercises[3].iconHeight} />
             <Exercise id={Exercises[4].id} navigation={navigation} image={Exercises[4].image} title={Exercises[4].title} subTitle={Exercises[4].subTitle} videoFile={Exercises[4].videoFile} modalIcon={Exercises[4].modalIcon} iconHeight={Exercises[4].iconHeight} />
-            <Exercise id={Exercises[5].id} navigation={navigation} image={Exercises[5].image} title={Exercises[5].title} subTitle={Exercises[5].subTitle} videoFile={Exercises[5].videoFile} modalIcon={Exercises[5].modalIcon} iconHeight={Exercises[5].iconHeight} />
+            <Exercise id={Exercises[5].id} navigation={navigation} image={Exercises[5].image} title={Exercises[5].title} subTitle={Exercises[5].subTitle} videoFile={Exercises[5].videoFile} modalIcon={Exercises[5].modalIcon} iconHeight={Exercises[5].iconHeight} /> */}
+            {/* {recommendedPicker()} */}
+            {/* {shuffle([1, 2, 3, 4, 5])} */}
+            {recommendedToday}
+            {}
           </ScrollView>
         
           <View style={{alignItems: "center", }}>
-            <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[8].uniqueImg} videoFile={Exercises[8].videoFile} modalIcon={Exercises[8].modalIcon} id={Exercises[8].id} autoCountDown={"30m"} customWidth={Exercises[8].customWidth}/> 
+            <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[8].uniqueImg} videoFile={Exercises[8].videoFile} modalIcon={Exercises[8].modalIcon} id={Exercises[8].id} autoCountDown={"30m"} customWidth={Exercises[8].customWidth} noFinishBell={Exercises[8].noFinishBell}/> 
           </View>
           <View style={{alignItems: "center", }}>
             <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[9].image} videoFile={Exercises[9].videoFile} modalIcon={Exercises[9].modalIcon} id={Exercises[9].id} customWidth={Exercises[9].customWidth}/> 
@@ -173,28 +223,49 @@ export default function BreatheScreen({navigation}) {
             {renderCategoryOptions()}
           </View>
  
-          { 
+          {/* { 
             selectedCategory === "Sleep" ? 
             <ScrollView horizontal={true} style={{flexDirection: "row", marginLeft: 25}} showsHorizontalScrollIndicator={false}>
-              <Exercise id={Exercises[6].id} navigation={navigation} image={Exercises[6].image} title={Exercises[6].title} subTitle={Exercises[6].subTitle} videoFile={Exercises[6].videoFile} modalIcon={Exercises[6].modalIcon} iconHeight={Exercises[6].iconHeight} />
-              <Exercise navigation={navigation} image={require("../../assets/exercises-images/purple-4x.png")} title="Cosmos" subTitle="Relax with the Universe"/>    
+              <Exercise id={Exercises[6].id} navigation={navigation} image={Exercises[6].image} title={Exercises[6].title} subTitle={Exercises[6].subTitle} videoFile={Exercises[6].videoFile} modalIcon={Exercises[6].modalIcon} iconHeight={Exercises[6].iconHeight} noFinishBell={Exercises[6].noFinishBell}/>
+              <Exercise id={Exercises[10].id} navigation={navigation} image={Exercises[10].image} title={Exercises[10].title} subTitle={Exercises[10].subTitle} />
             </ScrollView>
             : selectedCategory === "New" ? 
             <ScrollView horizontal={true} style={{flexDirection: "row", marginLeft: 25}} showsHorizontalScrollIndicator={false}>
-              <Exercise navigation={navigation} image={require("../../assets/exercises-images/forest-dawn-4x.png")} title="Box Breathing" subTitle="4 Second Box Pattern"/>
-              <Exercise navigation={navigation} image={require("../../assets/exercises-images/redrock-4x.png")} title="1 Minute Break" subTitle="60 Seconds of Zen"/>
-              <Exercise navigation={navigation} image={require("../../assets/exercises-images/aurora-4x.png")} title="No More Anxiety" subTitle="4-7-8 Tension Relief"/>
+              <Exercise id={Exercises[11].id} navigation={navigation} image={Exercises[11].image} title={Exercises[11].title} subTitle={Exercises[11].subTitle} modalIcon={Exercises[11].modalIcon} iconHeight={Exercises[11].iconHeight}/>
+              <Exercise id={Exercises[13].id} navigation={navigation} image={Exercises[13].image} title={Exercises[13].title} subTitle={Exercises[13].subTitle} />
+              <Exercise id={Exercises[12].id} navigation={navigation} image={Exercises[12].image} title={Exercises[12].title} subTitle={Exercises[12].subTitle} />
             </ScrollView>
             : selectedCategory === "Popular" ? 
             <ScrollView horizontal={true} style={{flexDirection: "row", marginLeft: 25}} showsHorizontalScrollIndicator={false}>
-              <Exercise navigation={navigation} image={require("../../assets/exercises-images/aurora-4x.png")} title="No More Anxiety" subTitle="4-7-8 Tension Relief"/>
-              <Exercise id={Exercises[6].id} navigation={navigation} image={Exercises[6].image} title={Exercises[6].title} subTitle={Exercises[6].subTitle} videoFile={Exercises[6].videoFile} modalIcon={Exercises[6].modalIcon} iconHeight={Exercises[6].iconHeight} />
-              <Exercise navigation={navigation} image={require("../../assets/exercises-images/redrock-4x.png")} title="1 Minute Break" subTitle="60 Seconds of Zen"/>
-              <Exercise navigation={navigation} image={require("../../assets/exercises-images/forest-dawn-4x.png")} title="Box Breathing" subTitle="4 Second Box Pattern"/>
-              <Exercise navigation={navigation} image={require("../../assets/exercises-images/purple-4x.png")} title="Cosmos" subTitle="Relax with the Universe"/>    
+              {popular}
             </ScrollView>
             : null
-          }
+          } */}
+
+
+            <ScrollView horizontal={true} style={selectedCategory === "Sleep" ? styles.showScroll : styles.hideScroll} showsHorizontalScrollIndicator={false}>
+              <Exercise id={Exercises[6].id} navigation={navigation} image={Exercises[6].image} title={Exercises[6].title} subTitle={Exercises[6].subTitle} videoFile={Exercises[6].videoFile} modalIcon={Exercises[6].modalIcon} iconHeight={Exercises[6].iconHeight} noFinishBell={Exercises[6].noFinishBell}/>
+              <Exercise id={Exercises[10].id} navigation={navigation} image={Exercises[10].image} title={Exercises[10].title} subTitle={Exercises[10].subTitle} />
+            </ScrollView>
+            <ScrollView horizontal={true} style={selectedCategory === "New" ? styles.showScroll : styles.hideScroll} showsHorizontalScrollIndicator={false}>
+              <Exercise id={Exercises[11].id} navigation={navigation} image={Exercises[11].image} title={Exercises[11].title} subTitle={Exercises[11].subTitle} modalIcon={Exercises[11].modalIcon} iconHeight={Exercises[11].iconHeight}/>
+              <Exercise id={Exercises[13].id} navigation={navigation} image={Exercises[13].image} title={Exercises[13].title} subTitle={Exercises[13].subTitle} />
+              <Exercise id={Exercises[12].id} navigation={navigation} image={Exercises[12].image} title={Exercises[12].title} subTitle={Exercises[12].subTitle} />
+            </ScrollView>
+            <ScrollView horizontal={true} style={selectedCategory === "Popular" ? styles.showScroll : styles.hideScroll} showsHorizontalScrollIndicator={false}>
+              {popular}
+            </ScrollView>
+         
+            
+          
+            {/* <ScrollView horizontal={true} style={{flexDirection: "row", marginLeft: 25}} showsHorizontalScrollIndicator={false}>
+              {
+                selectedCategory === "Sleep" ? recommendedToday
+                : selectedCategory === "New" ? popular
+                : selectedCategory === "Popular" ? popular : null
+              }
+            </ScrollView> */}
+
           
         </View>
   
@@ -232,5 +303,14 @@ const styles = StyleSheet.create({
     marginTop: 3,
     borderTopWidth: 2,
     width: "85%"
+  },
+  showScroll: {
+    flexDirection: "row", 
+    marginLeft: 25
+  },
+  hideScroll: {
+    flexDirection: "row", 
+    marginLeft: 25,
+    display: "none"
   }
 })

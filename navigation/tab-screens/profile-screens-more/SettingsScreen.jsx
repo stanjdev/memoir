@@ -20,7 +20,7 @@ export default function SettingsScreen({navigation}) {
 
   const signOutToHome = () => {
     signOut();
-    navigation.navigate('SplashScreen')
+    navigation.navigate('SplashScreen');
   }
 
   const [showPopUp, setShowPopup] = React.useState(false);
@@ -62,7 +62,7 @@ export default function SettingsScreen({navigation}) {
       {/* <Text style={{textAlign: "center", fontSize: 23, fontFamily: "Assistant-SemiBold", position: "absolute", width: width, top: height * 0.055, color: 'black'}}>Settings</Text> */}
     
 
-      <View style={{height: height, marginTop: Math.min(height * 0.05, 20)}}>
+      <View style={{height: height, marginTop: Math.min(height * 0.05, 0)}}>
         {/* <ScrollView> */}
           <View style={{ height: height, justifyContent: "center", flexDirection:"column", alignItems: "center", }}>
 
@@ -84,7 +84,7 @@ export default function SettingsScreen({navigation}) {
 
       </View>
 
-      { showPopUp ? <CreateAccountPopup /> : null }
+      {/* { showPopUp ? <CreateAccountPopup /> : null } */}
 
     </View>
     // </ImageBackground>
