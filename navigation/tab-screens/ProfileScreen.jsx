@@ -83,11 +83,11 @@ export default function ProfileScreen({navigation}) {
 
 
   useEffect(() => {
-    if (userToken && currUser) {
+    if (currUser) {
       getProgress();
     }
 
-  }, [userToken])
+  }, [userToken, currUser])
 
   
 
@@ -125,17 +125,37 @@ export default function ProfileScreen({navigation}) {
     let ceil = (count * fiveHours / 60 / 60);
 
     return practiceTime < 1800 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 ).toFixed(0)} subtitle="Minutes" subText="30 min Goal" progress={(Math.max(practiceTime, 0.01) / 60 / 60) / 0.5}/> 
-    : practiceTime >= 1800 && practiceTime < 7200 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(2)} subtitle="Hours" subText="2hr Goal" progress={(practiceTime / 60 / 60) / 2}/> 
-    : practiceTime >= 7200 && practiceTime < 18000 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(2)} subtitle="Hours" subText="5hr Goal" progress={(practiceTime / 60 / 60) / 5}/> 
-    : practiceTime >= fiveHours ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(2)} subtitle="Hours" subText={`${ceil}hr Goal`} progress={(practiceTime / 60 / 60) / ceil}/> 
+    : practiceTime >= 1800 && practiceTime < 7200 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(1)} subtitle="Hours" subText="2hr Goal" progress={(practiceTime / 60 / 60) / 2}/> 
+    : practiceTime >= 7200 && practiceTime < 18000 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(1)} subtitle="Hours" subText="5hr Goal" progress={(practiceTime / 60 / 60) / 5}/> 
+    : practiceTime >= fiveHours ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(1)} subtitle="Hours" subText={`${ceil}hr Goal`} progress={(practiceTime / 60 / 60) / ceil}/> 
     : <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number="0" subtitle="Hours" subText="5hr Goal" progress={0.01}/>
   }
+
+  const [dismissed, setDismissed] = useState(false);
+  // const [prevCeil, setPrevCeil] = useState();
 
   const renderMovingSessionsGoal = (sessionsCompleted) => {
     let seshString = String(sessionsCompleted);
     let rightMostNum = seshString[seshString.length - 1];
     let remainder = 10 - rightMostNum;
     let ceil = sessionsCompleted + remainder;
+
+
+    // ATTEMPT AT CONGRATS SPRITES
+    // let prevCeil = ceil - 10;
+
+    // // setPrevCeil(ceil - 10);
+    // // if (sessionsCompleted == prevCeil) setDismissed(false);
+    // console.log("dismissed: ", dismissed)
+    // console.log("prevCeil: ", prevCeil)
+    // console.log("ceil: ", ceil)
+
+    // if (isFocused && sessionsCompleted == prevCeil && !dismissed) {
+    //   Alert.alert("Congrats!", `You've completed ${sessionsCompleted} sessions!`, [
+    //     {text: "Awesome!", style: "cancel", onPress: () => setDismissed(true)}
+    //   ]);
+    // }
+    
 
     return <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-hash.png')} title="Sessions Completed" number={sessionsCompleted} subtitle={sessionsCompleted === 1 ? "Session" : "Sessions"} subText={`${ceil} Session Goal`} progress={ Math.max(sessionsCompleted, 0.01) / ceil }/>
   }
@@ -168,7 +188,7 @@ export default function ProfileScreen({navigation}) {
       <View style={{height: height, marginTop: Math.min(height * 0.05, 20)}}>
         {/* <ScrollView> */}
           <View style={{ height: height, justifyContent: "center", flexDirection:"column", alignItems: "center", }}>
-            { userToken ? 
+            {/* { userToken ? 
             <View style={{flexDirection:"row", flexWrap: "wrap", justifyContent: "center"}}>
               {renderPracticeTime()}
               {renderMovingSessionsGoal(sessionsCompleted)}
@@ -182,7 +202,14 @@ export default function ProfileScreen({navigation}) {
               <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-arrow.png')} title="Current Streak" number="0" subtitle="Days" subText="10 Day Streak Goal" progress={0.01}/>
               <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-rocket.png')} title="Best Streak" number="0" subtitle="Days" subText="No Streak" />
             </View>
-            }
+            } */}
+
+            <View style={{flexDirection:"row", flexWrap: "wrap", justifyContent: "center"}}>
+              {renderPracticeTime()}
+              {renderMovingSessionsGoal(sessionsCompleted)}
+              {renderMovingStreakGoal(currentStreak)}
+              <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-rocket.png')} title="Best Streak" number={bestStreak} subtitle={bestStreak === 1 ? "Day" : "Days"} subText={bestStreakDate === 0 ? "" : `Achieved ${bestStreakMonth}/${bestStreakDate}/${bestStreakYear}`} />
+            </View>
   
             {/* <TouchableOpacity style={{ width: 80, justifyContent: "center", alignItems: "center", padding: 5}} onPress={() => ""}>
               <View style={{flexDirection: "row", justifyContent: "center", alignItems: "center"}}>

@@ -169,7 +169,7 @@ export default function ExerciseVideo({ route, navigation }) {
       console.log("timerRunning: " + timerRunning);
       console.log("tracked sessionSecs: " + sessionSecs);
       setExerciseFinished(false);
-      exerciseInterv.current = setInterval(() => runExerciseClock(), 1000);
+      exerciseInterv.current = setInterval( async () => await runExerciseClock(), 1000);
     } 
     if (!timerRunning) {
       clearInterval(exerciseInterv.current);
@@ -178,7 +178,7 @@ export default function ExerciseVideo({ route, navigation }) {
 
 
   // COUNTDOWN for Exercise vids
-  const runExerciseClock = () => {
+  const runExerciseClock = async () => {
     if (secs > 0) {
       setSecs(secs - 1);
       
@@ -188,7 +188,7 @@ export default function ExerciseVideo({ route, navigation }) {
     } else {
       updateUserTime();
       incrementSessionsCompleted();
-      Alert.alert("Timer Complete", "Great job, you’ve completed your breath work session!", [{text: "Keep Going", onPress: () => setExerciseFinished(false)}, {text: "Finish", style: "cancel"}], );
+      Alert.alert("Timer Complete", "Great job, you’ve completed your breath work session!", [{text: "Keep Going", onPress: () => keepGoing()}, {text: "Finish", style: "cancel", onPress: () => navigation.goBack()}], );
       setTimerDuration(null);
       setTimerRunning(false);
       // setBellMuted(true);
@@ -215,6 +215,13 @@ export default function ExerciseVideo({ route, navigation }) {
     return time;
 }
   
+
+
+
+function keepGoing() {
+  setDisplayTimerDuration(false);
+  setExerciseFinished(false);
+}
 
 
 
@@ -417,14 +424,14 @@ export default function ExerciseVideo({ route, navigation }) {
       await progressRef.update({
         practiceTime: timeSoFar += sessionSecs
       })
-    } 
+    }
   }
 
 
   // WITH SAFETY CHECK ADDED - for users with no existing progress data objects
   // INSTEAD OF DB POST REQUESTING EVERY SECOND with incrementUserTime(), THIS INCREMENTS LOCALLY, THEN WHEN USER FINISHES EXERCISE WITH ALERT POPUP ORRR UNMOUNTS EXERCISE, THEN UPDATE THE PRACTICE TIME BY ADDING THE SO FAR WITH THIS LOCALLY INCREMENTED SECONDS TRACKER.
   async function updateUserTime() {
-    if (currUser && userToken) {
+    if (currUser ) {
       let timeSoFar;
       await progressRef.once('value', async snapshot => {
         if (snapshot.val() === null) {
@@ -499,7 +506,7 @@ export default function ExerciseVideo({ route, navigation }) {
   // WITH SAFETY CHECK ADDED - for users with no existing progress data objects
   // Increment sessions user completed - triggers when that 'finish' popup modal comes out
   async function incrementSessionsCompleted() {
-    if (currUser && userToken) {
+    if (currUser ) {
       let sessionsCompletedSoFar;
       await progressRef.once('value', async snapshot => {
         if (snapshot.val() === null) {
@@ -518,7 +525,7 @@ export default function ExerciseVideo({ route, navigation }) {
           sessionsCompleted: sessionsCompletedSoFar += 1
         })
       });
-    } 
+    }
   };
 
 
@@ -526,7 +533,7 @@ export default function ExerciseVideo({ route, navigation }) {
   // WITH SAFETY CHECK ADDED - for users with no existing progress data objects
   // Increment current and best streaks - triggers when blue 'Start' button is pressed
   const incrementStreak = async () => {
-    if (currUser && userToken) {
+    if (currUser ) {
       let currentStreakSoFar;
       let lastDateExercised;
       let bestStreakSoFar;
@@ -719,8 +726,6 @@ export default function ExerciseVideo({ route, navigation }) {
   }
 
 
-
-
   // console.log("video file: " + JSON.stringify(videoFile))
   // console.log("video url from firebase storage: " + JSON.stringify(videoUrl))
 
@@ -746,7 +751,9 @@ export default function ExerciseVideo({ route, navigation }) {
 
       <TouchableWithoutFeedback 
         onPress={touchScreenToggleControls} 
-        onLongPress={pause}
+        // onLongPress={pause}
+        onPressIn={() => setPaused(true)}
+        onPressOut={() => setPaused(false)}
         delayPressIn={5}
       >
         <View 

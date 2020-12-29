@@ -55,7 +55,10 @@ export default function BreatheScreen({navigation}) {
     'Assistant-SemiBold': require('../../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   });
 
-  const [selectedCategory, setSelectedCategory] = useState("Sleep");
+  const currentHour = new Date().getHours();
+  console.log(currentHour)
+
+  const [selectedCategory, setSelectedCategory] = useState(currentHour >= 20 ? "Sleep" : "New");
 
   const categoryOptions = {
     "Sleep": "Sleep",
@@ -90,31 +93,25 @@ export default function BreatheScreen({navigation}) {
 
 
 
-  // SIGN IN ANONYMOUS USER IF NOT SIGNED IN!
-  // const currUser = firebase.auth().currentUser;
-  // if (currUser === null) {
-
-  // }
-
-  // const progressRef = currUser ? firebase.database().ref(currUser.uid).child('progress') : null;
-
-
-
-
 
   const currUser = firebase.auth().currentUser;
   const favRef = currUser ? firebase.database().ref(currUser.uid).child('favorites') : null;
 
-  let favIds = [];
+  // let favIds = [];
+  const [favIds, setFavIds] = useState([]);
+
   useEffect(() => {
     if (currUser) {
       favRef.on("value", snapshot => {
+        setFavIds([]);
         snapshot.forEach(node => {
-          favIds.push(node.val().id)
+          // favIds.push(node.val().id)
+          setFavIds(arr => [...arr, node.val().id])
+          console.log(favIds)
+          // console.log(favIds.includes(2))
         })
       })
     }
-
   }, [])
 
   const checkIfLiked = (exId) => {
@@ -145,17 +142,49 @@ export default function BreatheScreen({navigation}) {
 
 
   useEffect(() => {
-    setRecommendedToday(shuffle([1, 2, 3, 4, 5]));
-    setPopular(shuffle([6, 10, 11, 12, 13]));
+    // setRecommendedToday(shuffle([1, 2, 3, 4, 5]));
+    // setPopular(shuffle([6, 10, 11, 12, 13]));
 
-    setTimeout(async () => {
-
-      
-    }, 0);
+    shuffle([1, 2, 3, 4, 5], setRecommendedToday);
+    shuffle([6, 10, 11, 12, 13], setPopular);
+    console.log("breathing exercises rendered!")
   }, [])
 
 
-  function shuffle(arr) {
+  // useEffect(() => {
+  //   setRecommendedToday(arr => recommendedToday)
+  // }, [favRef])
+
+
+  // function shuffle(arr) {
+  //   let currIdx = arr.length, tempValue, randomIdx;
+  //   while (currIdx !== 0) {
+  //     randomIdx = Math.floor(Math.random() * currIdx);
+  //     currIdx -= 1;
+
+  //     tempValue = arr[currIdx];
+  //     arr[currIdx] = arr[randomIdx];
+  //     arr[randomIdx] = tempValue;
+  //   }
+  //   return arr.map(x => 
+  //     <Exercise 
+  //       id={Exercises[x].id} 
+  //       key={Exercises[x].id}
+  //       navigation={navigation} 
+  //       image={Exercises[x].image || null} 
+  //       gif={Exercises[x].gif || undefined}
+  //       title={Exercises[x].title} 
+  //       subTitle={Exercises[x].subTitle} 
+  //       videoFile={Exercises[x].videoFile || null} 
+  //       modalIcon={Exercises[x].modalIcon || null} 
+  //       iconHeight={Exercises[x].iconHeight || null} 
+  //       customVolume={Exercises[x].customVolume || null}
+  //     />
+  //   );
+  // }
+
+  
+  const shuffle = (arr, setter) => {
     let currIdx = arr.length, tempValue, randomIdx;
     while (currIdx !== 0) {
       randomIdx = Math.floor(Math.random() * currIdx);
@@ -165,7 +194,11 @@ export default function BreatheScreen({navigation}) {
       arr[currIdx] = arr[randomIdx];
       arr[randomIdx] = tempValue;
     }
-    return arr.map(x => 
+    setter(arr);
+  }
+
+  function renderExercises(array) {
+    return array.map(x => 
       <Exercise 
         id={Exercises[x].id} 
         key={Exercises[x].id}
@@ -178,11 +211,13 @@ export default function BreatheScreen({navigation}) {
         modalIcon={Exercises[x].modalIcon || null} 
         iconHeight={Exercises[x].iconHeight || null} 
         customVolume={Exercises[x].customVolume || null}
+        isLiked={favIds.includes(x)}
       />
-    );
+    )
   }
 
-  
+
+
 
   return(
     <ScrollView style={{backgroundColor: "white"}}>
@@ -207,13 +242,16 @@ export default function BreatheScreen({navigation}) {
             <Exercise id={Exercises[4].id} navigation={navigation} image={Exercises[4].image} title={Exercises[4].title} subTitle={Exercises[4].subTitle} videoFile={Exercises[4].videoFile} modalIcon={Exercises[4].modalIcon} iconHeight={Exercises[4].iconHeight} />
             <Exercise id={Exercises[5].id} navigation={navigation} image={Exercises[5].image} title={Exercises[5].title} subTitle={Exercises[5].subTitle} videoFile={Exercises[5].videoFile} modalIcon={Exercises[5].modalIcon} iconHeight={Exercises[5].iconHeight} /> */}
             {/* {recommendedPicker()} */}
-            {/* {shuffle([1, 2, 3, 4, 5])} */}
-            {recommendedToday}
-            {}
+            {/* {recommendedToday} */}
+            {renderExercises(recommendedToday)}
           </ScrollView>
         
           <View style={{alignItems: "center", }}>
-            <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[8].uniqueImg} videoFile={Exercises[8].videoFile} modalIcon={Exercises[8].modalIcon} id={Exercises[8].id} autoCountDown={"30m"} customWidth={Exercises[8].customWidth} noFinishBell={Exercises[8].noFinishBell}/> 
+            {
+              currentHour >= 20 ? 
+              <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[8].uniqueImg} videoFile={Exercises[8].videoFile} modalIcon={Exercises[8].modalIcon} id={Exercises[8].id} autoCountDown={"30m"} customWidth={Exercises[8].customWidth} noFinishBell={Exercises[8].noFinishBell}/> 
+              : null
+            }
           </View>
           <View style={{alignItems: "center", }}>
             <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[9].image} videoFile={Exercises[9].videoFile} modalIcon={Exercises[9].modalIcon} id={Exercises[9].id} customWidth={Exercises[9].customWidth}/> 
@@ -245,15 +283,16 @@ export default function BreatheScreen({navigation}) {
 
             <ScrollView horizontal={true} style={selectedCategory === "Sleep" ? styles.showScroll : styles.hideScroll} showsHorizontalScrollIndicator={false}>
               <Exercise id={Exercises[6].id} navigation={navigation} image={Exercises[6].image} title={Exercises[6].title} subTitle={Exercises[6].subTitle} videoFile={Exercises[6].videoFile} modalIcon={Exercises[6].modalIcon} iconHeight={Exercises[6].iconHeight} noFinishBell={Exercises[6].noFinishBell}/>
-              <Exercise id={Exercises[10].id} navigation={navigation} image={Exercises[10].image} title={Exercises[10].title} subTitle={Exercises[10].subTitle} />
+              <Exercise id={Exercises[10].id} navigation={navigation} image={Exercises[10].image} title={Exercises[10].title} subTitle={Exercises[10].subTitle} videoFile={Exercises[10].videoFile} />
             </ScrollView>
             <ScrollView horizontal={true} style={selectedCategory === "New" ? styles.showScroll : styles.hideScroll} showsHorizontalScrollIndicator={false}>
-              <Exercise id={Exercises[11].id} navigation={navigation} image={Exercises[11].image} title={Exercises[11].title} subTitle={Exercises[11].subTitle} modalIcon={Exercises[11].modalIcon} iconHeight={Exercises[11].iconHeight}/>
-              <Exercise id={Exercises[13].id} navigation={navigation} image={Exercises[13].image} title={Exercises[13].title} subTitle={Exercises[13].subTitle} />
-              <Exercise id={Exercises[12].id} navigation={navigation} image={Exercises[12].image} title={Exercises[12].title} subTitle={Exercises[12].subTitle} />
+              <Exercise id={Exercises[11].id} navigation={navigation} image={Exercises[11].image} title={Exercises[11].title} subTitle={Exercises[11].subTitle} videoFile={Exercises[11].videoFile} modalIcon={Exercises[11].modalIcon} iconHeight={Exercises[11].iconHeight}/>
+              <Exercise id={Exercises[13].id} navigation={navigation} image={Exercises[13].image} title={Exercises[13].title} subTitle={Exercises[13].subTitle} videoFile={Exercises[13].videoFile} />
+              <Exercise id={Exercises[12].id} navigation={navigation} image={Exercises[12].image} title={Exercises[12].title} subTitle={Exercises[12].subTitle} videoFile={Exercises[12].videoFile} />
             </ScrollView>
             <ScrollView horizontal={true} style={selectedCategory === "Popular" ? styles.showScroll : styles.hideScroll} showsHorizontalScrollIndicator={false}>
-              {popular}
+              {/* {popular} */}
+              {renderExercises(popular)}
             </ScrollView>
          
             

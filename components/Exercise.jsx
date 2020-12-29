@@ -35,10 +35,10 @@ export default function Exercise({ uniqueSize, image, gif, title, subTitle, navi
         snapshot.forEach(node => {
           favIds.push(node.val().id)
         })
-        console.log(favIds)
+        // console.log(favIds) // array of favs
       })
     }
-    setLiked(favIds.includes(id));
+    setLiked(favIds.includes(id) || isLiked);
   }
 
   const toggleLikedIcon = async (favIds) => {
@@ -51,8 +51,10 @@ export default function Exercise({ uniqueSize, image, gif, title, subTitle, navi
     updateLiked();
     // console.log(favIds.includes(id))
     // setLiked(favIds.includes(id));
-    console.log(id)
-    console.log("rerender!")
+    
+    // console.log(id)
+    // console.log("rerender!")
+
     // console.log(`fav ids: ${favIds} includes id: ${id} = ${favIds.includes(id)} from Exercise.jsx!`);
 
     // return () => favRef.off()
@@ -85,7 +87,6 @@ export default function Exercise({ uniqueSize, image, gif, title, subTitle, navi
   };
 
   const getVid = async () => {
-
     if (videoFile && !videoUrl) {
       let storedVideoUrl = await AsyncStorage.getItem(videoFile);
       if (storedVideoUrl == null) {
@@ -105,18 +106,19 @@ export default function Exercise({ uniqueSize, image, gif, title, subTitle, navi
 
 
   const cacheAsset = async asset => {
-    const fileType = asset.match(/[^.]+$/g)[0] === "png" ? "image" : asset.match(/[^.]+$/g)[0] === "mp4" ? "video" : undefined;
-
-    const name = shorthash.unique(uri);
-    console.log('name', name);
+    // console.log(asset)
+    const fileType = asset && await asset.match(/[^.]+$/g)[0] === "png" ? "image" : 
+                              asset.match(/[^.]+$/g)[0] === "gif" ? "image" : 
+                              asset.match(/[^.]+$/g)[0] === "mp4" ? "video" : "unknown file type!";
 
     // cacheDirectory/flowers.png
     const path = `${FileSystem.cacheDirectory}${asset}`;
-    console.log("path", path);
+    // console.log("path", path);
     const file = await FileSystem.getInfoAsync(path);
-    // Read from previous cache:
+
+    // If it was already cached, read from previous cache:
     if (file.exists) {
-      console.log(`Read ${fileType} from cache!`);
+      // console.log(`Read ${fileType} from cache!`);
       if (fileType == "image") {
         setCachedImg( {uri: file.uri} );
       } else if (fileType == "video") {
@@ -136,11 +138,25 @@ export default function Exercise({ uniqueSize, image, gif, title, subTitle, navi
     if (fileType == "image")      setCachedImg( {uri: newAsset.uri} );
     else if (fileType == "video") setCachedVideo( {uri: newAsset.uri} );
     else return;
-
   }
 
 
 
+  useEffect(() => {
+    // checkAsync();
+    // importData();
+    // getData();
+    
+    cacheAsset(image);
+    cacheAsset(videoFile);
+    
+    // getImg();
+    // getVid();
+    // console.log(imgUrl);
+    // console.log(videoUrl);
+
+    // console.log(videoName)
+  }, [])
 
 
 
@@ -184,22 +200,7 @@ export default function Exercise({ uniqueSize, image, gif, title, subTitle, navi
 
 
 
-  useEffect(() => {
-    // checkAsync();
-    // importData();
-    // getData();
-    
-    cacheAsset(image);
-    cacheAsset(videoFile);
-    
-    // getImg();
-    // getVid();
-    // console.log(imgUrl);
-    // console.log(videoUrl);
-
-    // console.log(videoName)
-  }, [])
-
+  
 
 
 

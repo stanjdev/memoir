@@ -49,10 +49,10 @@ export default function CreateAccountPopup() {
       
       const first_name = json["first_name"];
       const last_name = json["last_name"];
-      const email = json["email"] ? json["email"] : null;
+      const email = json["email"] || null;
       const userId = json["id"];
       
-      // console.log("name!: ", first_name, last_name, email, userId, token);
+      console.log("fb name stuff!: ", first_name, last_name, email, userId, token);
       try {
         fbSignUp(email, first_name, last_name, userId, token);
       } catch (error) {
@@ -179,7 +179,7 @@ useEffect(() => {
   if (currUser && !currUser.isAnonymous) {
     navigation.navigate('UserWelcomeScreen')
   }
-}, [userToken])
+}, [userToken, currUser])
 
 
 

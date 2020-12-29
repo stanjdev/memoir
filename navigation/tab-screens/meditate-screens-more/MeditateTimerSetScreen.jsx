@@ -67,6 +67,7 @@ export default function MeditateTimerSetScreen({navigation}) {
 
   const onChangeSecs = (value) => {
     const bellOptions = {
+      // "30 Seconds": 5000, // short 5 sec test
       "30 Seconds": 30000,
       "60 Seconds": 60000,
       "90 Seconds": 90000,

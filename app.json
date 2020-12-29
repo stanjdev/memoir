@@ -31,7 +31,12 @@
       "bundleIdentifier": "com.memoir.memoir-app",
       "config": {
         "usesNonExemptEncryption": false
-     }
+     },
+     "infoPlist": {
+        "UIBackgroundModes": [
+          "audio"
+        ]
+      }
     },
     "android": {
       "package": "com.memoir.memoir",

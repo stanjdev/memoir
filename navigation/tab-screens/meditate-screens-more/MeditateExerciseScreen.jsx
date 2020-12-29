@@ -153,6 +153,8 @@ export default function MeditateExerciseScreen({ route, navigation }) {
 
   const [ mins, setMins ] = useState(minutes);
   const [ secs, setSecs ] = useState(0);
+
+  // SHORT 2 SEC TEST
   // const [ mins, setMins ] = useState(0);
   // const [ secs, setSecs ] = useState(2);
 
@@ -176,7 +178,10 @@ export default function MeditateExerciseScreen({ route, navigation }) {
     } else {
       updateUserTime();
       incrementSessionsCompleted();
-      Alert.alert("Timer Complete", "Great job, you’ve completed your meditation session!", [{text: "Back"}, {text: "Finish", style: "cancel"}], );
+      Alert.alert("Timer Complete", "Great job, you’ve completed your meditation session!", [
+        {text: "Back", onPress: () => navigation.goBack()}, 
+        {text: "Finish", style: "cancel", onPress: () => navigation.navigate("Profile")}
+      ]);
       setTimerRunning(false);
       bellSound.unloadAsync();
       // console.log('else');
@@ -184,6 +189,7 @@ export default function MeditateExerciseScreen({ route, navigation }) {
       clear();
       setTimeout(() => {
         finishedSound.unloadAsync(); // cuts off the sound
+        bellSound.unloadAsync(); // 
         // navigation.navigate("MeditateTimerSetScreen");
       }, 4000);
     }
@@ -194,7 +200,7 @@ export default function MeditateExerciseScreen({ route, navigation }) {
 
   // BELL SOUND - useInterval()  
   const bellSound = new Audio.Sound();
-  Audio.setAudioModeAsync({playsInSilentModeIOS: true});
+  Audio.setAudioModeAsync({playsInSilentModeIOS: true, staysActiveInBackground: true});
 
   const playBell = async () => await bellSound.replayAsync();
   const playBellFirst = async () => await bellSound.playAsync();
@@ -213,7 +219,7 @@ export default function MeditateExerciseScreen({ route, navigation }) {
 
   // FINISHED BELL SOUND
   const finishedSound = new Audio.Sound();
-  Audio.setAudioModeAsync({playsInSilentModeIOS: true});
+  Audio.setAudioModeAsync({playsInSilentModeIOS: true, staysActiveInBackground: true});
 
   const loadFinishedSound = async () => {
     try {
@@ -250,7 +256,7 @@ export default function MeditateExerciseScreen({ route, navigation }) {
   }, 1000);
 
   const [toggleBell, runningBell] = useInterval(() => {
-    loadSound();
+    timerRunning ? loadSound() : null;
   }, bellInterv);
 
   const toggle = () => {
@@ -274,7 +280,7 @@ export default function MeditateExerciseScreen({ route, navigation }) {
   // WITH SAFETY CHECK ADDED - for users with no existing progress data objects
   // INSTEAD OF DB POST REQUESTING EVERY SECOND with incrementUserTime(), THIS INCREMENTS LOCALLY, THEN WHEN USER FINISHES EXERCISE WITH ALERT POPUP ORRR UNMOUNTS EXERCISE, THEN UPDATE THE PRACTICE TIME BY ADDING THE SO FAR WITH THIS LOCALLY INCREMENTED SECONDS TRACKER.
   async function updateUserTime() {
-    if (currUser && userToken) {
+    if (currUser) {
       let timeSoFar;
       await progressRef.once('value', async snapshot => {
         if (snapshot.val() === null) {
@@ -301,7 +307,7 @@ export default function MeditateExerciseScreen({ route, navigation }) {
   // WITH SAFETY CHECK ADDED - for users with no existing progress data objects
   // Increment sessions user completed - triggers when that 'finish' popup modal comes out
   async function incrementSessionsCompleted() {
-    if (currUser && userToken) {
+    if (currUser) {
       let sessionsCompletedSoFar;
       await progressRef.once('value', async snapshot => {
         if (snapshot.val() === null) {

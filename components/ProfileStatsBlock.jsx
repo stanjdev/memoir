@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { useFonts } from 'expo-font';
+import { useIsFocused } from '@react-navigation/native'
 
 const { height, width } = Dimensions.get("window");
 
@@ -12,6 +13,26 @@ export default function ProfileStatsBlock({icon, title, number, subtitle, subTex
     'Assistant-Regular': require('../assets/fonts/Assistant/static/Assistant-Regular.ttf'),
     'Assistant-SemiBold': require('../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   });
+
+  const isFocused = useIsFocused();
+
+  const [prog, setProg] = useState(0.01);
+
+  const loadProgress = () => {
+    isFocused 
+    ?
+    setTimeout(() => {
+      setProg(progress);
+    }, 500) 
+    :
+    setProg(0.01);
+  }
+
+  useEffect(() => {
+    loadProgress();
+    
+  }, [isFocused])
+
   return (
       <View style={{ width: width * 0.77, height: Math.min(height * 0.13, 177), margin: 7, }}>
         <View style={{flexDirection: "row", alignItems: "center"}}>
@@ -29,7 +50,7 @@ export default function ProfileStatsBlock({icon, title, number, subtitle, subTex
         <View>
           {progress ? 
            <ProgressBar
-            progress={progress}
+            progress={prog}
             color={"#3681C7"}
             style={{backgroundColor: "#CCCCCC", borderRadius: 7, height: 3, marginTop: 10}}
             width={"100%"}

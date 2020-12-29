@@ -142,6 +142,7 @@ export default function Navigation({navigation}) {
         Alert.alert("User Not Found", "Your Account Info Does Not Match Our Records. Please Enter a Valid Username/Password.", [
           {text: "Okay"}, {style: "destructive"}
         ]);
+        return;
       }
 
       const currUser = fireApp.auth().currentUser;
@@ -152,7 +153,7 @@ export default function Navigation({navigation}) {
         userEmail = currUser.email;
         userToken = currUser.uid
         AsyncStorage.setItem('userToken', userToken);
-        AsyncStorage.setItem('userName', userFirstName);
+        userFirstName && AsyncStorage.setItem('userName', userFirstName);
         dispatch({ type: "SIGNIN", email: userEmail, token: userToken, firstName: userFirstName })
       }
     },
@@ -215,7 +216,7 @@ export default function Navigation({navigation}) {
                 userToken = currUser.uid;
                 userEmail = currUser.email;
                 AsyncStorage.setItem('userToken', userToken);
-                AsyncStorage.setItem('userName', userFirstName);
+                userFirstName && AsyncStorage.setItem('userName', userFirstName);
                 dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
               }
             })
@@ -254,7 +255,7 @@ export default function Navigation({navigation}) {
             userEmail = inputEmail;
             userToken = currUser.uid;
             AsyncStorage.setItem('userToken', userToken);
-            AsyncStorage.setItem('userName', userFirstName);
+            userFirstName && AsyncStorage.setItem('userName', userFirstName);
             dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
           }
 
@@ -276,7 +277,7 @@ export default function Navigation({navigation}) {
                   userEmail = inputEmail;
                   userToken = currUser.uid;
                   AsyncStorage.setItem('userToken', userToken);
-                  AsyncStorage.setItem('userName', userFirstName);
+                  userFirstName && AsyncStorage.setItem('userName', userFirstName);
                   dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
                 }
               })
@@ -284,6 +285,7 @@ export default function Navigation({navigation}) {
             })
         } catch (error) {
           console.log("Error upgrading anonymous account with Apple", error);
+          return;
         }
       }
 
@@ -300,6 +302,7 @@ export default function Navigation({navigation}) {
         Alert.alert("User Not Found", "Your Account Info Does Not Match Our Records. Please Enter a Valid Username/Password.", [
           {text: "Okay"}, {style: "destructive"}
         ]);
+        return;
       }
 
       const currUser = fireApp.auth().currentUser;
@@ -350,7 +353,7 @@ export default function Navigation({navigation}) {
                     userToken = token;
                     userEmail = currUser.privateRelayEmail;
                     AsyncStorage.setItem('userToken', userToken);
-                    AsyncStorage.setItem('userName', userFirstName);
+                    userFirstName && AsyncStorage.setItem('userName', userFirstName);
                     dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
                   }
                 })
@@ -358,6 +361,7 @@ export default function Navigation({navigation}) {
               })
           } catch (error) {
             console.log("Error upgrading anonymous account with Facebook", error);
+            return;
           }
       }
       const currUser = fireApp.auth().currentUser;
@@ -367,7 +371,7 @@ export default function Navigation({navigation}) {
         userToken = token;
         userEmail = currUser.privateRelayEmail;
         AsyncStorage.setItem('userToken', userToken);
-        AsyncStorage.setItem('userName', userFirstName);
+        userFirstName && AsyncStorage.setItem('userName', userFirstName);
         dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
       }
     },
@@ -396,6 +400,7 @@ export default function Navigation({navigation}) {
           // console.log("credential:", credential)
         } catch (error) {
           alert(error);
+          return;
         }
   
         if (currUser.email !== inputEmail && credential) {
@@ -409,7 +414,8 @@ export default function Navigation({navigation}) {
                 {text: "Okay"}
               ]);
             }).catch(function(error) {
-              alert(error)
+              alert(error);
+              return;
             })
           })
         }

@@ -42,7 +42,7 @@ export const Exercises = {
     id: 2,
     // image: require("../assets/exercises-images/circles.png"),
     // image: "circles.png",
-    image: "gifs/circles.gif",
+    image: "circles.gif",
     gif: "gifs/circles.gif",
     // image: require("../assets/exercises-images/circles.gif"),
     title: "Breathe for Focus",
@@ -155,6 +155,7 @@ export const Exercises = {
     title: "6 Deep Breaths PLACEHOLDER",
     subTitle: "",
     // videoFile: require('../assets/video-exercises/crescent-moon.mp4'),
+    videoFile: 'crescent-moon.mp4',
     modalIcon: require('../assets/exercises-images/modal-icons/breathe-waves.png'),
     iconHeight: 38,
     customWidth: 0.89,
@@ -164,6 +165,7 @@ export const Exercises = {
     image: "cosmos.png",
     title: "Cosmos",
     subTitle: "Relax with the Universe",
+    videoFile: 'crescent-moon.mp4',
     // videoFile: require('../assets/video-exercises/box-breathing.mp4'),
     modalIcon: require('../assets/exercises-images/modal-icons/arrow-squares.png'),
     iconHeight: 42
@@ -176,6 +178,7 @@ export const Exercises = {
     image: "grey-placeholder.png",
     title: "6 Breaths to Calm",
     subTitle: "Achieve a Calm State",
+    videoFile: 'crescent-moon.mp4',
     // videoFile: require('../assets/video-exercises/box-breathing.mp4'),
     modalIcon: require('../assets/exercises-images/modal-icons/cut-triangle.png'),
     iconHeight: 96
@@ -188,6 +191,7 @@ export const Exercises = {
     image: "grey-placeholder.png",
     title: "No More Anxiety",
     subTitle: "4-7-8 Tension Relief",
+    videoFile: 'crescent-moon.mp4',
     // videoFile: require('../assets/video-exercises/box-breathing.mp4'),
     modalIcon: require('../assets/exercises-images/modal-icons/cut-triangle.png'),
     iconHeight: 96
@@ -200,6 +204,7 @@ export const Exercises = {
     image: "grey-placeholder.png",
     title: "1 Minute Break",
     subTitle: "60 Seconds of Zen",
+    videoFile: 'crescent-moon.mp4',
     // videoFile: require('../assets/video-exercises/box-breathing.mp4'),
     modalIcon: require('../assets/exercises-images/modal-icons/cut-triangle.png'),
     iconHeight: 96
