@@ -2,7 +2,7 @@
   "expo": {
     "name": "Memoir",
     "slug": "Memoir",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/app-icon.png",
     "splash": {
