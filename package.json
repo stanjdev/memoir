@@ -17,6 +17,7 @@
     "@react-navigation/bottom-tabs": "^5.10.5",
     "@react-navigation/native": "^5.8.6",
     "@react-navigation/stack": "^5.12.3",
+    "date-and-time": "^0.14.2",
     "expo": "^39.0.0",
     "expo-apple-authentication": "~2.2.1",
     "expo-asset": "~8.2.0",
