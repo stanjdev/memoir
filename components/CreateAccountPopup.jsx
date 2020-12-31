@@ -54,7 +54,7 @@ export default function CreateAccountPopup() {
       
       console.log("fb name stuff!: ", first_name, last_name, email, userId, token);
       try {
-        fbSignUp(email, first_name, last_name, userId, token);
+        await fbSignUp(email, first_name, last_name, userId, token);
       } catch (error) {
         console.log(error);
       }

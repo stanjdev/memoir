@@ -55,13 +55,13 @@ export default function FavoritesScreen({navigation}) {
   const [favs, setFavs] = useState([]);
   let favIds = [];
 
+  const currUser = fireApp.auth().currentUser;
+  
   const getFavorites = async() => {
-    let currUser = await fireApp.auth().currentUser;
 
     const favRef = currUser && fireApp.database().ref(currUser.uid).child('favorites');
     // logged in check
     if (currUser !== null) {
-      
       
       favRef.on("value", snapshot => {
         snapshot.forEach(node => {
@@ -166,7 +166,7 @@ export default function FavoritesScreen({navigation}) {
     //   ])
     // }
     console.log(`favorites: ${favs}`)
-  }, [userToken])
+  }, [userToken, currUser])
 
 
   // function renderFavs() {

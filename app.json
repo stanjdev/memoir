@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "Memoir",
+    "description": "Memoir promotes mindfulness and serenity through breathing and meditation exercises. Users can sign in with their Facebook, Apple ID, or email to save their favorite exercises and track their exercise progress.",
     "slug": "Memoir",
     "version": "1.0.4",
     "orientation": "portrait",

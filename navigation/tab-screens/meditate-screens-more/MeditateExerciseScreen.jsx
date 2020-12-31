@@ -419,7 +419,9 @@ const styles = StyleSheet.create({
 
 
 
-
+// the callback was countDown() or loadSound()
+// toggle() is called whenever the pause and play button is pressed
+// useRef.current() to store a value that persists between renders. 
 
 
 // useINTERVAL ATTEMPT
@@ -435,7 +437,7 @@ function useInterval(callback, delay) {
 
   const clear = useCallback(() => clearInterval(intervalId.current), []);
 
-  // Remember the latest function.
+  // Remember the latest function. Store it in the useRef().current
   useEffect(() => {
     savedCallback.current = callback;
   }, [callback]);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
-import { PanResponder, Text, Modal, View, ScrollView, StatusBar, Button, Alert, Vibration, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, Animated, AppState } from 'react-native';
+import { Text, Modal, View, ScrollView, StatusBar, Alert, Image, Dimensions, StyleSheet, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, Animated, AppState } from 'react-native';
 import AppButton from './AppButton';
 import { useIsFocused } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -10,14 +10,12 @@ import { Audio, Video } from 'expo-av';
 import { setAudioModeAsync } from 'expo-av/build/Audio';
 
 import { fireApp } from '../firebase';
-import { app, apps, firestore } from 'firebase';
 
 import { AuthContext } from '../components/context';
 
 import { useKeepAwake } from 'expo-keep-awake';
 
 const { width, height } = Dimensions.get('window');
-
 
 
 
@@ -176,9 +174,10 @@ export default function ExerciseVideo({ route, navigation }) {
     }
   }, )
 
+  
 
   // COUNTDOWN for Exercise vids
-  const runExerciseClock = async () => {
+  const runExerciseClock = () => {
     if (secs > 0) {
       setSecs(secs - 1);
       
@@ -718,16 +717,58 @@ function keepGoing() {
   const [musicMuted, setMusicMuted] = useState(false);
   const toggleMusic = () => {
     setMusicMuted(!musicMuted);
+    // toggleUserAudioPrefs("music", musicMuted, setMusicMuted);
   }
 
   const pause = () => {
     setPaused(!paused);
-    // Alert.alert("paused: " + paused)
   }
+
+
+  // ATTEMPT #1 for user specfic mute preferences
+  const audioPrefRef = currUser && fireApp.database().ref(currUser.uid).child('audioPreferences');
+  async function toggleUserAudioPrefs(audioSource, state, setter) {
+    if (currUser) {
+      // let audioPreference;
+      audioPrefRef.on('value', async snapshot => {
+        if (snapshot.val() === null) {
+          audioPrefRef.set({
+            bellMuted: false,
+            musicMuted: false,
+          })
+          // audioPreference = await snapshot.val() !== null && audioSource == "bell" ? snapshot.val().bellMuted : 
+          //                   await snapshot.val() !== null && audioSource == "music" ? snapshot.val().musicMuted :
+          //                   false
+        } 
+
+        audioSource === "bell" 
+        ? 
+        await audioPrefRef.update({
+          bellMuted: !state
+        })
+        :
+        await audioPrefRef.update({
+          musicMuted: !state
+        })
+        
+        console.log(state)
+        await setter(!state)
+      });
+    }
+  };
+
+
+
+
 
 
   // console.log("video file: " + JSON.stringify(videoFile))
   // console.log("video url from firebase storage: " + JSON.stringify(videoUrl))
+
+
+
+
+
 
 
   return (
@@ -854,11 +895,9 @@ function keepGoing() {
         </Modal>
       </View>
 
-        
     </View>
   )
 }
-
 
 
 const styles = StyleSheet.create({
@@ -886,7 +925,6 @@ const styles = StyleSheet.create({
     margin: 20,
     marginTop: height * 0.15,
     backgroundColor: "white",
-    // borderWidth: 1,
     borderRadius: 20,
     padding: 35,
     justifyContent: "space-evenly",

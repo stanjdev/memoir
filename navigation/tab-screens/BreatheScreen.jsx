@@ -56,7 +56,7 @@ export default function BreatheScreen({navigation}) {
   });
 
   const currentHour = new Date().getHours();
-  console.log(currentHour)
+  // console.log(currentHour)
 
   const [selectedCategory, setSelectedCategory] = useState(currentHour >= 20 ? "Sleep" : "New");
 
@@ -147,7 +147,7 @@ export default function BreatheScreen({navigation}) {
 
     shuffle([1, 2, 3, 4, 5], setRecommendedToday);
     shuffle([6, 10, 11, 12, 13], setPopular);
-    console.log("breathing exercises rendered!")
+    // console.log("breathing exercises shuffle rendered!")
   }, [])
 
 

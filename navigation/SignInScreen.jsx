@@ -33,13 +33,16 @@ export default function SignInScreen ({navigation}) {
     isValidPassword: true
   })
   
+
   const { signIn, userToken, signInFail, resetSignInFail } = React.useContext(AuthContext);
+  const currUser = firebase.auth().currentUser;
 
   useEffect(() => {
-    if (userToken) {
+    if (currUser && !currUser.isAnonymous) {
       navigation.navigate('UserWelcomeScreen')
     }
-  }, [userToken])
+  }, [userToken, currUser])
+
 
 
   // includes validation check when user actually types in their email:

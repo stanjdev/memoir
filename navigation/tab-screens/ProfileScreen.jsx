@@ -21,7 +21,7 @@ export default function ProfileScreen({navigation}) {
   const [showPopUp, setShowPopup] = useState(false);
   
   useEffect(() => {
-    if (!userToken) {
+    if (currUser && currUser.isAnonymous || !userToken) {
       setTimeout(() => {
         isFocused ? setShowPopup(true) : setShowPopup(false)
       }, 500);

@@ -11,7 +11,7 @@ import { AuthContext } from '../components/context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { fireApp } from '../firebase';
-import firebase, { auth } from 'firebase';
+import firebase from 'firebase';
 
 
 export default function Navigation({navigation}) {
@@ -19,7 +19,6 @@ export default function Navigation({navigation}) {
   // const [userToken, setUserToken] = React.useState(null);
   // const [isLoading, setIsLoading] = React.useState(true);
   
-
 
   const initialLoginState = {
     userEmail: null,
@@ -173,7 +172,7 @@ export default function Navigation({navigation}) {
         // sign in anonymously whenever user signs out
         firebase.auth().signInAnonymously()
           .then(user => {
-            console.log(user)
+            console.log("logged out, new anonymous made!", user.uid)
           })
           .catch(err => console.log(err.code, err.message));
       } catch(e) {
@@ -312,7 +311,7 @@ export default function Navigation({navigation}) {
         // userEmail = currUser.email;
         userToken = currUser.uid;
         AsyncStorage.setItem('userToken', userToken);
-        AsyncStorage.setItem('userName', userFirstName);
+        userFirstName && AsyncStorage.setItem('userName', userFirstName);
         dispatch({ type: "SIGNIN", token: userToken, firstName: userFirstName })
       }
     },
@@ -325,6 +324,19 @@ export default function Navigation({navigation}) {
         await fireApp
           .auth()
           .signInWithEmailAndPassword(email || `${userId}@fbid.com`, userId);
+          
+        const currUser = fireApp.auth().currentUser;
+        let userFirstName, userEmail, userToken;
+        if (currUser !== null) {
+          userFirstName = currUser.displayName;
+          userToken = token;
+          userEmail = currUser.privateRelayEmail;
+          AsyncStorage.setItem('userToken', userToken);
+          userFirstName && AsyncStorage.setItem('userName', userFirstName);
+          dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
+        }
+        return;
+
       } else {
         // do link with credential here instead since they will start as anonymous, then link.
           // const result = await fireApp
@@ -338,7 +350,7 @@ export default function Navigation({navigation}) {
 
           try {
             const credential = firebase.auth.EmailAuthProvider.credential(email || `${userId}@fbid.com`, userId);
-            firebase.auth().currentUser.linkWithCredential(credential)
+            await firebase.auth().currentUser.linkWithCredential(credential)
               .then(async usercred => {
                 const user = usercred.user;
                 await user.updateProfile({
@@ -359,21 +371,12 @@ export default function Navigation({navigation}) {
                 })
                 console.log("Anonymous account successfully upgraded with Facebook!", user);
               })
+              return;
           } catch (error) {
             console.log("Error upgrading anonymous account with Facebook", error);
             return;
           }
-      }
-      const currUser = fireApp.auth().currentUser;
-      let userFirstName, userEmail, userToken;
-      if (currUser !== null) {
-        userFirstName = currUser.displayName;
-        userToken = token;
-        userEmail = currUser.privateRelayEmail;
-        AsyncStorage.setItem('userToken', userToken);
-        userFirstName && AsyncStorage.setItem('userName', userFirstName);
-        dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
-      }
+      };
     },
 
     updateNameAndEmail: async (inputName, inputEmail, inputPassword) => {
@@ -385,6 +388,7 @@ export default function Navigation({navigation}) {
           currUser.updateProfile({
             displayName: inputName,
           }).then(() => {
+            inputName && AsyncStorage.setItem('userName', inputName);
             dispatch({ type: "UPDATEUSERNAME", firstName: currUser.displayName })
             console.log(`First name changed to ${currUser.displayName}!`)
             Alert.alert("Success!", `First name changed to ${currUser.displayName}!`, [
@@ -435,48 +439,52 @@ export default function Navigation({navigation}) {
 
 
 
-
+  // WHEN FIRST OPENING THE APP
   // LOADING WHEEL INTRO - if user was already previously logged in
   useEffect(() => {
     setTimeout( async () => {
       // setIsLoading(false);
-
-      const currUser = fireApp.auth().currentUser;
+      
       let userFirstName, userEmail, userToken;
-      if (currUser !== null) {
-      //   // console.log(currUser);
-      //   userEmail = currUser.email;
-      //   userToken = currUser.uid
-        AsyncStorage.setItem('userName', currUser.displayName || '');
-        AsyncStorage.setItem('userToken', currUser.uid);
-      //   dispatch({ type: "SIGNIN", email: userEmail, token: userToken, firstName: userFirstName })
-      } 
-      
-      // if (!currUser && !userToken) {
-      //   firebase.auth().signInAnonymously()
-      //     .then(user => {
-      //       console.log(user)
-      //     })
-      //     .catch(err => console.log(err.code, err.message));
-      // }
-      
+      const currUser = fireApp.auth().currentUser;
 
-      // let userToken;
-      // userToken = null;
+      // if (currUser) {
+      //   console.log("existing curr user!", currUser.uid);
+      // //   userEmail = currUser.email;
+      // //   userToken = currUser.uid;
+      //   AsyncStorage.setItem('userName', currUser.displayName || '');
+      //   AsyncStorage.setItem('userToken', currUser.uid);
+      // //   dispatch({ type: "SIGNIN", email: userEmail, token: userToken, firstName: userFirstName })
+      // }
+
+    
       try {
         userToken = await AsyncStorage.getItem('userToken');
         userFirstName = await AsyncStorage.getItem('userName');
         // userToken = currUser ? currUser.uid : null;
         // if (currUser !== null) userFirstName = currUser.displayName;
+        
+        if (!userToken && !currUser) {
+          // WHEN USER TRIES APP FOR FIRST TIME
+          firebase.auth().signInAnonymously()
+            .then(user => {
+              console.log("new Anonymous made!", user.uid)
+            })
+            .catch(err => console.log(err.code, err.message));
+        } else {
+            console.log("existing curr user!", currUser.uid || "currUser ID not loaded");
+            await AsyncStorage.setItem('userName', currUser.displayName || '');
+            await AsyncStorage.setItem('userToken', currUser.uid || "currUser ID not loaded");
+        }
+
       } catch(e) {
-        console.log("useEffect hit!")
         console.log(e);
       }
 
       dispatch({ type: "RETRIEVE_TOKEN", token: userToken, firstName: userFirstName })
       console.log("user token:", userToken)
       console.log("user email:", currUser && currUser.email)
-      console.log("user firstName:", userFirstName)
+      console.log("user firstName, logged in as:", userFirstName)
     }, 0)
   }, [])
   

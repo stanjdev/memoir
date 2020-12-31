@@ -8,6 +8,9 @@ import AppButton from '../components/AppButton';
 import { useFonts } from 'expo-font';
 
 const { width, height } = Dimensions.get('window');
+import firebase from 'firebase';
+
+
 
 export default function SignUpScreen ({navigation}) {
   let [fontsLoaded] = useFonts({
@@ -18,13 +21,16 @@ export default function SignUpScreen ({navigation}) {
 
   const { userToken } = useContext(AuthContext);
 
+  const currUser = firebase.auth().currentUser;
+
   useEffect(() => {
-    if (userToken) {
+    if (currUser && !currUser.isAnonymous) {
       navigation.navigate('UserWelcomeScreen')
     }
-  }, [userToken])
+  }, [userToken, currUser])
 
   
+
   const [userInfo, setUserInfo] = React.useState({
     firstName: '',
     email: '',

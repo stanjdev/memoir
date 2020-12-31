@@ -27,7 +27,7 @@ export default function MeditateScreen({navigation}) {
         <View style={{flexDirection: "row", padding: 20}}>
           <View style={{backgroundColor: "white", flex: 1, height: height * 0.7, borderRadius: 20, justifyContent: "space-evenly", alignItems: "center" }}>
 
-            <View style={{width: width * 0.63, height: height * 0.45, justifyContent: "space-around", alignItems: "center", }}>
+            <View style={{width: width * 0.68, height: height * 0.45, justifyContent: "space-around", alignItems: "center", }}>
               <Image source={require('../../assets/screen-icons/meditate-circles-large.png')} style={{height: 47, }} resizeMode="contain"/>
               <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 23, textAlign: "center"}}>Sometimes Your Own Inner Voice is Enough</Text>
               <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>Our style of meditation doesn’t feature a voice to guide you through it.</Text>

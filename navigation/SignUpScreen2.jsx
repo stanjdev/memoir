@@ -8,6 +8,7 @@ import AppButton from '../components/AppButton';
 import { useFonts } from 'expo-font';
 
 const { width, height } = Dimensions.get('window');
+import firebase from 'firebase';
 
 
 export default function SignUpScreen ({navigation, route}) {
@@ -18,13 +19,15 @@ export default function SignUpScreen ({navigation, route}) {
   });
 
   const { signUp, userToken } = useContext(AuthContext);
+  const currUser = firebase.auth().currentUser;
 
   useEffect(() => {
-    if (userToken) {
-      navigation.navigate('UserWelcomeScreen')
+    if (currUser && !currUser.isAnonymous) {
+      navigation.navigate('UserWelcomeScreen');;
     }
-  }, [userToken])
+  }, [userToken, currUser])
 
+  
   const {routeFirstName, routeEmail} = route.params
 
   const [userInfo, setUserInfo] = React.useState({

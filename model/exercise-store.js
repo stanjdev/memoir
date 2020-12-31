@@ -41,9 +41,9 @@ export const Exercises = {
   2: {
     id: 2,
     // image: require("../assets/exercises-images/circles.png"),
-    // image: "circles.png",
-    image: "circles.gif",
-    gif: "gifs/circles.gif",
+    image: "circles.png",
+    // image: "circles.gif",
+    // gif: "gifs/circles.gif",
     // image: require("../assets/exercises-images/circles.gif"),
     title: "Breathe for Focus",
     subTitle: "Get in the Zone",
