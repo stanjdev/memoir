@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
-import { Text, Modal, View, ScrollView, StatusBar, Alert, Image, Dimensions, StyleSheet, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, Animated, AppState } from 'react-native';
+import { Text, Modal, View, ScrollView, StatusBar, Alert, Image, Pressable, Dimensions, StyleSheet, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, Animated, AppState } from 'react-native';
 import AppButton from './AppButton';
 import { useIsFocused } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -790,7 +790,7 @@ function keepGoing() {
       />
       {isFocused ? <StatusBar hidden={false} barStyle="light-content"/> : null} 
 
-      <TouchableWithoutFeedback 
+      {/* <TouchableWithoutFeedback 
         onPress={touchScreenToggleControls} 
         // onLongPress={pause}
         onPressIn={() => setPaused(true)}
@@ -800,9 +800,22 @@ function keepGoing() {
         <View 
           style={{ height: height * 0.67, width: width, position: "absolute", top: height * 0.15, zIndex: 10, }} 
         >
-          {/* <Text style={{color: "orange", borderWidth: 1}}>TOUCH!</Text> */}
         </View>
-      </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback> */}
+
+      <Pressable 
+        style={{ height: height * 0.67, width: width, position: "absolute", top: height * 0.15, zIndex: 10, borderWidth: 1, borderColor: 'orange'}}
+        onPress={touchScreenToggleControls}
+        // onLongPress={pause}
+        // onPressIn={() => setPaused(true)}
+        // onPressOut={() => setPaused(false)}
+
+        // onTouchStart={() => setPaused(true)}
+        // onTouchEnd={() => setPaused(false)}
+        onTouchStart={() => console.log("pressed!")}
+        onTouchEnd={() => console.log("released!")}
+      >
+      </Pressable>
 
 
       <Animated.View style={{ height: height, width: width, position: "absolute", opacity: overlayFade }}>
