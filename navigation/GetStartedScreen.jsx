@@ -5,7 +5,7 @@ import AppButton from '../components/AppButton';
 import * as Animatable from 'react-native-animatable';
 import { useFonts } from 'expo-font';
 import * as Font from 'expo-font';
-import { AppLoading } from 'expo';
+import AppLoading from 'expo-app-loading';
 
 const { width, height } = Dimensions.get('window');
 const bgImage = require('../assets/splash/memoir-splash-thin-content-4x.png')

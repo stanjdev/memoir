@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, useContext } from 'react';
-import { Animated, Text, View, StatusBar, Button, Alert, Vibration, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
+import { Animated, Text, View, StatusBar, Button, Alert, Vibration, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, AppState } from 'react-native';
 import AppButton from '../../../components/AppButton';
 import { useIsFocused } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -7,17 +7,43 @@ const bgImage = require('../../../assets/splash/memoir-splash-thin-4x.png')
 import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../../../components/context';
 
+// import BackgroundTimer from 'react-native-background-timer'; ONLY WORKS IN 'BARE' WORKFLOW IT SEEMS.
+
 import { Audio } from 'expo-av';
 import { useKeepAwake } from 'expo-keep-awake';
 
 const { width, height } = Dimensions.get('window');
 
-import firebase from 'firebase';
+import firebase, { apps } from 'firebase';
 
 
 export default function MeditateExerciseScreen({ route, navigation }) {
   useKeepAwake();
   const isFocused = useIsFocused();
+
+
+  // // AppState stuff
+  // const appState = useRef(AppState.currentState);
+  // const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
+  // useEffect(() => {
+  //   AppState.addEventListener("change", _handleAppStateChange);
+  //   console.log("CHANGE!! AppState active inactive thing!")
+
+  //   return () => AppState.removeEventListener("change", _handleAppStateChange);
+  // }, []);
+
+  // const _handleAppStateChange = nextAppState => {
+  //   if (appState.current.match(/inactive|background/) && nextAppState === "active") {
+  //     console.log("App has come to the foreground!");
+  //   }
+  //   appState.current = nextAppState;
+  //   setAppStateVisible(appState.current);
+  //   console.log("AppState:", appState.current);
+  // }
+
+
+
   
   let [fontsLoaded] = useFonts({
     'Assistant': require('../../../assets/fonts/Assistant/Assistant-VariableFont_wght.ttf'),
@@ -154,7 +180,7 @@ export default function MeditateExerciseScreen({ route, navigation }) {
   const [ mins, setMins ] = useState(minutes);
   const [ secs, setSecs ] = useState(0);
 
-  // SHORT 2 SEC TEST
+  // // SHORT 2 SEC TEST
   // const [ mins, setMins ] = useState(0);
   // const [ secs, setSecs ] = useState(2);
 
@@ -191,8 +217,9 @@ export default function MeditateExerciseScreen({ route, navigation }) {
         finishedSound.unloadAsync(); // cuts off the sound
         bellSound.unloadAsync(); // 
         // navigation.navigate("MeditateTimerSetScreen");
-      }, 4000);
+      }, 6000);
     }
+    console.log(sessionSecs);
     setSessionSecs(sessionSecs => sessionSecs += 1);
   }
 

@@ -30,18 +30,20 @@ export const Exercises = {
     id: 1,
     // image: require("../assets/exercises-images/flower-of-life.png"),
     image: "flower-of-life.png",
+    uniqueImg: "daily-exhale-5.png",
     title: "Flower of Life",
     subTitle: "Relax Your Mind",
     // videoFile: require('../assets/video-exercises/flower-of-life.mp4'),
     videoFile: 'flower-of-life.mp4',
     modalIcon: require('../assets/exercises-images/modal-icons/flower.png'),
     iconHeight: 60,
-    customVolume: 0.23
+    customVolume: 0.22
   },
   2: {
     id: 2,
     // image: require("../assets/exercises-images/circles.png"),
     image: "circles.png",
+    uniqueImg: "daily-exhale-3.png",
     // image: "circles.gif",
     // gif: "gifs/circles.gif",
     // image: require("../assets/exercises-images/circles.gif"),
@@ -57,6 +59,7 @@ export const Exercises = {
     // image: require("../assets/exercises-images/minute-break-4x.png"),
     // image: require("../assets/exercises-images/4-7-9-wheel.png"),
     image: "4-7-9-wheel.png",
+    uniqueImg: "daily-exhale-6.png",
     title: "1 Minute Break",
     subTitle: "60 Seconds of Zen",
     // videoFile: require('../assets/video-exercises/4-7-9-wheel.mp4'),
@@ -69,10 +72,11 @@ export const Exercises = {
     // image: require("../assets/exercises-images/jungle-green.png"),
     // image: require("../assets/exercises-images/box-breathing.png"),
     image: "box-breathing.png",
+    uniqueImg: "daily-exhale-2.png",
     title: "Box Breathing",
     subTitle: "4 Second Box Pattern",
     // videoFile: require('../assets/video-exercises/box-breathing.mp4'),
-    videoFile: 'box-breathing.mp4',
+    videoFile: "box-breathing.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/arrow-squares.png'),
     iconHeight: 42
   },
@@ -80,6 +84,7 @@ export const Exercises = {
     id: 5,
     // image: require("../assets/exercises-images/yin-yang.png"),
     image: "yin-yang.png",
+    uniqueImg: "daily-exhale-4.png",
     title: "Ride the Wave",
     subTitle: "Slow Deep Breathing",
     // videoFile: require('../assets/video-exercises/yin-yang.mp4'),
@@ -163,6 +168,7 @@ export const Exercises = {
   10: {
     id: 10,
     image: "cosmos.png",
+    uniqueImg: "daily-exhale-3.png",
     title: "Cosmos",
     subTitle: "Relax with the Universe",
     videoFile: 'crescent-moon.mp4',
@@ -213,7 +219,84 @@ export const Exercises = {
     */
 
   },
-  14: {
+
+
+
+
+
+
+  // 14: {
+  //   id: 14,
+  //   image: "Daily Exhale 2.png",
+  //   uniqueImg: "Daily Exhale 2.png",
+  //   title: "Daily Exhale 2",
+  //   subTitle: "2 Min Session",
+  //   videoFile: "box-breathing.mp4",
+  //   modalIcon: require('../assets/exercises-images/modal-icons/arrow-squares.png'),
+  //   autoCountDown: "2m"
+  // },
+  // 15: {
+  //   id: 15,
+  //   image: "Daily Exhale 3.png",
+  //   uniqueImg: "Daily Exhale 3.png",
+  //   title: "Daily Exhale 3",
+  //   subTitle: "2 Min Session",
+  //   videoFile: 'circles.mp4',
+  //   modalIcon: require('../assets/exercises-images/modal-icons/audi.png'),
+  //   autoCountDown: "2m"
+  // },
+  // 16: {
+
+  // },
+  // 17: {
+  //   id: 17,
+  //   image: "Daily Exhale 4.png",
+  //   uniqueImg: "Daily Exhale 4.png",
+  //   title: "Daily Exhale 4",
+  //   subTitle: "2 Min Session",
+  //   videoFile: 'yin-yang.mp4',
+  //   modalIcon: require('../assets/exercises-images/modal-icons/wave.png'),
+  //   autoCountDown: "2m"
+  // },
+  // 18: {
+  //   id: 18,
+  //   image: "Daily Exhale 5.png",
+  //   uniqueImg: "Daily Exhale 5.png",
+  //   title: "Daily Exhale 5",
+  //   subTitle: "2 Min Session",
+  //   videoFile: 'flower-of-life.mp4',
+  //   modalIcon: require('../assets/exercises-images/modal-icons/flower.png'),
+  //   autoCountDown: "2m"
+  // },
+  // 19: {
+  //   id: 19,
+  //   image: "Daily Exhale 6.png",
+  //   uniqueImg: "Daily Exhale 6.png",
+  //   title: "Daily Exhale 6",
+  //   subTitle: "2 Min Session",
+  //   videoFile: '4-7-9-wheel.mp4',
+  //   modalIcon: require('../assets/exercises-images/modal-icons/zen-circle.png'),
+  //   autoCountDown: "2m"
+  // },
+  20: {
+
+  },
+  21: {
+
+  },
+  22: {
+
+  },
+  23: {
+
+  },
+  24: {
+
+  },
+  25: {
+
+  },
+  26: {
 
   },
 }

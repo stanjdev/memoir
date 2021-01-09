@@ -4,7 +4,6 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { AuthContext } from '../components/context';
 
 import { useFonts } from 'expo-font';
-import { AppLoading } from 'expo';
 
 import shorthash from 'shorthash';
 import * as FileSystem from 'expo-file-system';
@@ -210,7 +209,7 @@ export default function Exercise({ uniqueSize, image, gif, title, subTitle, navi
 
   return ( 
     uniqueSize == "topBanner" ? 
-    <TouchableOpacity onPress={() => notSignedIn ? console.log("not signed in!") : navigation.navigate("ExerciseVideo", { videoFile, videoUrl, cachedVideo, modalIcon, iconHeight, id, autoCountDown: autoCountDown || null, noFinishBell: noFinishBell || null })}>
+    <TouchableOpacity onPress={() => notSignedIn ? console.log("not signed in!") : navigation.navigate("ExerciseVideo", { videoFile, videoUrl, cachedVideo, modalIcon, iconHeight, id, autoCountDown: autoCountDown || null, customVolume: customVolume || null, noFinishBell: noFinishBell || null })}>
       <Image 
         // source={{uri: imgUrl}}
         source={ cachedImg }

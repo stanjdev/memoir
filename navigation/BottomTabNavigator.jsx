@@ -27,7 +27,7 @@ import icoMoonConfig from '../assets/tabIcons/icomoon/selection.json';
 import { Entypo } from '@expo/vector-icons'; 
 
 import { useFonts } from 'expo-font';
-import { AppLoading } from 'expo';
+import AppLoading from 'expo-app-loading';
 
 
 

@@ -1,18 +1,26 @@
 import React, { useEffect } from 'react';
-import { Text, View, StyleSheet, StatusBar, Image, Dimensions, ImageBackground } from 'react-native';
+import { View, StyleSheet, StatusBar, Image, Dimensions } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 
 import AppButton from '../components/AppButton';
-
 const { width, height } = Dimensions.get('window');
 
 
-export default function SplashScreen ({navigation}) {
+export default function SplashScreen ({ route, navigation }) {
+  const isFocused = useIsFocused();
+
+  const navTo = () => route.params ? 
+                      navigation.navigate('Memoir', { screen: 'Profile' })
+                    : navigation.navigate('Memoir')
 
   useEffect(() => {
-    setTimeout(() => {
-      navigation.navigate('Memoir')
+    let timeout = setTimeout(() => {
+      navTo();
     }, 1500);
-  }, [])
+
+    return () => clearTimeout(timeout);
+  }, [isFocused])
+
 
   return (
     <View style={styles.container}>
@@ -24,7 +32,7 @@ export default function SplashScreen ({navigation}) {
         <AppButton
           buttonStyles={styles.blueButton} 
           // onPress={() => navigation.navigate('GetStartedScreen')}
-          onPress={() => navigation.navigate('Memoir')}
+          onPress={navTo}
         />
         <Image 
           source={require('../assets/splash/memoir-splash.png')}

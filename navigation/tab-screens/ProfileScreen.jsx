@@ -1,4 +1,4 @@
-import React, { useEffect,useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import { Text, View, StatusBar, Button, Alert, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
 import AppButton from '../../components/AppButton';
 import { AuthContext } from '../../components/context';
@@ -113,6 +113,8 @@ export default function ProfileScreen({navigation}) {
   }
 
 
+  const fiveHrGoal = useRef();
+
   const renderPracticeTime = () => {
     let past5Hours = practiceTime;
     let fiveHours = 18000;
@@ -123,6 +125,8 @@ export default function ProfileScreen({navigation}) {
       count++;
     }
     let ceil = (count * fiveHours / 60 / 60);
+    fiveHrGoal.current = ceil;
+    
 
     return practiceTime < 1800 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 ).toFixed(0)} subtitle="Minutes" subText="30 min Goal" progress={(Math.max(practiceTime, 0.01) / 60 / 60) / 0.5}/> 
     : practiceTime >= 1800 && practiceTime < 7200 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(1)} subtitle="Hours" subText="2hr Goal" progress={(practiceTime / 60 / 60) / 2}/> 
@@ -131,41 +135,68 @@ export default function ProfileScreen({navigation}) {
     : <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number="0" subtitle="Hours" subText="5hr Goal" progress={0.01}/>
   }
 
-  const [dismissed, setDismissed] = useState(false);
-  // const [prevCeil, setPrevCeil] = useState();
+
+
+  // CONGRATULATIONS SPRITE MESSAGES!
+  const timeGoal = useRef();
+  const [dismissedTimeGoal, setDismissedTimeGoal] = useState(false);
+  const [dismissedSessions, setDismissedSessions] = useState(false);
+  const [dismissedCurrStreak, setDismissedCurrStreak] = useState(false);
+  const bestStreakSoFar = useRef();
+
+  const practiceTimeSoFar = (practiceTime / 60 / 60).toFixed(1);
+
+  useEffect(() => {
+    if (sessionsCompleted == 0 || currentStreak == 0) return;
+    if (sessionsCompleted % 10 !== 0) setDismissedSessions(false);
+    if (currentStreak % 10 !== 0) setDismissedCurrStreak(false);
+
+    timeGoal.current = fiveHrGoal.current.toFixed(1);
+
+
+    if (practiceTimeSoFar >= timeGoal.current && !dismissedTimeGoal) {
+      Alert.alert("Congrats!", `You've practiced for ${practiceTimeSoFar} hours!`, [
+        {text: "Awesome!", onPress: () => setDismissedTimeGoal(true)}
+      ]);
+      timeGoal.current = fiveHrGoal.current;
+    }
+    console.log(practiceTimeSoFar, fiveHrGoal.current, timeGoal.current);
+
+
+    if (isFocused && sessionsCompleted % 10 == 0 && !dismissedSessions) {
+      Alert.alert("Congrats!", `You've completed ${sessionsCompleted} sessions!`, [
+        {text: "Awesome!", onPress: () => setDismissedSessions(true)}
+      ]);
+    } 
+
+    if (isFocused && currentStreak % 10 == 0 && !dismissedCurrStreak) {
+      Alert.alert("Congrats!", `You've hit a ${currentStreak} day streak!`, [
+        {text: "Awesome!", onPress: () => setDismissedCurrStreak(true)}
+      ]);
+    }
+
+    if (bestStreakSoFar.current && bestStreak !== bestStreakSoFar.current) {
+      Alert.alert("Congrats!", `New Best Streak! ${bestStreak} days!`, [
+        {text: "Awesome!"}
+      ]);
+    }
+    bestStreakSoFar.current = bestStreak;
+
+  }, [isFocused])
+
+
 
   const renderMovingSessionsGoal = (sessionsCompleted) => {
-    let seshString = String(sessionsCompleted);
-    let rightMostNum = seshString[seshString.length - 1];
+    let rightMostNum = sessionsCompleted % 10;
     let remainder = 10 - rightMostNum;
     let ceil = sessionsCompleted + remainder;
-
-
-    // ATTEMPT AT CONGRATS SPRITES
-    // let prevCeil = ceil - 10;
-
-    // // setPrevCeil(ceil - 10);
-    // // if (sessionsCompleted == prevCeil) setDismissed(false);
-    // console.log("dismissed: ", dismissed)
-    // console.log("prevCeil: ", prevCeil)
-    // console.log("ceil: ", ceil)
-
-    // if (isFocused && sessionsCompleted == prevCeil && !dismissed) {
-    //   Alert.alert("Congrats!", `You've completed ${sessionsCompleted} sessions!`, [
-    //     {text: "Awesome!", style: "cancel", onPress: () => setDismissed(true)}
-    //   ]);
-    // }
-    
-
     return <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-hash.png')} title="Sessions Completed" number={sessionsCompleted} subtitle={sessionsCompleted === 1 ? "Session" : "Sessions"} subText={`${ceil} Session Goal`} progress={ Math.max(sessionsCompleted, 0.01) / ceil }/>
   }
 
   const renderMovingStreakGoal = (currentStreak) => {
-    let streakString = String(currentStreak);
-    let rightMostNum = streakString[streakString.length - 1];
+    let rightMostNum = currentStreak % 10;
     let remainder = 10 - rightMostNum;
     let ceil = currentStreak + remainder;
-
     return <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-arrow.png')} title="Current Streak" number={currentStreak} subtitle={currentStreak === 1 ? "Day" : "Days"} subText={`${ceil} Day Streak Goal`} progress={ Math.max(currentStreak, 0.01) / ceil}/>
   }
 

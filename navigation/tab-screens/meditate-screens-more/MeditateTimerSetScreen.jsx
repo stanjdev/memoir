@@ -4,7 +4,7 @@ import AppButton from '../../../components/AppButton';
 import { useIsFocused } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { AuthContext } from '../../../components/context';
-
+import * as Haptics from 'expo-haptics';
 
 const bgImage = require('../../../assets/splash/memoir-splash-thin-4x.png')
 
@@ -60,12 +60,17 @@ export default function MeditateTimerSetScreen({navigation}) {
     return items;
   }
 
-  const onChange = (value) => {
-    if (value > 0 && value <= 60) 
-    setMinutes(value)
+  const onChange = async (value) => {
+    if (value > 0 && value <= 60) {
+      setMinutes(value)
+
+      if (value !== minutes) {
+        await Haptics.selectionAsync();
+      }
+    }
   }
 
-  const onChangeSecs = (value) => {
+  const onChangeSecs = async (value) => {
     const bellOptions = {
       // "30 Seconds": 5000, // short 5 sec test
       "30 Seconds": 30000,
@@ -80,6 +85,11 @@ export default function MeditateTimerSetScreen({navigation}) {
     if (value >= 0 && value < 7) {
       setBellIntervDisplay(bellArray[value])
       setBellInterv(bellOptions[bellArray[value]])
+
+      if (bellArray[value] !== bellIntervDisplay) {
+        await Haptics.selectionAsync();
+        // console.log(value);
+      }
     }
     // console.log(bellIntervDisplay)
     // console.log(bellInterv)
@@ -132,6 +142,7 @@ export default function MeditateTimerSetScreen({navigation}) {
         if (dateNow - lastDateExercised == 1 || dateNow - lastDateExercised == -30 || dateNow - lastDateExercised == -29 || dateNow - lastDateExercised == -28 || dateNow - lastDateExercised == -27 || dateNow - lastDateExercised == -26) {
           await progressRef.update({
             currentStreak: currentStreakSoFar += 1,
+            bestStreak: Math.max(bestStreakSoFar, currentStreakSoFar)
           })
         } else if (dateNow - lastDateExercised > 1 || currentStreakSoFar == 0) {
           await progressRef.update({

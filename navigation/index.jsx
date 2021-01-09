@@ -1,6 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import BottomTabNavigator from './BottomTabNavigator';
 import React, { useEffect, useState, useMemo } from 'react';
 
 import OnboardingStackScreen from './OnboardingStackScreen';
@@ -522,6 +521,8 @@ export default function Navigation({navigation}) {
 
 
 
+import BottomTabNavigator from './BottomTabNavigator';
+import ProfileScreen from './tab-screens/ProfileScreen';
 import SplashScreen from './SplashScreen';
 import SignInScreen from './SignInScreen';
 import SignUpScreen from './SignUpScreen';
@@ -545,6 +546,7 @@ function RootNavigator() {
       <Stack.Screen options={{headerShown:false, ...TransitionPresets.ModalTransition }} name="SignUpScreen2" component={SignUpScreen2} />
       <Stack.Screen options={{headerShown:false, ...TransitionPresets.RevealFromBottomAndroid }} name="SignInScreen" component={SignInScreen} />
       <Stack.Screen options={{headerShown:false, ...TransitionPresets.FadeFromBottomAndroid }} name="UserWelcomeScreen" component={UserWelcomeScreen} />
+      <Stack.Screen options={{headerShown:false, ...TransitionPresets.ScaleFromCenterAndroid }} name="Profile" component={ProfileScreen} />
     </Stack.Navigator>
   )
 }

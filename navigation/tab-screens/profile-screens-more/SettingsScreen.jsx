@@ -14,14 +14,27 @@ import ProfileStatsBlock from '../../../components/ProfileStatsBlock';
 import firebase from 'firebase';
 
 
-export default function SettingsScreen({navigation}) {
+export default function SettingsScreen({ navigation }) {
   const isFocused = useIsFocused();
   const { signOut, userToken } = React.useContext(AuthContext);
 
+  const logOutAlert = () => {
+    Alert.alert("Are you sure you want to logout?", "", [
+        {text: "Yes", onPress: () => signOutToHome()}, 
+        {text: "Cancel", style: "cancel"}
+      ]
+    );
+  };
+
   const signOutToHome = () => {
     signOut();
-    navigation.navigate('SplashScreen');
-  }
+    navigation.navigate("SplashScreen", { fromLogout: true });
+
+    // setTimeout(() => {
+    //   navigation.navigate("Profile");
+    // }, 2000);
+    // then, back to "Progress" screen
+  };
 
   const [showPopUp, setShowPopup] = React.useState(false);
   React.useEffect(() => {
@@ -76,7 +89,7 @@ export default function SettingsScreen({navigation}) {
               <SettingOption text={"Change Password"} action={() => resetPassword(currUserEmail)}/>
               <SettingOption text={"Terms & Conditions"} action={() => console.log("nothing yet!")}/>
               <SettingOption text={"Privacy Policy"} action={() => console.log("nothing yet!")}/>
-              <SettingOption text={"Log Out"} action={signOutToHome}/>
+              <SettingOption text={"Log Out"} action={logOutAlert}/>
             </View>
           </View>
 

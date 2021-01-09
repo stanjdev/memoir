@@ -17,6 +17,10 @@ import { useKeepAwake } from 'expo-keep-awake';
 
 const { width, height } = Dimensions.get('window');
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import DoubleClick from 'react-native-double-tap';
+
 
 
 export default function ExerciseVideo({ route, navigation }) {
@@ -64,6 +68,34 @@ export default function ExerciseVideo({ route, navigation }) {
   };
 
 
+  
+  let lastPress = null;
+  const handlePress = () => {
+    
+    const time = new Date().getTime();
+    const delta = time - lastPress;
+    const DOUBLE_PRESS_DELAY = 400;
+  
+
+    if (lastPress && delta < DOUBLE_PRESS_DELAY) {
+      handleDoublePress();
+    } else {
+      touchScreenToggleControls();
+      console.log('single press!')
+      lastPress = time;
+    }  
+  }
+
+  const handleDoublePress = () => {
+    console.log("double pressed!");
+    pause();
+  }
+
+  const handleSinglePress = () => {
+    touchScreenToggleControls();
+  }
+
+
   const touchScreenToggleControls = () => {
     setOverlay(!overlay);
     overlayFader();
@@ -90,8 +122,8 @@ export default function ExerciseVideo({ route, navigation }) {
   const [ timerDuration, setTimerDuration ] = useState(null);
 
   const timerDurationsOptions = {
-    "30s": {mins: 0, secs: 2},
-    // "30s": {mins: 0, secs: 30},
+    // "30s": {mins: 0, secs: 2},
+    "30s": {mins: 0, secs: 30},
     "1m": {mins: 1, secs: 0},
     "2m": {mins: 2, secs: 0},
     "3m": {mins: 3, secs: 0},
@@ -563,6 +595,7 @@ function keepGoing() {
         if (dateNow - lastDateExercised == 1 || dateNow - lastDateExercised == -30 || dateNow - lastDateExercised == -29 || dateNow - lastDateExercised == -28 || dateNow - lastDateExercised == -27 || dateNow - lastDateExercised == -26) {
           await progressRef.update({
             currentStreak: currentStreakSoFar += 1,
+            bestStreak: Math.max(bestStreakSoFar, currentStreakSoFar)
           })
         } else if (dateNow - lastDateExercised > 1 || currentStreakSoFar == 0) {
           await progressRef.update({
@@ -708,11 +741,47 @@ function keepGoing() {
     setLiked(bool);
   }
 
+
+
+
+
+
+
   // simple bell mute function
   const [bellMuted, setBellMuted] = useState(false);
   const bellMute = () => {
     setBellMuted(!bellMuted);
   }
+
+  // // Failed asyncStorage bell pref attempt: 
+  // const storePref = async (storageKey, value) => {
+  //   try {
+  //     await AsyncStorage.setItem(storageKey, String(value))
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   setTimeout(async () => {
+  //     try {
+  //       const pref = await AsyncStorage.getItem('bellMuted')
+  //       if (pref !== null) setBellMuted(pref);
+  //       console.log("pref:", pref);
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
+  //   }, 0);
+  // }, []);
+
+  // useEffect(() => {
+  //   setTimeout(async () => {
+  //     storePref('bellMuted', bellMuted);
+  //   }, 0);
+  //   console.log("Bell Muted:", bellMuted)
+  // }, [bellMuted]);
+
+
 
   const [musicMuted, setMusicMuted] = useState(false);
   const toggleMusic = () => {
@@ -790,6 +859,7 @@ function keepGoing() {
       />
       {isFocused ? <StatusBar hidden={false} barStyle="light-content"/> : null} 
 
+
       {/* <TouchableWithoutFeedback 
         onPress={touchScreenToggleControls} 
         // onLongPress={pause}
@@ -803,19 +873,32 @@ function keepGoing() {
         </View>
       </TouchableWithoutFeedback> */}
 
-      <Pressable 
-        style={{ height: height * 0.67, width: width, position: "absolute", top: height * 0.15, zIndex: 10, borderWidth: 1, borderColor: 'orange'}}
+      {/* <Pressable 
+        style={{ height: height * 0.67, width: width, position: "absolute", top: height * 0.15, zIndex: 10 }}
         onPress={touchScreenToggleControls}
+        // onPress={handlePress}
         // onLongPress={pause}
         // onPressIn={() => setPaused(true)}
         // onPressOut={() => setPaused(false)}
 
-        // onTouchStart={() => setPaused(true)}
-        // onTouchEnd={() => setPaused(false)}
-        onTouchStart={() => console.log("pressed!")}
-        onTouchEnd={() => console.log("released!")}
+        onTouchStart={() => setPaused(true)}
+        onTouchEnd={() => setPaused(false)}
+        // onTouchStart={() => console.log("pressed!")}
+        // onTouchEnd={() => console.log("released!")}
       >
-      </Pressable>
+      </Pressable> */}
+
+      <View style={{ height: height * 0.67, width: width, position: "absolute", top: height * 0.15, zIndex: 10,  }}>
+        <DoubleClick
+          singleTap={touchScreenToggleControls}
+          doubleTap={pause}
+          delay={300}
+        >
+          <View style={{ height: height * 0.67, width: width,  }}>
+          </View>
+        </DoubleClick>
+      </View>
+
 
 
       <Animated.View style={{ height: height, width: width, position: "absolute", opacity: overlayFade }}>
