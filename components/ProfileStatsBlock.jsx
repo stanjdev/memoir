@@ -23,16 +23,16 @@ export default function ProfileStatsBlock({icon, title, number, subtitle, subTex
     ?
     setTimeout(() => {
       setProg(progress);
-    }, 500) 
+    }, 400) 
     :
     setProg(0.01);
   }
 
   useEffect(() => {
     loadProgress();
-    
-  }, [isFocused])
+  }, [isFocused, progress])
 
+  
   return (
       <View style={{ width: width * 0.77, height: Math.min(height * 0.13, 177), margin: 7, }}>
         <View style={{flexDirection: "row", alignItems: "center"}}>

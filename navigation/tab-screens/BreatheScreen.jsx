@@ -142,10 +142,13 @@ export default function BreatheScreen({navigation}) {
   const [recommendedToday, setRecommendedToday] = useState();
   const [popular, setPopular] = useState();
 
+  // currentHour >= 20 ? 
 
   useEffect(() => {
     // shuffle([1, 2, 3, 4, 5, 7], setDailyExhales);
-    shuffle([1, 2, 3, 4, 5, 6, 10, 11, 12, 13], setRecommendedToday);
+    currentHour >= 20 ? 
+      shuffle([1, 2, 3, 4, 5, 6, 10, 11, 12, 13], setRecommendedToday) : 
+      shuffle([1, 2, 3, 4, 5, 11, 12, 13], setRecommendedToday);
     shuffle([6, 10, 11, 12, 13], setPopular);
   }, [])
 

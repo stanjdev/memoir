@@ -8,7 +8,7 @@ import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
 
 const { width, height } = Dimensions.get('window');
-const bgImage = require('../assets/splash/memoir-splash-thin-content-4x.png')
+// const bgImage = require('../assets/splash/memoir-splash-thin-content-4x.png')
 // const bgImage = require('../assets/splash/memoir-splash-thin-4x.png')
 
 // let customFonts = {
@@ -38,7 +38,7 @@ export default function GetStartedScreen ({navigation}) {
   return (
     <View style={styles.container}>
       <StatusBar hidden={true}/>
-      <ImageBackground source={bgImage} style={styles.bgImage}>
+      <ImageBackground source={null} style={styles.bgImage}>
         <View style={styles.body}>
           {/* <Image source={require('../assets/splash/memoir-logo-white.png')}/>
           <Image source={require('../assets/splash/circles-white.png')} resizeMode="stretch"/>

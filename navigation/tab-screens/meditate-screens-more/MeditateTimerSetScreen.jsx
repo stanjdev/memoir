@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
-import { Text, View, StatusBar, ScrollView, Button, Alert, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, NativeEventEmitter } from 'react-native';
+import { Text, View, StatusBar, ScrollView, Button, Alert, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import AppButton from '../../../components/AppButton';
 import { useIsFocused } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { AuthContext } from '../../../components/context';
 import * as Haptics from 'expo-haptics';
 
-const bgImage = require('../../../assets/splash/memoir-splash-thin-4x.png')
+const bgImage = require('../../../assets/splash/memoir-splash-thin-4x.png');
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
@@ -20,12 +20,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import firebase from 'firebase';
 
 
-export default function MeditateTimerSetScreen({navigation}) {
+export default function MeditateTimerSetScreen({ navigation, route }) {
   const [minutes, setMinutes] = React.useState(10);
   const [bellIntervDisplay, setBellIntervDisplay] = React.useState("30 Seconds");
   const [bellInterv, setBellInterv] = React.useState(30000);
 
   const { userToken } = useContext(AuthContext);
+
+  // const { bgImage } = route.params;
 
   // const renderMinsPickerItems = () => {
   //   let items = [];
@@ -170,7 +172,7 @@ export default function MeditateTimerSetScreen({navigation}) {
     // console.log("started meditation!");
     incrementStreak();
     setTimeout(() => {
-      navigation.navigate('MeditateExerciseScreen', { minutes, bellInterv });
+      navigation.navigate('MeditateExerciseScreen', { minutes, bellInterv, bgImage });
     }, 0);
   }
 
@@ -251,7 +253,7 @@ export default function MeditateTimerSetScreen({navigation}) {
                   scrollEventThrottle={16}
                   style={{ width: 200, maxHeight: 50 }} 
                 >
-                  <View style={{flexDirection: "row", alignItems: "center",  }}>
+                  <View style={{flexDirection: "row", alignItems: "center",}}>
                     {renderMinsPickerItems()}
                   </View>
                 </ScrollView>

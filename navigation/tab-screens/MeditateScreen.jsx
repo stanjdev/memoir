@@ -1,14 +1,24 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, StatusBar, Button, Alert, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import AppButton from '../../components/AppButton';
 import { useIsFocused } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-const bgImage = require('../../assets/splash/memoir-splash-thin-4x.png')
 
 const { width, height } = Dimensions.get('window');
+const bgImage = require('../../assets/splash/memoir-splash-thin-4x.png');
+// const bgImg = 'memoir-splash-thin-4x.png';
+
+// import { cacheAsset } from '../../components/cacheAsset';
+
 
 export default function MeditateScreen({navigation}) {
   const isFocused = useIsFocused();
+
+  // const [cachedImg, setCachedImg] = useState();
+
+  // useEffect(() => {
+  //   cacheAsset(bgImg, setCachedImg, "splash-screens");
+  // }, [])
 
   let [fontsLoaded] = useFonts({
     'Assistant': require('../../assets/fonts/Assistant/Assistant-VariableFont_wght.ttf'),
@@ -38,7 +48,7 @@ export default function MeditateScreen({navigation}) {
               title="Got It" 
               buttonStyles={styles.blueButton}
               buttonTextStyles={styles.buttonText}
-              onPress={() => navigation.navigate('MeditateTimerSetScreen')}
+              onPress={() => navigation.navigate('MeditateTimerSetScreen', {bgImage: bgImage})}
             />
 
           </View>

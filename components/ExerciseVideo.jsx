@@ -3,7 +3,7 @@ import { Text, Modal, View, ScrollView, StatusBar, Alert, Image, Pressable, Dime
 import AppButton from './AppButton';
 import { useIsFocused } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-const bgImage = require('../assets/splash/memoir-splash-thin-4x.png')
+// const bgImage = require('../assets/splash/memoir-splash-thin-4x.png');
 import { useNavigation } from '@react-navigation/native';
 
 import { Audio, Video } from 'expo-av';
@@ -537,7 +537,7 @@ function keepGoing() {
   // WITH SAFETY CHECK ADDED - for users with no existing progress data objects
   // Increment sessions user completed - triggers when that 'finish' popup modal comes out
   async function incrementSessionsCompleted() {
-    if (currUser ) {
+    if (currUser) {
       let sessionsCompletedSoFar;
       await progressRef.once('value', async snapshot => {
         if (snapshot.val() === null) {
@@ -545,7 +545,11 @@ function keepGoing() {
             practiceTime: 0,
             sessionsCompleted: 0,
             currentStreak: 0,
-            bestStreak: 0
+            bestStreak: 0,
+            lastDateExercised: new Date().getDate(),
+            bestStreakDate: new Date().getDate(),
+            bestStreakMonth: new Date().getMonth() + 1,
+            bestStreakYear: new Date().getFullYear()
           })
           sessionsCompletedSoFar = await snapshot.val() !== null ? snapshot.val().sessionsCompleted : 0;
         } else {

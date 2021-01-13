@@ -8,7 +8,7 @@ import CreateAccountPopup from '../../components/CreateAccountPopup';
 import { useFonts } from 'expo-font';
 
 const { width, height } = Dimensions.get('window');
-const bgImage = require('../../assets/splash/memoir-splash-thin-4x.png')
+// const bgImage = require('../../assets/splash/memoir-splash-thin-4x.png');
 import ProfileStatsBlock from '../../components/ProfileStatsBlock';
 
  
@@ -35,7 +35,7 @@ export default function ProMemberScreen({navigation}) {
   });
 
   return (
-    <ImageBackground source={bgImage} style={{ flex: 1, }} resizeMode="cover">
+    <ImageBackground source={null} style={{ flex: 1, }} resizeMode="cover">
       {isFocused ? <StatusBar barStyle="light-content" hidden={false}/> : null}
       <TouchableOpacity onPress={() => userToken ? navigation.goBack() : null} style={{position: "absolute", left: width * 0.02, top: height * 0.045, zIndex: 100, padding: 15}}>
         <Image source={require('../../assets/screen-icons/back-arrow-white.png')} style={{height: 20,}} resizeMode="contain"/>

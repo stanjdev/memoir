@@ -165,7 +165,7 @@ export default function AccountInfoScreen ({navigation}) {
               <Text style={{fontSize: 26, color: "#717171", textAlign: "center", fontFamily: "Assistant-SemiBold", }}>Account Info</Text>
             </View>
 
-            <View style={{height: 400, justifyContent: "space-around", alignItems: "center",}}>
+            <View style={{height: 400, justifyContent: "space-around", alignItems: "center", }}>
 
               <View>
                 <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>New First Name</Text>

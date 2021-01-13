@@ -3,7 +3,7 @@ import { Animated, Text, View, StatusBar, Button, Alert, Vibration, Image, Dimen
 import AppButton from '../../../components/AppButton';
 import { useIsFocused } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-const bgImage = require('../../../assets/splash/memoir-splash-thin-4x.png')
+const bgImage = require('../../../assets/splash/memoir-splash-thin-4x.png');
 import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../../../components/context';
 
@@ -14,7 +14,7 @@ import { useKeepAwake } from 'expo-keep-awake';
 
 const { width, height } = Dimensions.get('window');
 
-import firebase, { apps } from 'firebase';
+import firebase from 'firebase';
 
 
 export default function MeditateExerciseScreen({ route, navigation }) {

@@ -1,12 +1,15 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { Text, View, StyleSheet, StatusBar, Image, Dimensions, ImageBackground } from 'react-native';
 import { AuthContext } from '../components/context';
 import AppButton from '../components/AppButton';
 import { useFonts } from 'expo-font';
 
 const { width, height } = Dimensions.get('window');
-const bgImage = require('../assets/splash/user-welcome-bg-4x.png')
+const bgImage = require('../assets/splash/user-welcome-bg-4x.png');
 // const bgImage = require('../assets/splash/memoir-splash-thin-4x.png')
+
+// const bgImg = "user-welcome-bg-4x.png";
+// import { cacheAsset } from '../components/cacheAsset';
 
 
 export default function UserWelcomeScreen ({navigation}) {
@@ -19,7 +22,11 @@ export default function UserWelcomeScreen ({navigation}) {
     'Assistant-SemiBold': require('../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   })
 
+  // const [cachedImage, setCachedImg] = useState();
+
   useEffect(() => {
+    // cacheAsset(bgImg, setCachedImg, "splash-screens");
+
     setTimeout(() => {
       navigation.navigate('Memoir');
     }, 3000);

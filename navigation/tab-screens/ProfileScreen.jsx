@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
-import { Text, View, StatusBar, Button, Alert, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, View, StatusBar, Button, Alert, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, ScrollView, TimePickerAndroid } from 'react-native';
 import AppButton from '../../components/AppButton';
 import { AuthContext } from '../../components/context';
 import { useIsFocused } from '@react-navigation/native';
@@ -8,7 +8,7 @@ import CreateAccountPopup from '../../components/CreateAccountPopup';
 import { useFonts } from 'expo-font';
 
 const { width, height } = Dimensions.get('window');
-const bgImage = require('../../assets/splash/memoir-splash-thin-4x.png')
+// const bgImage = require('../../assets/splash/memoir-splash-thin-4x.png');
 import ProfileStatsBlock from '../../components/ProfileStatsBlock';
 
 import firebase from 'firebase';
@@ -47,10 +47,10 @@ export default function ProfileScreen({navigation}) {
     lastDateExercised: 0,
     bestStreakDate: 0,
     bestStreakMonth: 0,
-    bestStreakYear: 2020
+    bestStreakYear: 2021
   });
 
-  const { practiceTime, sessionsCompleted, currentStreak, bestStreak, lastDateExercised, bestStreakDate, bestStreakMonth, bestStreakYear } = userProgress
+  const { practiceTime, sessionsCompleted, currentStreak, bestStreak, lastDateExercised, bestStreakDate, bestStreakMonth, bestStreakYear } = userProgress;
 
   const currUser = firebase.auth().currentUser;
   const progressRef = currUser ? firebase.database().ref(currUser.uid).child('progress') : null;
@@ -98,9 +98,6 @@ export default function ProfileScreen({navigation}) {
   // }, [])
 
 
-
-
-
   const fakeAddProgressData = async () => {
     const progressPushRef = await firebase.database().ref(currUser.uid).child('progress');
 
@@ -111,6 +108,7 @@ export default function ProfileScreen({navigation}) {
       bestStreak: 7
     })
   }
+
 
 
   const fiveHrGoal = useRef();
@@ -125,9 +123,9 @@ export default function ProfileScreen({navigation}) {
       count++;
     }
     let ceil = (count * fiveHours / 60 / 60);
-    fiveHrGoal.current = ceil;
+    let totalMills = count * fiveHours;
+    fiveHrGoal.current = totalMills;
     
-
     return practiceTime < 1800 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 ).toFixed(0)} subtitle="Minutes" subText="30 min Goal" progress={(Math.max(practiceTime, 0.01) / 60 / 60) / 0.5}/> 
     : practiceTime >= 1800 && practiceTime < 7200 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(1)} subtitle="Hours" subText="2hr Goal" progress={(practiceTime / 60 / 60) / 2}/> 
     : practiceTime >= 7200 && practiceTime < 18000 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(1)} subtitle="Hours" subText="5hr Goal" progress={(practiceTime / 60 / 60) / 5}/> 
@@ -138,29 +136,41 @@ export default function ProfileScreen({navigation}) {
 
 
   // CONGRATULATIONS SPRITE MESSAGES!
-  const timeGoal = useRef();
   const [dismissedTimeGoal, setDismissedTimeGoal] = useState(false);
   const [dismissedSessions, setDismissedSessions] = useState(false);
   const [dismissedCurrStreak, setDismissedCurrStreak] = useState(false);
   const bestStreakSoFar = useRef();
+  
+  
+  const timeConditions = practiceTime < 1800 ? 1800 : 
+  practiceTime >= 1800 && practiceTime < 7200 ? 7200 :
+  practiceTime >= 7200 && practiceTime < 18000 ? 18000 :
+  practiceTime >= 18000 ? fiveHrGoal.current : null;
+  
+  const timeGoal = useRef();
+  useEffect(() => {
+    timeGoal.current = timeConditions
+  }, [])
 
-  const practiceTimeSoFar = (practiceTime / 60 / 60).toFixed(1);
 
   useEffect(() => {
     if (sessionsCompleted == 0 || currentStreak == 0) return;
     if (sessionsCompleted % 10 !== 0) setDismissedSessions(false);
     if (currentStreak % 10 !== 0) setDismissedCurrStreak(false);
 
-    timeGoal.current = fiveHrGoal.current.toFixed(1);
 
-
-    if (practiceTimeSoFar >= timeGoal.current && !dismissedTimeGoal) {
-      Alert.alert("Congrats!", `You've practiced for ${practiceTimeSoFar} hours!`, [
-        {text: "Awesome!", onPress: () => setDismissedTimeGoal(true)}
+    if (practiceTime >= timeGoal.current && !dismissedTimeGoal && Math.trunc(timeGoal.current) !== 0) {
+      Alert.alert("Congrats!", `You've practiced for ${practiceTime < 3600 ? Math.trunc(practiceTime / 60) : Math.trunc(practiceTime / 60 / 60)} ${practiceTime < 3600 ? "minutes" : "hours"}!`, [
+        {text: "Awesome!", onPress: () => {
+          setDismissedTimeGoal(true);
+          setTimeout(() => {
+            timeGoal.current = timeConditions;
+            setDismissedTimeGoal(false);
+          }, 1000);
+        }}
       ]);
-      timeGoal.current = fiveHrGoal.current;
     }
-    console.log(practiceTimeSoFar, fiveHrGoal.current, timeGoal.current);
+    console.log(practiceTime, fiveHrGoal.current, timeGoal.current);
 
 
     if (isFocused && sessionsCompleted % 10 == 0 && !dismissedSessions) {
@@ -205,7 +215,7 @@ export default function ProfileScreen({navigation}) {
   return (
     // <ImageBackground source={bgImage} style={{ flex: 1, resizeMode: "cover", justifyContent: "flex-start",}}>
     // </ImageBackground>
-    <View source={bgImage} style={{ backgroundColor:"white", flex: 1, resizeMode: "cover", justifyContent: "flex-start",}}>
+    <View style={{ backgroundColor:"white", flex: 1, resizeMode: "cover", justifyContent: "flex-start",}}>
       {isFocused ? <StatusBar barStyle="dark-content" hidden={false}/> : null}
       <TouchableOpacity onPress={() => userToken ? navigation.goBack() : null} style={{position: "absolute", left: width * 0.02, top: height * 0.045, zIndex: 100, padding: 15}}>
         <Image source={require('../../assets/screen-icons/back-arrow.png')} style={{height: 20,}} resizeMode="contain"/>
@@ -250,7 +260,7 @@ export default function ProfileScreen({navigation}) {
             </TouchableOpacity> */}
 
             <View style={{ alignItems: "center", height: 150, justifyContent: "space-evenly"}}> 
-              <Text style={{color: "#535353", fontFamily: "Assistant-SemiBold", fontSize: 17.5, lineHeight: 22, width: 220, textAlign: "center", }}>
+              {/* <Text style={{color: "#535353", fontFamily: "Assistant-SemiBold", fontSize: 17.5, lineHeight: 22, width: 220, textAlign: "center", }}>
               Upgrade to Unlimited and
               gain access to the full library.
               </Text>
@@ -260,8 +270,9 @@ export default function ProfileScreen({navigation}) {
                   buttonStyles={styles.blueButton}
                   buttonTextStyles={styles.buttonText}
                   onPress={() => navigation.navigate('ProMemberScreen')}
-                />
+                /> */}
             </View>
+            
           </View>
 
         {/* </ScrollView> */}

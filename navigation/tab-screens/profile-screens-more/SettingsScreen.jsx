@@ -8,7 +8,7 @@ import CreateAccountPopup from '../../../components/CreateAccountPopup';
 import { useFonts } from 'expo-font';
 
 const { width, height } = Dimensions.get('window');
-const bgImage = require('../../../assets/splash/memoir-splash-thin-4x.png')
+// const bgImage = require('../../../assets/splash/memoir-splash-thin-4x.png');
 import ProfileStatsBlock from '../../../components/ProfileStatsBlock';
 
 import firebase from 'firebase';
