@@ -31,7 +31,7 @@ export default function ProfileStatsBlock({icon, title, mills, number, subtitle,
       setProg(progress);
       // setAnimation("slideOutUp");
       setAnimation(slideNums);
-    }, 500)
+    }, 250)
     :
     setProg(0.01);
     setAnimation("");
@@ -51,7 +51,7 @@ export default function ProfileStatsBlock({icon, title, mills, number, subtitle,
   useEffect(() => {
     loadProgress();
     renderNumBar(number);
-    console.log("number:", number);
+    // console.log("number:", number);
 
     // Animated.timing(rollNums, {
     //     toValue: -210,
@@ -109,13 +109,13 @@ export default function ProfileStatsBlock({icon, title, mills, number, subtitle,
 
   const renderNumBar = (number) => {
     let nums = [];
-    console.log("renderNumber:", number)
+    // console.log("renderNumber:", number);
     if (number > 0) {
       for (let i = 0; i < number; i += number / 5) {
-        console.log( Math.trunc(number) !== number ? i.toFixed(1) : Math.trunc(i) );
+        // console.log( Math.trunc(number) !== number ? i.toFixed(1) : Math.trunc(i) );
         nums.push(<Text key={`${title} ${i}`} style={{fontFamily: "Assistant-SemiBold", fontSize: 36, color: "#3681C7", marginRight: 7, marginBottom: -6, }}>{ Math.trunc(number) !== number ? i.toFixed(1) : Math.trunc(i) }</Text>);
       }
-      console.log( Math.trunc(number) !== number ? number : Math.trunc(number) );
+      // console.log( Math.trunc(number) !== number ? number : Math.trunc(number) );
       nums.push(<Text key={`${title} ${number}`} style={{fontFamily: "Assistant-SemiBold", fontSize: 36, color: "#3681C7", marginRight: 7, marginBottom: -6, }}>{ number }</Text>);
     }
     setNumBar(nums);

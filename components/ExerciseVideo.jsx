@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, { useEffect, useState, useRef, useContext, useCallback } from 'react';
 import { Text, Modal, View, ScrollView, StatusBar, Alert, Image, Pressable, Dimensions, StyleSheet, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, Animated, AppState } from 'react-native';
 import AppButton from './AppButton';
 import { useIsFocused } from '@react-navigation/native';
@@ -21,11 +21,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import DoubleClick from 'react-native-double-tap';
 
-
+import * as SplashScreen from 'expo-splash-screen';
 
 export default function ExerciseVideo({ route, navigation }) {
   useKeepAwake();
   
+  // useEffect(() => {
+  //   SplashScreen.preventAutoHideAsync();
+  //   setTimeout(() => {
+  //     SplashScreen.hideAsync();
+  //   }, 300);
+  // }, [])
+
   const isFocused = useIsFocused();
 
   let [fontsLoaded] = useFonts({
@@ -34,7 +41,7 @@ export default function ExerciseVideo({ route, navigation }) {
     'Assistant-SemiBold': require('../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   });
 
-  const { id, videoFile, videoUrl, cachedVideo, modalIcon, iconHeight, autoCountDown, customVolume, noFinishBell } = route.params;
+  const { id, videoFile, videoUrl, cachedVideo, modalIcon, iconHeight, autoCountDown, customVolume, noFinishBell, modalText, uniqueImgEvening } = route.params;
 
   const { signOut, userToken, userFirstName } = useContext(AuthContext);
 
@@ -122,8 +129,8 @@ export default function ExerciseVideo({ route, navigation }) {
   const [ timerDuration, setTimerDuration ] = useState(null);
 
   const timerDurationsOptions = {
-    // "30s": {mins: 0, secs: 2},
-    "30s": {mins: 0, secs: 30},
+    "30s": {mins: 0, secs: 2},
+    // "30s": {mins: 0, secs: 30},
     "1m": {mins: 1, secs: 0},
     "2m": {mins: 2, secs: 0},
     "3m": {mins: 3, secs: 0},
@@ -140,10 +147,10 @@ export default function ExerciseVideo({ route, navigation }) {
       options.push(
         <TouchableOpacity 
           onPress={() => pressTimerChoice(time)}
-          key={`${time}`} 
+          key={time} 
           style={{ padding: 10, paddingRight: 27, paddingLeft: 27}}
         >
-          <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 19, color: "white", }}>{time}</Text>
+          <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 19, color: "white"}}>{time}</Text>
         </TouchableOpacity>
       )
     }
@@ -155,7 +162,9 @@ export default function ExerciseVideo({ route, navigation }) {
     setDisplayTimerDuration(true);
     toggleShowTimerScroller();
     setTimerRunning(true);
-    // toggleClock();
+    if (!runningClock) {
+      toggleClock();
+    }
   };
 
   const runAutoCountDown = (time) => {
@@ -179,6 +188,7 @@ export default function ExerciseVideo({ route, navigation }) {
 
   
   useEffect(() => {
+    if (runningClock) toggleClock();
     // MOUNT
     // console.log("exercise screen mounted!");
     // console.log(`Video File: ${videoFile}`);
@@ -188,23 +198,40 @@ export default function ExerciseVideo({ route, navigation }) {
   }, []);
 
 
+
+  const startExercise = () => {
+    setModalVisible(!modalVisible);
+    console.log("exercise started!");
+    incrementStreak();
+    if (!runningClock && autoCountDown) toggleClock();
+  }
+
+
+
   const exerciseInterv = useRef(null);
   useEffect(() => {
     if (exerciseInterv.current) clearInterval(exerciseInterv.current);
     if (timerDuration) {
+      // console.log("timerDuration!");
       if (paused) setTimerRunning(false);
       else setTimerRunning(true);
     }
     if (timerRunning) {
-      console.log("timerRunning: " + timerRunning);
-      console.log("tracked sessionSecs: " + sessionSecs);
+      // console.log("timerRunning: " + timerRunning);
+      // console.log("tracked sessionSecs: " + sessionSecs);
       setExerciseFinished(false);
-      exerciseInterv.current = setInterval( async () => await runExerciseClock(), 1000);
+      // exerciseInterv.current = setInterval( async () => runExerciseClock(), 1000);
     } 
     if (!timerRunning) {
       clearInterval(exerciseInterv.current);
     }
-  }, )
+    // console.log("runningClock", runningClock);
+  })
+
+
+  const [toggleClock, runningClock, clear] = useInterval(() => {
+    runExerciseClock();
+  }, 1000);
 
   
 
@@ -212,20 +239,23 @@ export default function ExerciseVideo({ route, navigation }) {
   const runExerciseClock = () => {
     if (secs > 0) {
       setSecs(secs - 1);
-      
     } else if (mins >= 1 && secs == 0) {
       setSecs(59);
       setMins(mins - 1);
     } else {
       updateUserTime();
       incrementSessionsCompleted();
-      Alert.alert("Timer Complete", "Great job, you’ve completed your breath work session!", [{text: "Keep Going", onPress: () => keepGoing()}, {text: "Finish", style: "cancel", onPress: () => navigation.goBack()}], );
       setTimerDuration(null);
       setTimerRunning(false);
-      // setBellMuted(true);
       setExerciseFinished(true);
+      clear();
+      Alert.alert("Timer Complete", "Great job, you’ve completed your breath work session!", [
+        {text: "Keep Going", onPress: () => keepGoing()}, 
+        {text: "Finish", style: "cancel", onPress: () => navigation.goBack()}
+      ]);
+      // setBellMuted(true);
       touchScreenToggleControls();
-      console.log('else hit!');
+      console.log('else hit! Finished!');
       loadFinishedSound();
       clearInterval(exerciseInterv.current);
       bellSound.unloadAsync();
@@ -234,7 +264,7 @@ export default function ExerciseVideo({ route, navigation }) {
       //   navigation.navigate("Memoir");
       // }, 2000);
     }
-    console.log("runExerciseClock secs: " + secs);
+    console.log("runExerciseClock sessionSecs: " + sessionSecs);
     setSessionSecs(sessionSecs => sessionSecs += 1);
   }
 
@@ -248,10 +278,10 @@ export default function ExerciseVideo({ route, navigation }) {
   
 
 
-
 function keepGoing() {
   setDisplayTimerDuration(false);
   setExerciseFinished(false);
+  toggleClock();
 }
 
 
@@ -412,14 +442,13 @@ function keepGoing() {
     if (!modalVisible && !exerciseFinished && !paused) {
       loadAndPlayMusic();
       if (autoCountDown) {
-        console.log("autoCountdown!");
-        console.log(autoCountDown);
+        console.log("autoCountdown!", autoCountDown);
         runAutoCountDown(autoCountDown);
       }
     }
-
     return () => music.unloadAsync();
   }, [modalVisible]);
+
 
   useEffect(() => {
     if (playingAudio.current && !exerciseFinished) {
@@ -495,9 +524,12 @@ function keepGoing() {
     updateUserTime();
     navigation.goBack();
   }
-
-
-
+  
+  
+  const fromModalGoBack = () => {
+    navigation.goBack();
+    setModalVisible(!modalVisible);
+  }
 
 
 
@@ -574,7 +606,7 @@ function keepGoing() {
       let bestStreakSoFar;
 
       await progressRef.once('value', async snapshot => {
-        if (snapshot.val() === null) {
+        if (await snapshot.val() === null) {
           progressRef.set({
             practiceTime: 0,
             sessionsCompleted: 0,
@@ -595,18 +627,21 @@ function keepGoing() {
         }
 
         let dateNow = new Date().getDate();
+        // let dateNow = 24;
 
-        if (dateNow - lastDateExercised == 1 || dateNow - lastDateExercised == -30 || dateNow - lastDateExercised == -29 || dateNow - lastDateExercised == -28 || dateNow - lastDateExercised == -27 || dateNow - lastDateExercised == -26) {
-          await progressRef.update({
-            currentStreak: currentStreakSoFar += 1,
-            bestStreak: Math.max(bestStreakSoFar, currentStreakSoFar)
-          })
-        } else if (dateNow - lastDateExercised > 1 || currentStreakSoFar == 0) {
+        if (dateNow - lastDateExercised > 1 || currentStreakSoFar == 0) {
           await progressRef.update({
             currentStreak: 1,
-            bestStreak: Math.max(bestStreakSoFar, 1)
+            bestStreak: Math.max(bestStreakSoFar, currentStreakSoFar),
+            lastDateExercised: dateNow
           })
-        } else null
+        } else if (dateNow - lastDateExercised === 1 || dateNow - lastDateExercised <= -26) {
+          await progressRef.update({
+            currentStreak: currentStreakSoFar += 1,
+            bestStreak: Math.max(bestStreakSoFar, currentStreakSoFar),
+            lastDateExercised: dateNow
+          })
+        }
 
         if (bestStreakSoFar < currentStreakSoFar) {
           await progressRef.update({
@@ -625,11 +660,7 @@ function keepGoing() {
 
 
 
-  const startExercise = () => {
-    setModalVisible(!modalVisible);
-    console.log("exercise started!");
-    incrementStreak();
-  }
+  
 
 
 
@@ -794,6 +825,7 @@ function keepGoing() {
   }
 
   const pause = () => {
+    toggleClock();
     setPaused(!paused);
   }
 
@@ -856,7 +888,7 @@ function keepGoing() {
         isMuted={bellMuted}
         // isMuted={true}
         resizeMode="cover"
-        shouldPlay={!modalVisible && !exerciseFinished && !paused}
+        shouldPlay={!modalVisible && !exerciseFinished && !paused && isFocused}
         // shouldPlay={false}
         isLooping
         style={{ width: width, height: height }}
@@ -938,7 +970,7 @@ function keepGoing() {
           </Animated.View>
 
 
-          <View style={{...styles.borderControl}, {  position: "absolute", bottom: 0, flexDirection: "row", justifyContent: "space-evenly", width: width, height: height * 0.12}}>
+          <View style={{...styles.borderControl}, { position: "absolute", bottom: 0, flexDirection: "row", justifyContent: "space-evenly", width: width, height: height * 0.12 }}>
             <TouchableOpacity style={styles.exerciseControls, {padding: 13, paddingLeft: 11} } onPress={ toggleFavorite }>
               {liked ? 
               <Image source={require('../assets/screen-icons/1-like-heart-filled.png')} resizeMode="contain" style={{margin: 4, height: 27, width: 27, }}/>
@@ -974,16 +1006,44 @@ function keepGoing() {
           visible={modalVisible}
           onRequestClose={() => { Alert.alert("Modal has been closed.") }}
         >
-          {/* <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 15, width: width * 0.2, position: "absolute", top: 50, borderWidth: 1, borderColor: "white" }}>
+          
+          <TouchableOpacity onPress={fromModalGoBack} style={{ padding: 15, width: width * 0.2, position: "absolute", top: 50, }}>
             <Image source={require('../assets/screen-icons/back-arrow-white.png')} style={{height: 20, marginLeft: 0}} resizeMode="contain"/>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
+
           <View style={{backgroundColor: "white", height: height * 0.74, borderRadius: 20, justifyContent: "space-between", alignItems: "center", width: width * 0.9, ...styles.modalView }}>
             <View style={{width: width * 0.63, height: height * 0.45, justifyContent: "space-between", alignItems: "center" }}>
               <Image source={ modalIcon } style={{height: iconHeight || 31, }} resizeMode="contain"/>
               <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 28, textAlign: "center", width: 205}}>Inhale, Hold, Exhale, Repeat</Text>
-              <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>This breathing exercise is designed to bring you calmness, relaxation, and inner peace.</Text>
-              <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>Repeat the loop at least 6 times for maximum benefit, or set a timer on the next page to make it a full session.</Text>
-              <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>Tap anywhere on the screen to view controls or return to home.</Text>
+              {
+                modalText == "dailyExhale" ? 
+                <>
+                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>Welcome to your Daily Exhale.</Text>
+                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>This breathing exercise is designed to bring you stress-relief and inner peace.</Text>
+                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center", width: width * 0.51}}>We’ll start you off today with a 2-minute timer.</Text>
+                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>You can adjust the timer and other settings by tapping on the screen.</Text>
+                </>
+                : modalText == "eveningWindDown" ? 
+                <>
+                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>Welcome to your Evening Wind-Down.</Text>
+                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>This breathing exercise is designed to bring you stress-relief and inner peace.</Text>
+                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center", width: width * 0.51}}>We’ll start you off this evening with a 2-minute timer. </Text>
+                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>You can adjust the timer and other settings by tapping on the screen.</Text>
+                </>
+                : 
+                uniqueImgEvening && uniqueImgEvening !== null ? 
+                <>
+                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>This breathing exercise is will help you wind down for a restful night’s sleep.</Text>
+                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>You can watch the screen, or simply listen to the bell sound as you take deep breaths.</Text>
+                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>Tap anywhere on the screen to view controls or return back to home.</Text>
+                </>
+                :
+                <>
+                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>This breathing exercise is designed to bring you calmness, relaxation, and inner peace.</Text>
+                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>Repeat the loop at least 6 times for maximum benefit, or set a timer to make it a full session.</Text>
+                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>Tap anywhere on the screen to view controls or return back to home.</Text>
+                </>
+              }
             </View>
             <AppButton 
               title="Start" 
@@ -1048,3 +1108,48 @@ const styles = StyleSheet.create({
   }
 })
 
+
+
+
+
+
+// the callback was countDown() or loadSound()
+// toggle() is called whenever the pause and play button is pressed
+// useRef.current() to store a value that persists between renders. 
+
+
+// useINTERVAL ATTEMPT
+function useInterval(callback, delay) {
+  const savedCallback = useRef();
+  const intervalId = useRef(null);
+  const [currentDelay, setDelay] = useState(delay);
+
+  const toggleRunning = useCallback(
+    () => setDelay(currentDelay => (currentDelay === null ? delay : null)),
+    [delay]
+  );
+
+  const clear = useCallback(() => clearInterval(intervalId.current), []);
+
+  // Remember the latest function. Store it in the useRef().current
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  // Set up the interval.
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+
+    if (intervalId.current) clear();
+
+    if (currentDelay !== null) {
+      intervalId.current = setInterval(tick, currentDelay);
+    }
+
+    return clear;
+  }, [currentDelay, clear]);
+
+  return [toggleRunning, !!currentDelay, clear];
+}

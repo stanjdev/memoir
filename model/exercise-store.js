@@ -25,31 +25,28 @@ const loadFile = (fileName) => {
 
 
 
+
 export const Exercises = {
   1: {
     id: 1,
-    // image: require("../assets/exercises-images/flower-of-life.png"),
     image: "flower-of-life.png",
-    uniqueImg: "daily-exhale-5.png",
+    uniqueImg: "daily-exhale-flower-of-life-green.png",
     title: "Flower of Life",
     subTitle: "Relax Your Mind",
-    // videoFile: require('../assets/video-exercises/flower-of-life.mp4'),
-    videoFile: 'flower-of-life.mp4',
+    videoFile: "flower-of-life.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/flower.png'),
-    iconHeight: 60,
+    iconHeight: 70,
     customVolume: 0.22
   },
   2: {
     id: 2,
-    // image: require("../assets/exercises-images/circles.png"),
     image: "circles.png",
-    uniqueImg: "daily-exhale-3.png",
+    uniqueImg: "daily-exhale-om-pink.png",
     // image: "circles.gif",
     // gif: "gifs/circles.gif",
     // image: require("../assets/exercises-images/circles.gif"),
     title: "Breathe for Focus",
     subTitle: "Get in the Zone",
-    // videoFile: require('../assets/video-exercises/circles.mp4'),
     videoFile: 'circles.mp4',
     modalIcon: require('../assets/exercises-images/modal-icons/audi.png'),
     iconHeight: 39
@@ -59,7 +56,7 @@ export const Exercises = {
     // image: require("../assets/exercises-images/minute-break-4x.png"),
     // image: require("../assets/exercises-images/4-7-9-wheel.png"),
     image: "4-7-9-wheel.png",
-    uniqueImg: "daily-exhale-6.png",
+    uniqueImg: "daily-exhale-478-orange.png",
     title: "1 Minute Break",
     subTitle: "60 Seconds of Zen",
     // videoFile: require('../assets/video-exercises/4-7-9-wheel.mp4'),
@@ -72,19 +69,19 @@ export const Exercises = {
     // image: require("../assets/exercises-images/jungle-green.png"),
     // image: require("../assets/exercises-images/box-breathing.png"),
     image: "box-breathing.png",
-    uniqueImg: "daily-exhale-2.png",
+    uniqueImg: "daily-exhale-box-breathing-green.png",
     title: "Box Breathing",
     subTitle: "4 Second Box Pattern",
     // videoFile: require('../assets/video-exercises/box-breathing.mp4'),
     videoFile: "box-breathing.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/arrow-squares.png'),
-    iconHeight: 42
+    iconHeight: 60
   },
   5: {
     id: 5,
     // image: require("../assets/exercises-images/yin-yang.png"),
     image: "yin-yang.png",
-    uniqueImg: "daily-exhale-4.png",
+    uniqueImg: "daily-exhale-yinyang.png",
     title: "Ride the Wave",
     subTitle: "Slow Deep Breathing",
     // videoFile: require('../assets/video-exercises/yin-yang.mp4'),
@@ -107,6 +104,8 @@ export const Exercises = {
     // image: require("../assets/exercises-images/moon-4x.png"),
     // image: require("../assets/exercises-images/crescent-moon.png"),
     image: "crescent-moon.png",
+    uniqueImg: "evening-wind-down-crescent-moon.png",
+    uniqueImgEvening: "evening-wind-down-crescent-moon.png",
     title: "Sweet Dreams",
     subTitle: "For Better Sleep",
     // videoFile: require('../assets/video-exercises/crescent-moon.mp4'),
@@ -117,16 +116,15 @@ export const Exercises = {
   },
   7: {
     id: 7,
-    // image: require("../assets/exercises-images/daily-exhale.png"),
-    image: "daily-exhale.png",
-    // uniqueImg: require("../assets/exercises-images/daily-exhale.png"),
-    uniqueImg: "daily-exhale.png",
-    title: "Daily Exhale",
-    subTitle: "2 Min Session",
+    image: "pyramid-blue.png",
+    uniqueImg: "daily-exhale-pyramid-blue.png",
+    title: "Morning Zen",
+    subTitle: "Start Your AM Flow",
     // videoFile: require('../assets/video-exercises/daily-exhale.mp4'),
     videoFile: 'daily-exhale.mp4',
-    modalIcon: require('../assets/exercises-images/modal-icons/breathe-waves.png'),
-    autoCountDown: "2m"
+    modalIcon: require('../assets/exercises-images/modal-icons/pyramid.png'),
+    autoCountDown: "2m",
+    iconHeight: 95,
     /* 
       <TouchableOpacity onPress={() => navigation.navigate("ExerciseVideo", { videoFile: require('../../assets/video-exercises/daily-exhale.mp4'), modalIcon: require('../../assets/exercises-images/modal-icons/breathe-waves.png') })}>
         <Image 
@@ -141,7 +139,6 @@ export const Exercises = {
     id: 8,
     // image: require("../assets/exercises-images/crescent-moon.png"),
     image: "crescent-moon.png",
-    // uniqueImg: require("../assets/exercises-images/horiz-sleep-session.png"),
     uniqueImg: "horiz-sleep-session.png",
     title: "30 Min Sleep",
     subTitle: "Timed Session",
@@ -156,145 +153,192 @@ export const Exercises = {
   9: {
     id: 9,
     // image: require("../assets/exercises-images/horiz-deep-breaths.png"),
-    image: "horiz-deep-breaths.png",
-    title: "6 Deep Breaths PLACEHOLDER",
-    subTitle: "",
-    // videoFile: require('../assets/video-exercises/crescent-moon.mp4'),
-    videoFile: 'crescent-moon.mp4',
-    modalIcon: require('../assets/exercises-images/modal-icons/breathe-waves.png'),
-    iconHeight: 38,
+    image: "horiz-6-deep-breaths.png",
+    uniqueImg: "horiz-6-deep-breaths.png",
+    title: "6 Deep Breaths to Relax",
+    subTitle: "Timed Session",
+    videoFile: 'triangle-blue6b.mp4',
+    modalIcon: require('../assets/exercises-images/modal-icons/cut-triangle.png'),
+    iconHeight: 85,
     customWidth: 0.89,
+    autoCountDown: "2m",
   },
   10: {
     id: 10,
     image: "cosmos.png",
-    uniqueImg: "daily-exhale-3.png",
+    uniqueImg: "evening-wind-down-cosmos.png",
+    uniqueImgEvening: "evening-wind-down-cosmos.png",
     title: "Cosmos",
     subTitle: "Relax with the Universe",
-    videoFile: 'crescent-moon.mp4',
+    videoFile: 'cosmos.mp4',
     // videoFile: require('../assets/video-exercises/box-breathing.mp4'),
     modalIcon: require('../assets/exercises-images/modal-icons/arrow-squares.png'),
-    iconHeight: 42
+    iconHeight: 60,
+    noFinishBell: true
     /*
     <Exercise navigation={navigation} image={require("../../assets/exercises-images/cosmos.png")} title="Cosmos" subTitle="Relax with the Universe"/>     
      */
   },
   11: {
     id: 11,
-    image: "grey-placeholder.png",
+    image: "triangle-blue6b.png",
+    uniqueImg: "daily-exhale-triangle-blue6b.png",
     title: "6 Breaths to Calm",
     subTitle: "Achieve a Calm State",
-    videoFile: 'crescent-moon.mp4',
+    videoFile: 'triangle-blue6b.mp4',
     // videoFile: require('../assets/video-exercises/box-breathing.mp4'),
     modalIcon: require('../assets/exercises-images/modal-icons/cut-triangle.png'),
-    iconHeight: 96
+    iconHeight: 85
     /* 
 <Exerciseimage={require("../../assets/exercises-images/forest-dawn-4x.png")} subTitle="4 Second Box Pattern"/>
 */
   },
   12: {
     id: 12,
-    image: "grey-placeholder.png",
+    image: "hexagon-green.png",
+    uniqueImg: "daily-exhale-hexagon-green.png",
+    uniqueImgEvening: "evening-wind-down-hexagon-green.png",
     title: "No More Anxiety",
     subTitle: "4-7-8 Tension Relief",
-    videoFile: 'crescent-moon.mp4',
-    // videoFile: require('../assets/video-exercises/box-breathing.mp4'),
-    modalIcon: require('../assets/exercises-images/modal-icons/cut-triangle.png'),
-    iconHeight: 96
-    /* 
-    <Exercise navigation={navigation} image={require("../../assets/exercises-images/aurora-4x.png")} title="No More Anxiety" subTitle="4-7-8 Tension Relief"/>
-    */
+    videoFile: "hexagon-green.mp4",
+    modalIcon: require('../assets/exercises-images/modal-icons/hexagon.png'),
+    iconHeight: 80,
+    noFinishBell: true
   },
   13: {
     id: 13,
-    image: "grey-placeholder.png",
-    title: "1 Minute Break",
-    subTitle: "60 Seconds of Zen",
-    videoFile: 'crescent-moon.mp4',
-    // videoFile: require('../assets/video-exercises/box-breathing.mp4'),
-    modalIcon: require('../assets/exercises-images/modal-icons/cut-triangle.png'),
-    iconHeight: 96
-    /* 
-    <Exercise navigation={navigation} image={require("../../assets/exercises-images/redrock-4x.png")} title="1 Minute Break" subTitle="60 Seconds of Zen"/>
-    */
-
+    image: "flower-of-life-yellow.png",
+    uniqueImg: "daily-exhale-flower-of-life-yellow.png",
+    title: "Flower of Life",
+    subTitle: "Relax Your Mind",
+    videoFile: "flower-of-life.mp4",
+    modalIcon: require('../assets/exercises-images/modal-icons/flower.png'),
+    iconHeight: 70,
+    customVolume: 0.22
   },
-
-
-
-
-
-
-  // 14: {
-  //   id: 14,
-  //   image: "Daily Exhale 2.png",
-  //   uniqueImg: "Daily Exhale 2.png",
-  //   title: "Daily Exhale 2",
-  //   subTitle: "2 Min Session",
-  //   videoFile: "box-breathing.mp4",
-  //   modalIcon: require('../assets/exercises-images/modal-icons/arrow-squares.png'),
-  //   autoCountDown: "2m"
-  // },
-  // 15: {
-  //   id: 15,
-  //   image: "Daily Exhale 3.png",
-  //   uniqueImg: "Daily Exhale 3.png",
-  //   title: "Daily Exhale 3",
-  //   subTitle: "2 Min Session",
-  //   videoFile: 'circles.mp4',
-  //   modalIcon: require('../assets/exercises-images/modal-icons/audi.png'),
-  //   autoCountDown: "2m"
-  // },
-  // 16: {
-
-  // },
-  // 17: {
-  //   id: 17,
-  //   image: "Daily Exhale 4.png",
-  //   uniqueImg: "Daily Exhale 4.png",
-  //   title: "Daily Exhale 4",
-  //   subTitle: "2 Min Session",
-  //   videoFile: 'yin-yang.mp4',
-  //   modalIcon: require('../assets/exercises-images/modal-icons/wave.png'),
-  //   autoCountDown: "2m"
-  // },
-  // 18: {
-  //   id: 18,
-  //   image: "Daily Exhale 5.png",
-  //   uniqueImg: "Daily Exhale 5.png",
-  //   title: "Daily Exhale 5",
-  //   subTitle: "2 Min Session",
-  //   videoFile: 'flower-of-life.mp4',
-  //   modalIcon: require('../assets/exercises-images/modal-icons/flower.png'),
-  //   autoCountDown: "2m"
-  // },
-  // 19: {
-  //   id: 19,
-  //   image: "Daily Exhale 6.png",
-  //   uniqueImg: "Daily Exhale 6.png",
-  //   title: "Daily Exhale 6",
-  //   subTitle: "2 Min Session",
-  //   videoFile: '4-7-9-wheel.mp4',
-  //   modalIcon: require('../assets/exercises-images/modal-icons/zen-circle.png'),
-  //   autoCountDown: "2m"
-  // },
+  14: {
+    id: 14,
+    image: "box-breathing-orange.png",
+    uniqueImg: "daily-exhale-box-breathing-orange.png",
+    title: "Box Breathing",
+    subTitle: "4 Second Box Pattern",
+    videoFile: "box-breathing-3.mp4",
+    modalIcon: require('../assets/exercises-images/modal-icons/arrow-squares.png'),
+    iconHeight: 60
+  },
+  15: {
+    id: 15,
+    image: "pyramid-yellow.png",
+    uniqueImg: "daily-exhale-pyramid-yellow.png",
+    title: "Morning Zen",
+    subTitle: "Start Your AM Flow",
+    videoFile: 'pyramid-yellow.mp4',
+    modalIcon: require('../assets/exercises-images/modal-icons/pyramid.png'),
+    autoCountDown: "2m",
+    iconHeight: 95,
+  },
+  16: {
+    id: 16,
+    image: "om-blue.png",
+    uniqueImg: "evening-wind-down-om-blue.png",
+    uniqueImgEvening: "evening-wind-down-om-blue.png",
+    title: "Breathe for Focus",
+    subTitle: "Get in the Zone",
+    videoFile: "om-blue-sleep.mp4",
+    modalIcon: require('../assets/exercises-images/modal-icons/audi.png'),
+    iconHeight: 38,
+    noFinishBell: true
+  },
+  17: {
+    id: 17,
+    image: "478-green.png",
+    uniqueImg: "daily-exhale-478-green.png",
+    title: "Classic 4-7-8",
+    subTitle: "Time Tested Calm",
+    videoFile: '4-7-8-forest.mp4',
+    modalIcon: require('../assets/exercises-images/modal-icons/zen-circle.png'),
+    iconHeight: 48
+  },
+  18: {
+    id: 18,
+    image: "triangle-warm.png",
+    uniqueImg: "daily-exhale-triangle-warm.png",
+    title: "Study Stress Relief",
+    subTitle: "A Break from the Books",
+    videoFile: "triangle-warm.mp4",
+    modalIcon: require('../assets/exercises-images/modal-icons/cut-triangle.png'),
+    iconHeight: 85,
+  },
+  19: {
+    id: 19,
+    image: "triangle-green.png",
+    uniqueImg: "daily-exhale-triangle-green.png",
+    title: "Study Stress Relief",
+    subTitle: "A Break from the Books",
+    videoFile: "triangle-green.mp4",
+    modalIcon: require('../assets/exercises-images/modal-icons/cut-triangle.png'),
+    iconHeight: 85,
+  },
   20: {
-
+    id: 20,
+    image: "accordion-yellow.png",
+    uniqueImg: "daily-exhale-accordion-yellow.png",
+    title: "Energize",
+    subTitle: "Refresh & Reinvigorate",
+    videoFile: "accordion-1.mp4",
+    modalIcon: require('../assets/exercises-images/modal-icons/breathe-waves.png'),
   },
   21: {
-
+    id: 21,
+    image: "yinyang-orange.png",
+    uniqueImg: "daily-exhale-yinyang-orange.png",
+    title: "Ride the Wave",
+    subTitle: "Slow Deep Breathing",
+    videoFile: "yinyang-orange.mp4",
+    modalIcon: require('../assets/exercises-images/modal-icons/wave.png'),
+    iconHeight: 35
   },
   22: {
-
+    id: 22,
+    image: "3-circles-green.png",
+    uniqueImg: "daily-exhale-3-circles-green.png",
+    title: "Breathe for Focus",
+    subTitle: "Get in the Zone",
+    videoFile: 'circles.mp4',
+    modalIcon: require('../assets/exercises-images/modal-icons/3-circles.png'),
+    iconHeight: 65
   },
   23: {
-
+    id: 23,
+    image: "crazy-triangles.png",
+    uniqueImg: "daily-exhale-crazy-triangles.png",
+    title: "Breathe for Focus",
+    subTitle: "Get in the Zone",
+    videoFile: "crazy-triangles.mp4",
+    modalIcon: require('../assets/exercises-images/modal-icons/breathe-waves.png'),
+    // iconHeight: 39
   },
   24: {
-
+    id: 24,
+    image: "purple-peace.png",
+    uniqueImg: "daily-exhale-funky-loop-purple.png",
+    uniqueImgEvening: "evening-wind-down-funky-loop-purple.png",
+    title: "Purple Peace",
+    subTitle: "Deep Cadence",
+    videoFile: "crazy-triangles.mp4",
+    modalIcon: require('../assets/exercises-images/modal-icons/breathe-waves.png'),
+    noFinishBell: true
   },
   25: {
-
+    id: 25,
+    image: "infinity-purple.png",
+    uniqueImg: "evening-wind-down-infinity-purple.png",
+    uniqueImgEvening: "evening-wind-down-infinity-purple.png",
+    title: "Infinite Loop",
+    subTitle: "Evening Wind Down",
+    videoFile: "infinity-purple.mp4",
+    modalIcon: require('../assets/exercises-images/modal-icons/infinity.png'),
+    noFinishBell: true
   },
   26: {
 

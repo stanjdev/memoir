@@ -59,7 +59,7 @@ export default function BreatheScreen({navigation}) {
   const currentHour = new Date().getHours();
   // console.log(currentHour)
 
-  const [selectedCategory, setSelectedCategory] = useState(currentHour >= 20 ? "Sleep" : "New");
+  const [selectedCategory, setSelectedCategory] = useState(currentHour >= 20 || currentHour <= 3 ? "Sleep" : "New");
 
   const categoryOptions = {
     "Sleep": "Sleep",
@@ -136,20 +136,35 @@ export default function BreatheScreen({navigation}) {
   //   onRefresh();
   // }, [])
 
+  /* 
+  Daily's
+  1-5, 7, 11-15, 17-24
+
+  Evenings:
+  6, 10, 12, 16, 24, 25
+
+  New: 
+  7, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 
+  */
 
   // this way doesn't shuffle it every time you move from tab to tab
   const [dailyExhales, setDailyExhales] = useState([1, 2, 3, 4, 5, 7, 10]);
+  const [eveningWindDowns, setEveningWindDowns] = useState([6, 10, 12, 6, 16, 24, 25]);
   const [recommendedToday, setRecommendedToday] = useState();
   const [popular, setPopular] = useState();
+  const [sleepExercises, setSleepExercises] = useState();
+  const [newExercises, setNewExercises] = useState();
 
-  // currentHour >= 20 ? 
+  // currentHour >= 20 || currentHour <= 3 ? 
 
   useEffect(() => {
     // shuffle([1, 2, 3, 4, 5, 7], setDailyExhales);
-    currentHour >= 20 ? 
+    currentHour >= 20 || currentHour <= 3 ? 
       shuffle([1, 2, 3, 4, 5, 6, 10, 11, 12, 13], setRecommendedToday) : 
-      shuffle([1, 2, 3, 4, 5, 11, 12, 13], setRecommendedToday);
+      shuffle([1, 2, 3, 4, 5, 7, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24], setRecommendedToday);
     shuffle([6, 10, 11, 12, 13], setPopular);
+    shuffle([6, 10, 12, 16, 24, 25], setSleepExercises);
+    shuffle([7, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24,], setNewExercises);
   }, [])
 
 
@@ -197,7 +212,7 @@ export default function BreatheScreen({navigation}) {
       arr[randomIdx] = tempValue;
     }
     setter(arr);
-  }
+  };
 
   
   // weekly reshuffle and pick solution for now.
@@ -212,7 +227,7 @@ export default function BreatheScreen({navigation}) {
               key={Exercises[chosenExNum].id}
               navigation={navigation} 
               uniqueSize={Exercises[chosenExNum].uniqueImg && "topBanner"}
-              image={Exercises[chosenExNum].uniqueImg || null} 
+              image={currentHour >= 20 || currentHour <= 3 ? Exercises[chosenExNum].uniqueImgEvening : Exercises[chosenExNum].uniqueImg || null} 
               gif={Exercises[chosenExNum].gif || undefined}
               title={Exercises[chosenExNum].title} 
               subTitle={Exercises[chosenExNum].subTitle} 
@@ -234,6 +249,7 @@ export default function BreatheScreen({navigation}) {
         key={Exercises[x].id}
         navigation={navigation} 
         image={Exercises[x].image || null} 
+        uniqueImgEvening={Exercises[x].uniqueImgEvening || null}
         gif={Exercises[x].gif || undefined}
         title={Exercises[x].title} 
         subTitle={Exercises[x].subTitle} 
@@ -260,7 +276,11 @@ export default function BreatheScreen({navigation}) {
 
           <View style={{marginTop: 50, justifyContent: "center", alignItems: "center"}}>
             {/* <Exercise uniqueSize="topBanner" navigation={navigation} image={Exercises[7].image} videoFile={Exercises[7].videoFile} modalIcon={Exercises[7].modalIcon} id={Exercises[7].id} autoCountDown={"2m"}/>  */}
-            {renderDailyExhale(dailyExhales)}
+            { 
+            currentHour >= 20 || currentHour <= 3 ? 
+            renderDailyExhale(eveningWindDowns)
+            : renderDailyExhale(dailyExhales)
+            }
           </View>
           
           <View style={{marginLeft: 25}}>
@@ -280,14 +300,14 @@ export default function BreatheScreen({navigation}) {
         
           <View style={{alignItems: "center", }}>
             {/* {
-              currentHour >= 20 ? 
+              currentHour >= 20 || currentHour <= 3 ? 
               <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[8].uniqueImg} videoFile={Exercises[8].videoFile} modalIcon={Exercises[8].modalIcon} id={Exercises[8].id} autoCountDown={"30m"} customWidth={Exercises[8].customWidth} noFinishBell={Exercises[8].noFinishBell}/> 
               : null
             } */}
-            <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[8].uniqueImg} videoFile={Exercises[8].videoFile} modalIcon={Exercises[8].modalIcon} id={Exercises[8].id} autoCountDown={"30m"} customWidth={Exercises[8].customWidth} noFinishBell={Exercises[8].noFinishBell}/> 
+            <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[8].uniqueImg} videoFile={Exercises[8].videoFile} modalIcon={Exercises[8].modalIcon} id={Exercises[8].id} autoCountDown={Exercises[8].autoCountDown} customWidth={Exercises[8].customWidth} iconHeight={Exercises[8].iconHeight} noFinishBell={Exercises[8].noFinishBell}/> 
           </View>
           <View style={{alignItems: "center", }}>
-            <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[9].image} videoFile={Exercises[9].videoFile} modalIcon={Exercises[9].modalIcon} id={Exercises[9].id} customWidth={Exercises[9].customWidth}/> 
+            <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[9].image} videoFile={Exercises[9].videoFile} modalIcon={Exercises[9].modalIcon} id={Exercises[9].id} autoCountDown={Exercises[9].autoCountDown} customWidth={Exercises[9].customWidth} iconHeight={Exercises[9].iconHeight} /> 
           </View>
 
           <View style={{marginLeft: 25, flexDirection: "row", }}>
@@ -315,13 +335,15 @@ export default function BreatheScreen({navigation}) {
 
 
             <ScrollView horizontal={true} style={selectedCategory === "Sleep" ? styles.showScroll : styles.hideScroll} showsHorizontalScrollIndicator={false}>
-              <Exercise id={Exercises[6].id} navigation={navigation} image={Exercises[6].image} title={Exercises[6].title} subTitle={Exercises[6].subTitle} videoFile={Exercises[6].videoFile} modalIcon={Exercises[6].modalIcon} iconHeight={Exercises[6].iconHeight} noFinishBell={Exercises[6].noFinishBell}/>
-              <Exercise id={Exercises[10].id} navigation={navigation} image={Exercises[10].image} title={Exercises[10].title} subTitle={Exercises[10].subTitle} videoFile={Exercises[10].videoFile} />
+              {/* <Exercise id={Exercises[6].id} navigation={navigation} image={Exercises[6].image} title={Exercises[6].title} subTitle={Exercises[6].subTitle} videoFile={Exercises[6].videoFile} modalIcon={Exercises[6].modalIcon} iconHeight={Exercises[6].iconHeight} noFinishBell={Exercises[6].noFinishBell}/>
+              <Exercise id={Exercises[10].id} navigation={navigation} image={Exercises[10].image} title={Exercises[10].title} subTitle={Exercises[10].subTitle} videoFile={Exercises[10].videoFile} /> */}
+              {renderExercises(sleepExercises)}
             </ScrollView>
             <ScrollView horizontal={true} style={selectedCategory === "New" ? styles.showScroll : styles.hideScroll} showsHorizontalScrollIndicator={false}>
-              <Exercise id={Exercises[11].id} navigation={navigation} image={Exercises[11].image} title={Exercises[11].title} subTitle={Exercises[11].subTitle} videoFile={Exercises[11].videoFile} modalIcon={Exercises[11].modalIcon} iconHeight={Exercises[11].iconHeight}/>
+              {/* <Exercise id={Exercises[11].id} navigation={navigation} image={Exercises[11].image} title={Exercises[11].title} subTitle={Exercises[11].subTitle} videoFile={Exercises[11].videoFile} modalIcon={Exercises[11].modalIcon} iconHeight={Exercises[11].iconHeight}/>
               <Exercise id={Exercises[13].id} navigation={navigation} image={Exercises[13].image} title={Exercises[13].title} subTitle={Exercises[13].subTitle} videoFile={Exercises[13].videoFile} />
-              <Exercise id={Exercises[12].id} navigation={navigation} image={Exercises[12].image} title={Exercises[12].title} subTitle={Exercises[12].subTitle} videoFile={Exercises[12].videoFile} />
+              <Exercise id={Exercises[12].id} navigation={navigation} image={Exercises[12].image} title={Exercises[12].title} subTitle={Exercises[12].subTitle} videoFile={Exercises[12].videoFile} /> */}
+              {renderExercises(newExercises)}
             </ScrollView>
             <ScrollView horizontal={true} style={selectedCategory === "Popular" ? styles.showScroll : styles.hideScroll} showsHorizontalScrollIndicator={false}>
               {/* {popular} */}

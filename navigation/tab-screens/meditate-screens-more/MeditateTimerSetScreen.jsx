@@ -113,13 +113,13 @@ export default function MeditateTimerSetScreen({ navigation, route }) {
 // WITH SAFETY CHECK ADDED - for users with no existing progress data objects
   // Increment current and best streaks - triggers when blue 'Start' button is pressed
   const incrementStreak = async () => {
-    if (currUser && userToken) {
+    if (currUser ) {
       let currentStreakSoFar;
       let lastDateExercised;
       let bestStreakSoFar;
 
       await progressRef.once('value', async snapshot => {
-        if (snapshot.val() === null) {
+        if (await snapshot.val() === null) {
           progressRef.set({
             practiceTime: 0,
             sessionsCompleted: 0,
@@ -140,18 +140,21 @@ export default function MeditateTimerSetScreen({ navigation, route }) {
         }
 
         let dateNow = new Date().getDate();
+        // let dateNow = 26;
 
-        if (dateNow - lastDateExercised == 1 || dateNow - lastDateExercised == -30 || dateNow - lastDateExercised == -29 || dateNow - lastDateExercised == -28 || dateNow - lastDateExercised == -27 || dateNow - lastDateExercised == -26) {
-          await progressRef.update({
-            currentStreak: currentStreakSoFar += 1,
-            bestStreak: Math.max(bestStreakSoFar, currentStreakSoFar)
-          })
-        } else if (dateNow - lastDateExercised > 1 || currentStreakSoFar == 0) {
+        if (dateNow - lastDateExercised > 1 || currentStreakSoFar == 0) {
           await progressRef.update({
             currentStreak: 1,
-            bestStreak: Math.max(bestStreakSoFar, 1)
-          })
-        } else null
+            bestStreak: Math.max(bestStreakSoFar, currentStreakSoFar),
+            lastDateExercised: dateNow
+          });
+        } else if (dateNow - lastDateExercised === 1 || dateNow - lastDateExercised <= -26) {
+          await progressRef.update({
+            currentStreak: currentStreakSoFar += 1,
+            bestStreak: Math.max(bestStreakSoFar, currentStreakSoFar),
+            lastDateExercised: dateNow
+          });
+        }
 
         if (bestStreakSoFar < currentStreakSoFar) {
           await progressRef.update({

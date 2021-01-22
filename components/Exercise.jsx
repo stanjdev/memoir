@@ -14,7 +14,7 @@ import firebase from 'firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-export default function Exercise({ uniqueSize, image, gif, title, subTitle, navigation, onPress, videoFile, modalIcon, iconHeight, id, autoCountDown, customWidth, customVolume, isLiked, noFinishBell, notSignedIn }) {
+export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, title, subTitle, navigation, onPress, videoFile, modalIcon, iconHeight, id, autoCountDown, customWidth, customVolume, isLiked, noFinishBell, notSignedIn }) {
   
   const { userToken, userFavs } = useContext(AuthContext);
 
@@ -197,19 +197,12 @@ export default function Exercise({ uniqueSize, image, gif, title, subTitle, navi
   };
 
 
-
-
-  
-
-
-
-
-
+  const currentHour = new Date().getHours();
 
 
   return ( 
     uniqueSize == "topBanner" ? 
-    <TouchableOpacity onPress={() => notSignedIn ? console.log("not signed in!") : navigation.navigate("ExerciseVideo", { videoFile, videoUrl, cachedVideo, modalIcon, iconHeight, id, autoCountDown: autoCountDown || null, customVolume: customVolume || null, noFinishBell: noFinishBell || null })}>
+    <TouchableOpacity onPress={() => notSignedIn ? console.log("not signed in!") : navigation.navigate("ExerciseVideo", { videoFile, videoUrl, cachedVideo, modalIcon, iconHeight, id, autoCountDown: autoCountDown || null, customVolume: customVolume || null, noFinishBell: noFinishBell || null, modalText: currentHour >= 20 || currentHour <= 3 ? "eveningWindDown" : "dailyExhale" })}>
       <Image 
         // source={{uri: imgUrl}}
         source={ cachedImg }
@@ -233,7 +226,7 @@ export default function Exercise({ uniqueSize, image, gif, title, subTitle, navi
     : 
 
     <View style={styles.imageSmallContainer}>
-      <TouchableOpacity onPress={() => notSignedIn ? console.log("not signed in!") : navigation.navigate("ExerciseVideo", { videoFile, videoUrl, cachedVideo, modalIcon, iconHeight, id, autoCountDown: autoCountDown || null, customVolume: customVolume || null, noFinishBell: noFinishBell || null })}>
+      <TouchableOpacity onPress={() => notSignedIn ? console.log("not signed in!") : navigation.navigate("ExerciseVideo", { videoFile, videoUrl, cachedVideo, modalIcon, iconHeight, id, autoCountDown: autoCountDown || null, customVolume: customVolume || null, noFinishBell: noFinishBell || null, uniqueImgEvening: uniqueImgEvening || null })}>
         <Image 
           // source={{uri: imgUrl}} 
           source={ cachedImg }

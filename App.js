@@ -23,7 +23,7 @@ export default function App() {
     SplashScreen.preventAutoHideAsync();
     setTimeout(() => {
       SplashScreen.hideAsync();
-    }, 1500);
+    }, 300);
   }, [])
 
   return (
