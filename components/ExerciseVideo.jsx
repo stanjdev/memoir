@@ -129,8 +129,8 @@ export default function ExerciseVideo({ route, navigation }) {
   const [ timerDuration, setTimerDuration ] = useState(null);
 
   const timerDurationsOptions = {
-    "30s": {mins: 0, secs: 2},
-    // "30s": {mins: 0, secs: 30},
+    // "30s": {mins: 0, secs: 2},
+    "30s": {mins: 0, secs: 30},
     "1m": {mins: 1, secs: 0},
     "2m": {mins: 2, secs: 0},
     "3m": {mins: 3, secs: 0},

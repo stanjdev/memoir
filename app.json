@@ -3,7 +3,7 @@
     "name": "Memoir",
     "description": "Memoir promotes mindfulness and serenity through deep breathing and meditation exercises. Users can sign in with their Facebook, Apple ID, or email to save their favorite exercises and track their personal exercise progress. On Android, install Expo and scan the QR Code to start!",
     "slug": "Memoir",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "orientation": "portrait",
     "icon": "./assets/app-icon.png",
     "splash": {

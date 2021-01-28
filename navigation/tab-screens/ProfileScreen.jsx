@@ -159,7 +159,7 @@ export default function ProfileScreen({navigation}) {
     if (currentStreak % 10 !== 0) setDismissedCurrStreak(false);
 
 
-    if (practiceTime >= timeGoal.current && !dismissedTimeGoal && Math.trunc(timeGoal.current) !== 0) {
+    if (isFocused && practiceTime >= timeGoal.current && !dismissedTimeGoal && Math.trunc(timeGoal.current) !== 0) {
       Alert.alert("Congrats!", `You've practiced for ${practiceTime < 3600 ? Math.trunc(practiceTime / 60) : Math.trunc(practiceTime / 60 / 60)} ${practiceTime < 3600 ? "minutes" : "hours"}!`, [
         {text: "Awesome!", onPress: () => {
           setDismissedTimeGoal(true);
@@ -185,7 +185,7 @@ export default function ProfileScreen({navigation}) {
       ]);
     }
 
-    if (bestStreakSoFar.current && bestStreak !== bestStreakSoFar.current) {
+    if (isFocused && bestStreakSoFar.current && bestStreak !== bestStreakSoFar.current) {
       Alert.alert("Congrats!", `New Best Streak! ${bestStreak} days!`, [
         {text: "Awesome!"}
       ]);

@@ -36,7 +36,8 @@ export const Exercises = {
     videoFile: "flower-of-life.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/flower.png'),
     iconHeight: 70,
-    customVolume: 0.22
+    customVolume: 0.22,
+    color: "green"
   },
   2: {
     id: 2,
@@ -49,7 +50,8 @@ export const Exercises = {
     subTitle: "Get in the Zone",
     videoFile: 'circles.mp4',
     modalIcon: require('../assets/exercises-images/modal-icons/audi.png'),
-    iconHeight: 39
+    iconHeight: 39,
+    color: "purple"
   },
   3: {
     id: 3,
@@ -62,7 +64,8 @@ export const Exercises = {
     // videoFile: require('../assets/video-exercises/4-7-9-wheel.mp4'),
     videoFile: '4-7-9-wheel.mp4',
     modalIcon: require('../assets/exercises-images/modal-icons/zen-circle.png'),
-    iconHeight: 48
+    iconHeight: 48,
+    color: "orange"
   },
   4: {
     id: 4,
@@ -75,7 +78,8 @@ export const Exercises = {
     // videoFile: require('../assets/video-exercises/box-breathing.mp4'),
     videoFile: "box-breathing.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/arrow-squares.png'),
-    iconHeight: 60
+    iconHeight: 60,
+    color: "green"
   },
   5: {
     id: 5,
@@ -97,7 +101,8 @@ export const Exercises = {
 
     // videoFile: loadFile('videos/yin-yang.mp4'),
     modalIcon: require('../assets/exercises-images/modal-icons/wave.png'),
-    iconHeight: 35
+    iconHeight: 35,
+    color: "orange"
   },
   6: {
     id: 6,
@@ -112,7 +117,8 @@ export const Exercises = {
     videoFile: 'crescent-moon.mp4',
     modalIcon: require('../assets/exercises-images/modal-icons/moon.png'),
     iconHeight: 38,
-    noFinishBell: true
+    noFinishBell: true,
+    color: "blue"
   },
   7: {
     id: 7,
@@ -125,6 +131,7 @@ export const Exercises = {
     modalIcon: require('../assets/exercises-images/modal-icons/pyramid.png'),
     autoCountDown: "2m",
     iconHeight: 95,
+    color: "blue"
     /* 
       <TouchableOpacity onPress={() => navigation.navigate("ExerciseVideo", { videoFile: require('../../assets/video-exercises/daily-exhale.mp4'), modalIcon: require('../../assets/exercises-images/modal-icons/breathe-waves.png') })}>
         <Image 
@@ -153,9 +160,9 @@ export const Exercises = {
   9: {
     id: 9,
     // image: require("../assets/exercises-images/horiz-deep-breaths.png"),
-    image: "horiz-6-deep-breaths.png",
+    image: "triangle-blue6b.png",
     uniqueImg: "horiz-6-deep-breaths.png",
-    title: "6 Deep Breaths to Relax",
+    title: "6 Deep Breaths",
     subTitle: "Timed Session",
     videoFile: 'triangle-blue6b.mp4',
     modalIcon: require('../assets/exercises-images/modal-icons/cut-triangle.png'),
@@ -174,7 +181,8 @@ export const Exercises = {
     // videoFile: require('../assets/video-exercises/box-breathing.mp4'),
     modalIcon: require('../assets/exercises-images/modal-icons/arrow-squares.png'),
     iconHeight: 60,
-    noFinishBell: true
+    noFinishBell: true,
+    color: "purple"
     /*
     <Exercise navigation={navigation} image={require("../../assets/exercises-images/cosmos.png")} title="Cosmos" subTitle="Relax with the Universe"/>     
      */
@@ -188,7 +196,8 @@ export const Exercises = {
     videoFile: 'triangle-blue6b.mp4',
     // videoFile: require('../assets/video-exercises/box-breathing.mp4'),
     modalIcon: require('../assets/exercises-images/modal-icons/cut-triangle.png'),
-    iconHeight: 85
+    iconHeight: 85,
+    color: "green"
     /* 
 <Exerciseimage={require("../../assets/exercises-images/forest-dawn-4x.png")} subTitle="4 Second Box Pattern"/>
 */
@@ -203,7 +212,8 @@ export const Exercises = {
     videoFile: "hexagon-green.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/hexagon.png'),
     iconHeight: 80,
-    noFinishBell: true
+    noFinishBell: true,
+    color: "green"
   },
   13: {
     id: 13,
@@ -211,10 +221,11 @@ export const Exercises = {
     uniqueImg: "daily-exhale-flower-of-life-yellow.png",
     title: "Flower of Life",
     subTitle: "Relax Your Mind",
-    videoFile: "flower-of-life.mp4",
+    videoFile: "flower-of-life-warm-forest.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/flower.png'),
     iconHeight: 70,
-    customVolume: 0.22
+    customVolume: 0.4,
+    color: "yellow"
   },
   14: {
     id: 14,
@@ -224,7 +235,8 @@ export const Exercises = {
     subTitle: "4 Second Box Pattern",
     videoFile: "box-breathing-3.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/arrow-squares.png'),
-    iconHeight: 60
+    iconHeight: 60,
+    color: "blue"
   },
   15: {
     id: 15,
@@ -236,6 +248,7 @@ export const Exercises = {
     modalIcon: require('../assets/exercises-images/modal-icons/pyramid.png'),
     autoCountDown: "2m",
     iconHeight: 95,
+    color: "yellow"
   },
   16: {
     id: 16,
@@ -247,7 +260,8 @@ export const Exercises = {
     videoFile: "om-blue-sleep.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/audi.png'),
     iconHeight: 38,
-    noFinishBell: true
+    noFinishBell: true,
+    color: "blue"
   },
   17: {
     id: 17,
@@ -257,7 +271,8 @@ export const Exercises = {
     subTitle: "Time Tested Calm",
     videoFile: '4-7-8-forest.mp4',
     modalIcon: require('../assets/exercises-images/modal-icons/zen-circle.png'),
-    iconHeight: 48
+    iconHeight: 48,
+    color: "green"
   },
   18: {
     id: 18,
@@ -268,6 +283,7 @@ export const Exercises = {
     videoFile: "triangle-warm.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/cut-triangle.png'),
     iconHeight: 85,
+    color: "orange"
   },
   19: {
     id: 19,
@@ -278,6 +294,7 @@ export const Exercises = {
     videoFile: "triangle-green.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/cut-triangle.png'),
     iconHeight: 85,
+    color: "green"
   },
   20: {
     id: 20,
@@ -287,6 +304,7 @@ export const Exercises = {
     subTitle: "Refresh & Reinvigorate",
     videoFile: "accordion-1.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/breathe-waves.png'),
+    color: "orange"
   },
   21: {
     id: 21,
@@ -296,7 +314,8 @@ export const Exercises = {
     subTitle: "Slow Deep Breathing",
     videoFile: "yinyang-orange.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/wave.png'),
-    iconHeight: 35
+    iconHeight: 35,
+    color: "orange"
   },
   22: {
     id: 22,
@@ -304,9 +323,10 @@ export const Exercises = {
     uniqueImg: "daily-exhale-3-circles-green.png",
     title: "Breathe for Focus",
     subTitle: "Get in the Zone",
-    videoFile: 'circles.mp4',
+    videoFile: "3-circles.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/3-circles.png'),
-    iconHeight: 65
+    iconHeight: 65,
+    color: "green"
   },
   23: {
     id: 23,
@@ -316,7 +336,8 @@ export const Exercises = {
     subTitle: "Get in the Zone",
     videoFile: "crazy-triangles.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/breathe-waves.png'),
-    // iconHeight: 39
+    // iconHeight: 39,
+    color: "pink"
   },
   24: {
     id: 24,
@@ -325,9 +346,10 @@ export const Exercises = {
     uniqueImgEvening: "evening-wind-down-funky-loop-purple.png",
     title: "Purple Peace",
     subTitle: "Deep Cadence",
-    videoFile: "crazy-triangles.mp4",
+    videoFile: "purple-morph.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/breathe-waves.png'),
-    noFinishBell: true
+    noFinishBell: true,
+    color: "purple"
   },
   25: {
     id: 25,
@@ -338,9 +360,10 @@ export const Exercises = {
     subTitle: "Evening Wind Down",
     videoFile: "infinity-purple.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/infinity.png'),
-    noFinishBell: true
+    noFinishBell: true,
+    color: "dark"
   },
   26: {
 
   },
-}
+};

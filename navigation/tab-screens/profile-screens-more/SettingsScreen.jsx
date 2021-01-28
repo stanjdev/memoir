@@ -13,6 +13,9 @@ import ProfileStatsBlock from '../../../components/ProfileStatsBlock';
 
 import firebase from 'firebase';
 
+import * as Linking from 'expo-linking';
+import * as WebBrowser from 'expo-web-browser';
+
 
 export default function SettingsScreen({ navigation }) {
   const isFocused = useIsFocused();
@@ -77,20 +80,21 @@ export default function SettingsScreen({ navigation }) {
 
       <View style={{height: height, marginTop: Math.min(height * 0.05, 0)}}>
         {/* <ScrollView> */}
-          <View style={{ height: height, justifyContent: "center", flexDirection:"column", alignItems: "center", }}>
-
-            <View style={{ alignItems: "center", height: height * 0.75, justifyContent: "space-evenly",}}> 
+          <View style={{ height: height, justifyContent: "center", flexDirection: "column", alignItems: "center", }}>
+          
+            <View style={{ alignItems: "center", height: height * 0.73, }}> 
               <SettingOption text={"Account Info"} action={() => navigation.navigate("AccountInfoScreen")}/>
               <SettingOption text={"Notifications"} action={() => console.log("nothing yet!")}/>
-              <SettingOption text={"Billing Info"} action={() => console.log("nothing yet!")}/>
-              <SettingOption text={"Subscriptions"} action={() => console.log("nothing yet!")}/>
-              <SettingOption text={"Restore Purchase"} action={() => console.log("nothing yet!")}/>
+              {/* <SettingOption text={"Billing Info"} action={() => console.log("nothing yet!")}/> */}
+              {/* <SettingOption text={"Subscriptions"} action={() => console.log("nothing yet!")}/> */}
+              {/* <SettingOption text={"Restore Purchase"} action={() => console.log("nothing yet!")}/> */}
               <SettingOption text={"Support"} action={() => console.log("nothing yet!")}/>
               <SettingOption text={"Change Password"} action={() => resetPassword(currUserEmail)}/>
               <SettingOption text={"Terms & Conditions"} action={() => console.log("nothing yet!")}/>
-              <SettingOption text={"Privacy Policy"} action={() => console.log("nothing yet!")}/>
+              <SettingOption text={"Privacy Policy"} action={() => WebBrowser.openBrowserAsync("https://www.privacypolicygenerator.info/live.php?token=JVOQUQnNzluF7M5IuHUKPcBXSlNLZBgX")}/>
               <SettingOption text={"Log Out"} action={logOutAlert}/>
             </View>
+
           </View>
 
         {/* </ScrollView> */}
@@ -115,12 +119,14 @@ const SettingOption = ({ text, action }) => (
 const styles = StyleSheet.create({
   item: {
     width: 290,
-    height: Math.min(height * 0.07, 58),
+    height: Math.min(height * 0.09, 61),
+    // height: height * 0.05,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     // borderWidth: 1,
     // margin: 5
+    // borderWidth: 1
   },
   text: {
     color: "#535353",

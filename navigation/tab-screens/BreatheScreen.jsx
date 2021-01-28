@@ -148,7 +148,7 @@ export default function BreatheScreen({navigation}) {
   */
 
   // this way doesn't shuffle it every time you move from tab to tab
-  const [dailyExhales, setDailyExhales] = useState([1, 2, 3, 4, 5, 7, 10]);
+  const [dailyExhales, setDailyExhales] = useState([1, 2, 3, 4, 5, 7, 20]);
   const [eveningWindDowns, setEveningWindDowns] = useState([6, 10, 12, 6, 16, 24, 25]);
   const [recommendedToday, setRecommendedToday] = useState();
   const [popular, setPopular] = useState();
@@ -162,7 +162,7 @@ export default function BreatheScreen({navigation}) {
     currentHour >= 20 || currentHour <= 3 ? 
       shuffle([1, 2, 3, 4, 5, 6, 10, 11, 12, 13], setRecommendedToday) : 
       shuffle([1, 2, 3, 4, 5, 7, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24], setRecommendedToday);
-    shuffle([6, 10, 11, 12, 13], setPopular);
+    shuffle([6, 10, 11, 12, 13, 14, 17, 18, 19], setPopular);
     shuffle([6, 10, 12, 16, 24, 25], setSleepExercises);
     shuffle([7, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24,], setNewExercises);
   }, [])
@@ -214,6 +214,35 @@ export default function BreatheScreen({navigation}) {
     setter(arr);
   };
 
+
+  function renderExercises(array) {
+    for (let i = 0; i < 5; i++) {
+      if (Exercises[array[i]].color == Exercises[array[i + 1]].color) {
+        array.push(...array.splice(i + 1, 1));
+      }
+    };
+
+    array = array.slice(0, 5);
+    // console.log("arr length:", array.length)
+    return array.map(x => 
+      <Exercise 
+        id={Exercises[x].id} 
+        key={Exercises[x].id}
+        navigation={navigation} 
+        image={Exercises[x].image || null} 
+        uniqueImgEvening={Exercises[x].uniqueImgEvening || null}
+        gif={Exercises[x].gif || undefined}
+        title={Exercises[x].title} 
+        subTitle={Exercises[x].subTitle} 
+        videoFile={Exercises[x].videoFile || null} 
+        modalIcon={Exercises[x].modalIcon || null} 
+        iconHeight={Exercises[x].iconHeight || null} 
+        customVolume={Exercises[x].customVolume || null}
+        isLiked={favIds.includes(x)}
+      />
+    )
+  };
+
   
   // weekly reshuffle and pick solution for now.
   function renderDailyExhale(array) {
@@ -238,29 +267,9 @@ export default function BreatheScreen({navigation}) {
               isLiked={favIds.includes(chosenExNum)}
               autoCountDown={"2m"}
             />
-  }
+  };
 
-  function renderExercises(array) {
-    array = array.slice(0, 5);
-    // console.log("arr length:", array.length)
-    return array.map(x => 
-      <Exercise 
-        id={Exercises[x].id} 
-        key={Exercises[x].id}
-        navigation={navigation} 
-        image={Exercises[x].image || null} 
-        uniqueImgEvening={Exercises[x].uniqueImgEvening || null}
-        gif={Exercises[x].gif || undefined}
-        title={Exercises[x].title} 
-        subTitle={Exercises[x].subTitle} 
-        videoFile={Exercises[x].videoFile || null} 
-        modalIcon={Exercises[x].modalIcon || null} 
-        iconHeight={Exercises[x].iconHeight || null} 
-        customVolume={Exercises[x].customVolume || null}
-        isLiked={favIds.includes(x)}
-      />
-    )
-  }
+
 
 
 
@@ -307,7 +316,7 @@ export default function BreatheScreen({navigation}) {
             <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[8].uniqueImg} videoFile={Exercises[8].videoFile} modalIcon={Exercises[8].modalIcon} id={Exercises[8].id} autoCountDown={Exercises[8].autoCountDown} customWidth={Exercises[8].customWidth} iconHeight={Exercises[8].iconHeight} noFinishBell={Exercises[8].noFinishBell}/> 
           </View>
           <View style={{alignItems: "center", }}>
-            <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[9].image} videoFile={Exercises[9].videoFile} modalIcon={Exercises[9].modalIcon} id={Exercises[9].id} autoCountDown={Exercises[9].autoCountDown} customWidth={Exercises[9].customWidth} iconHeight={Exercises[9].iconHeight} /> 
+            <Exercise uniqueSize="horizontal" navigation={navigation} image={Exercises[9].uniqueImg} videoFile={Exercises[9].videoFile} modalIcon={Exercises[9].modalIcon} id={Exercises[9].id} autoCountDown={Exercises[9].autoCountDown} customWidth={Exercises[9].customWidth} iconHeight={Exercises[9].iconHeight} /> 
           </View>
 
           <View style={{marginLeft: 25, flexDirection: "row", }}>
