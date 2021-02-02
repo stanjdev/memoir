@@ -39,14 +39,14 @@ export default function SettingsScreen({ navigation }) {
     // then, back to "Progress" screen
   };
 
-  const [showPopUp, setShowPopup] = React.useState(false);
-  React.useEffect(() => {
-    if (!userToken) {
-      setTimeout(() => {
-        isFocused ? setShowPopup(true) : setShowPopup(false)
-      }, 1000);
-    }
-  }, [isFocused])
+  // const [showPopUp, setShowPopup] = React.useState(false);
+  // React.useEffect(() => {
+  //   if (!userToken) {
+  //     setTimeout(() => {
+  //       isFocused ? setShowPopup(true) : setShowPopup(false)
+  //     }, 1000);
+  //   }
+  // }, [isFocused])
 
 
   let [fontsLoaded] = useFonts({
@@ -83,16 +83,30 @@ export default function SettingsScreen({ navigation }) {
           <View style={{ height: height, justifyContent: "center", flexDirection: "column", alignItems: "center", }}>
           
             <View style={{ alignItems: "center", height: height * 0.73, }}> 
-              <SettingOption text={"Account Info"} action={() => navigation.navigate("AccountInfoScreen")}/>
-              <SettingOption text={"Notifications"} action={() => console.log("nothing yet!")}/>
-              {/* <SettingOption text={"Billing Info"} action={() => console.log("nothing yet!")}/> */}
-              {/* <SettingOption text={"Subscriptions"} action={() => console.log("nothing yet!")}/> */}
-              {/* <SettingOption text={"Restore Purchase"} action={() => console.log("nothing yet!")}/> */}
-              <SettingOption text={"Support"} action={() => console.log("nothing yet!")}/>
-              <SettingOption text={"Change Password"} action={() => resetPassword(currUserEmail)}/>
-              <SettingOption text={"Terms & Conditions"} action={() => console.log("nothing yet!")}/>
-              <SettingOption text={"Privacy Policy"} action={() => WebBrowser.openBrowserAsync("https://www.privacypolicygenerator.info/live.php?token=JVOQUQnNzluF7M5IuHUKPcBXSlNLZBgX")}/>
-              <SettingOption text={"Log Out"} action={logOutAlert}/>
+              {userToken ? 
+              <View>
+                <SettingOption text={"Account Info"} action={() => navigation.navigate("AccountInfoScreen")}/>
+                <SettingOption text={"Notifications"} action={() => console.log("nothing yet!")}/>
+                {/* <SettingOption text={"Billing Info"} action={() => console.log("nothing yet!")}/> */}
+                {/* <SettingOption text={"Subscriptions"} action={() => console.log("nothing yet!")}/> */}
+                {/* <SettingOption text={"Restore Purchase"} action={() => console.log("nothing yet!")}/> */}
+                <SettingOption text={"Support"} action={() => console.log("nothing yet!")}/>
+                <SettingOption text={"Change Password"} action={() => resetPassword(currUserEmail)}/>
+                <SettingOption text={"Terms & Conditions"} action={() => console.log("nothing yet!")}/>
+                <SettingOption text={"Privacy Policy"} action={() => WebBrowser.openBrowserAsync("https://www.privacypolicygenerator.info/live.php?token=JVOQUQnNzluF7M5IuHUKPcBXSlNLZBgX")}/>
+                <SettingOption text={"Log Out"} action={logOutAlert}/>
+              </View>
+              : 
+              <View>
+                <SettingOption text={"Create Account"} action={() => navigation.goBack()}/>
+                <SettingOption text={"Notifications"} action={() => console.log("nothing yet!")}/>
+                <SettingOption text={"Support"} action={() => console.log("nothing yet!")}/>
+                <SettingOption text={"Terms & Conditions"} action={() => console.log("nothing yet!")}/>
+                <SettingOption text={"Privacy Policy"} action={() => WebBrowser.openBrowserAsync("https://www.privacypolicygenerator.info/live.php?token=JVOQUQnNzluF7M5IuHUKPcBXSlNLZBgX")}/>
+              </View>
+              }
+             
+
             </View>
 
           </View>

@@ -37,12 +37,12 @@ export default function MeditateScreen({navigation}) {
         <View style={{flexDirection: "row", padding: 20}}>
           <View style={{backgroundColor: "white", flex: 1, height: height * 0.7, borderRadius: 20, justifyContent: "space-evenly", alignItems: "center" }}>
 
-            <View style={{width: width * 0.68, height: height * 0.45, justifyContent: "space-around", alignItems: "center", }}>
+            <View style={{width: width < 330 ? width * 0.7 : width * 0.68, height: height * 0.45, justifyContent: "space-around", alignItems: "center", }}>
               <Image source={require('../../assets/screen-icons/meditate-circles-large.png')} style={{height: 47, }} resizeMode="contain"/>
-              <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 23, textAlign: "center"}}>Sometimes Your Own Inner Voice is Enough</Text>
-              <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>Our style of meditation doesn’t feature a voice to guide you through it.</Text>
-              <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>Instead, we use a gentle bell sound to remind you to stay present.</Text>
-              <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>On the next page you can set how often you’d like the bell to ring.</Text>
+              <Text style={{fontFamily: "Assistant-SemiBold", fontSize: height < 600 ? 20 : 23, textAlign: "center"}}>Sometimes Your Own Inner Voice is Enough</Text>
+              <Text style={styles.modalTextStyle}>Our style of meditation doesn’t feature a voice to guide you through it.</Text>
+              <Text style={styles.modalTextStyle}>Instead, we use a gentle bell sound to remind you to stay present.</Text>
+              <Text style={styles.modalTextStyle}>On the next page you can set how often you’d like the bell to ring.</Text>
             </View>
             <AppButton 
               title="Got It" 
@@ -78,6 +78,11 @@ const styles = StyleSheet.create({
     fontSize: 22,
     letterSpacing: 1,
     fontFamily: "Assistant-SemiBold"
+  },
+  modalTextStyle : {
+    fontFamily: "Assistant-Regular", 
+    fontSize: height < 600 ? 14 : 16,
+    textAlign: "center"
   }
 })
 

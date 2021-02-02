@@ -958,7 +958,7 @@ function keepGoing() {
 
           <Animated.View style={[ {position: "absolute", bottom: height * 0.12, width: width, opacity: fadeAnim, display: showTimerScroller ? "none" : "flex"}, ]}>
             <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 17, color: "white", textAlign: "center"}}>Select Timer Duration</Text>
-            <View style={{height: height * 0.06, flexDirection: "row", justifyContent: "space-evenly", alignItems: "center"}}>
+            <View style={{height: height < 600 ? height * 0.07 : height * 0.06, flexDirection: "row", justifyContent: "space-evenly", alignItems: "center"}}>
               <ScrollView 
                 horizontal={true} 
                 showsHorizontalScrollIndicator={false}
@@ -1012,36 +1012,36 @@ function keepGoing() {
           </TouchableOpacity>
 
           <View style={{backgroundColor: "white", height: height * 0.74, borderRadius: 20, justifyContent: "space-between", alignItems: "center", width: width * 0.9, ...styles.modalView }}>
-            <View style={{width: width * 0.63, height: height * 0.45, justifyContent: "space-between", alignItems: "center" }}>
+            <View style={{width: width < 380 ? width * 0.69 : width * 0.63, height: height * 0.45, justifyContent: "space-between", alignItems: "center" }}>
               <Image source={ modalIcon } style={{height: iconHeight || 31, }} resizeMode="contain"/>
-              <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 28, textAlign: "center", width: 205}}>Inhale, Hold, Exhale, Repeat</Text>
+              <Text style={{fontFamily: "Assistant-SemiBold", fontSize: height < 600 ? 20 : height < 700 ? 23 : 28, textAlign: "center", width: 205}}>Inhale, Hold, Exhale, Repeat</Text>
               {
                 modalText == "dailyExhale" ? 
                 <>
-                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>Welcome to your Daily Exhale.</Text>
-                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>This breathing exercise is designed to bring you stress-relief and inner peace.</Text>
-                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center", width: width * 0.51}}>We’ll start you off today with a 2-minute timer.</Text>
-                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>You can adjust the timer and other settings by tapping on the screen.</Text>
+                  <Text style={styles.modalTextStyle}>Welcome to your Daily Exhale.</Text>
+                  <Text style={styles.modalTextStyle}>This breathing exercise is designed to bring you stress-relief and inner peace.</Text>
+                  <Text style={styles.modalTextStyle}>We’ll start you off today with a 2-minute timer.</Text>
+                  <Text style={styles.modalTextStyle}>You can adjust the timer and other settings by tapping on the screen.</Text>
                 </>
                 : modalText == "eveningWindDown" ? 
                 <>
-                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>Welcome to your Evening Wind-Down.</Text>
-                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>This breathing exercise is designed to bring you stress-relief and inner peace.</Text>
-                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center", width: width * 0.51}}>We’ll start you off this evening with a 2-minute timer. </Text>
-                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>You can adjust the timer and other settings by tapping on the screen.</Text>
+                  <Text style={styles.modalTextStyle}>Welcome to your Evening Wind-Down.</Text>
+                  <Text style={styles.modalTextStyle}>This breathing exercise is designed to bring you stress-relief and inner peace.</Text>
+                  <Text style={styles.modalTextStyle}>We’ll start you off this evening with a 2-minute timer. </Text>
+                  <Text style={styles.modalTextStyle}>You can adjust the timer and other settings by tapping on the screen.</Text>
                 </>
                 : 
                 uniqueImgEvening && uniqueImgEvening !== null ? 
                 <>
-                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>This breathing exercise is will help you wind down for a restful night’s sleep.</Text>
-                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>You can watch the screen, or simply listen to the bell sound as you take deep breaths.</Text>
-                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>Tap anywhere on the screen to view controls or return back to home.</Text>
+                  <Text style={styles.modalTextStyle}>This breathing exercise is will help you wind down for a restful night’s sleep.</Text>
+                  <Text style={styles.modalTextStyle}>You can watch the screen, or simply listen to the bell sound as you take deep breaths.</Text>
+                  <Text style={styles.modalTextStyle}>Tap anywhere on the screen to view controls or return back to home.</Text>
                 </>
                 :
                 <>
-                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>This breathing exercise is designed to bring you calmness, relaxation, and inner peace.</Text>
-                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>Repeat the loop at least 6 times for maximum benefit, or set a timer to make it a full session.</Text>
-                  <Text style={{fontFamily: "Assistant-Regular", fontSize: 16, textAlign: "center"}}>Tap anywhere on the screen to view controls or return back to home.</Text>
+                  <Text style={styles.modalTextStyle}>This breathing exercise is designed to bring you calmness, relaxation, and inner peace.</Text>
+                  <Text style={styles.modalTextStyle}>Repeat the loop at least 6 times for maximum benefit, or set a timer to make it a full session.</Text>
+                  <Text style={styles.modalTextStyle}>Tap anywhere on the screen to view controls or return back to home.</Text>
                 </>
               }
             </View>
@@ -1087,7 +1087,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
-    justifyContent: "space-evenly",
+    justifyContent: height < 600 ? "space-between" : height < 700 ? "space-around" : "space-evenly",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -1105,6 +1105,12 @@ const styles = StyleSheet.create({
   },
   borderControl: {
     borderWidth: 1, borderColor: "white"
+  },
+  modalTextStyle: {
+    fontFamily: "Assistant-Regular", 
+    fontSize: height < 600 ? 14 : 16, 
+    textAlign: "center",
+    // width: width * 0.51
   }
 })
 

@@ -42,7 +42,7 @@ export default function ProfileStatsBlock({icon, title, mills, number, subtitle,
       translateY: 0
     },
     to: {
-      translateY: -210
+      translateY: height < 600 ? -166 : -210
     },
   }
 
@@ -113,10 +113,10 @@ export default function ProfileStatsBlock({icon, title, mills, number, subtitle,
     if (number > 0) {
       for (let i = 0; i < number; i += number / 5) {
         // console.log( Math.trunc(number) !== number ? i.toFixed(1) : Math.trunc(i) );
-        nums.push(<Text key={`${title} ${i}`} style={{fontFamily: "Assistant-SemiBold", fontSize: 36, color: "#3681C7", marginRight: 7, marginBottom: -6, }}>{ Math.trunc(number) !== number ? i.toFixed(1) : Math.trunc(i) }</Text>);
+        nums.push(<Text key={`${title} ${i}`} style={{fontFamily: "Assistant-SemiBold", fontSize: height < 600 ? 30 : 36, color: "#3681C7", marginRight: 7, marginBottom: -6, }}>{ Math.trunc(number) !== number ? i.toFixed(1) : Math.trunc(i) }</Text>);
       }
       // console.log( Math.trunc(number) !== number ? number : Math.trunc(number) );
-      nums.push(<Text key={`${title} ${number}`} style={{fontFamily: "Assistant-SemiBold", fontSize: 36, color: "#3681C7", marginRight: 7, marginBottom: -6, }}>{ number }</Text>);
+      nums.push(<Text key={`${title} ${number}`} style={{fontFamily: "Assistant-SemiBold", fontSize: height < 600 ? 30 : 36, color: "#3681C7", marginRight: 7, marginBottom: -6, }}>{ number }</Text>);
     }
     setNumBar(nums);
   }
@@ -126,9 +126,9 @@ export default function ProfileStatsBlock({icon, title, mills, number, subtitle,
 
   return (
       <View style={{ width: width * 0.77, height: Math.min(height * 0.13, 177), margin: 7, }}>
-        <View style={{flexDirection: "row", alignItems: "center"}}>
-          <Image source={icon} style={{height: 22, width: 26, marginRight: 10}} resizeMode="contain"/>
-          <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 22, color: "#717171"}}>{title}</Text>
+        <View style={{flexDirection: "row", alignItems: "center", marginTop: height < 600 ? 20 : null}}>
+          <Image source={icon} style={{height: height < 600 ? 20 : 22, width: 26, marginRight: 10}} resizeMode="contain"/>
+          <Text style={{fontFamily: "Assistant-SemiBold", fontSize: height < 600 ? 19 : 22, color: "#717171"}}>{title}</Text>
         </View>
         
         <View style={{flexDirection: "row", alignItems: "flex-end", justifyContent: "space-between",}}>
@@ -168,7 +168,7 @@ export default function ProfileStatsBlock({icon, title, mills, number, subtitle,
 
             {/* <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 36, color: "#3681C7", marginRight: 7, marginBottom: -6, }}>{number}</Text> */}
             
-            <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 21.45, color: "#3681C7", }}>{subtitle}</Text>
+            <Text style={{fontFamily: "Assistant-SemiBold", fontSize: height < 600 ? 19 : 21.45, color: "#3681C7", }}>{subtitle}</Text>
           </View>
           <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 12.03, color: "#717171"}}>{subText}</Text>
         </View>

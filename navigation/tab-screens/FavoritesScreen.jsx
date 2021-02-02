@@ -178,7 +178,7 @@ export default function FavoritesScreen({navigation}) {
   return (
     <View>
       <ScrollView style={{backgroundColor: "white", height: currentUser && !currentUser.isAnonymous ? height : height * 0.92}} scrollEnabled={userToken ? true : false}>
-      <TouchableOpacity onPress={() => userToken ? navigation.goBack() : null} style={{position: "absolute", left: width * 0.02, top: height * 0.045, zIndex: 100, padding: 15}}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={{position: "absolute", left: width * 0.02, top: height * 0.045, zIndex: 100, padding: 15}}>
         <Image source={require('../../assets/screen-icons/back-arrow.png')} style={{height: 20,}} resizeMode="contain"/>
       </TouchableOpacity>
         {isFocused ? <StatusBar barStyle="dark-content" hidden={false}/> : null}

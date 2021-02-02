@@ -293,7 +293,7 @@ export default function BreatheScreen({navigation}) {
           </View>
           
           <View style={{marginLeft: 25}}>
-            <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 26 }}>Recommended For You</Text>
+            <Text style={{fontFamily: "Assistant-SemiBold", fontSize: width < 350 ? 23 : 26 }}>Recommended For You</Text>
           </View>
           
           <ScrollView horizontal={true} style={{flexDirection: "row", marginLeft: 25}} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
@@ -394,12 +394,12 @@ const styles = StyleSheet.create({
   },
   selected: {
     fontFamily: "Assistant-SemiBold", 
-    fontSize: 26, 
+    fontSize: width < 350 ? 23 : 26, 
     color: "black",
   },
   unSelected: {
     fontFamily: "Assistant-SemiBold", 
-    fontSize: 26, 
+    fontSize: width < 350 ? 23 : 26, 
     color: "#717171"
   },
   underline: {

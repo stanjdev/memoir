@@ -217,14 +217,14 @@ export default function ProfileScreen({navigation}) {
     // </ImageBackground>
     <View style={{ backgroundColor:"white", flex: 1, resizeMode: "cover", justifyContent: "flex-start",}}>
       {isFocused ? <StatusBar barStyle="dark-content" hidden={false}/> : null}
-      <TouchableOpacity onPress={() => userToken ? navigation.goBack() : null} style={{position: "absolute", left: width * 0.02, top: height * 0.045, zIndex: 100, padding: 15}}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={{position: "absolute", left: width * 0.02, top: height * 0.045, zIndex: 100, padding: 15}}>
         <Image source={require('../../assets/screen-icons/back-arrow.png')} style={{height: 20,}} resizeMode="contain"/>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => userToken ? navigation.navigate('SettingsScreen') : null} style={{ position: "absolute", right: width * 0.05, top: height * 0.045, zIndex: 100, paddingBottom: 10, paddingTop: 10 }}>
+      <TouchableOpacity onPress={() => navigation.navigate('SettingsScreen')} style={{ position: "absolute", right: width * 0.05, top: height * 0.045, zIndex: 100, paddingBottom: 10, paddingTop: 10 }}>
         <Image source={require('../../assets/screen-icons/gear-grey.png')} style={{height: 32, width: 60}} resizeMode="contain"/>
       </TouchableOpacity>
 
-      <Text style={{textAlign: "center", fontSize: 23, fontFamily: "Assistant-SemiBold", position: "absolute", width: width, top: height * 0.057, color: '#535353'}}>{userFirstName ? String(userFirstName).charAt(0).toUpperCase() + String(userFirstName).slice(1) + "'s Progress" : "Your Progress"}</Text>
+      <Text style={{textAlign: "center", fontSize: height < 600 ? 20 : 23, fontFamily: "Assistant-SemiBold", position: "absolute", width: width, top: height * 0.057, color: '#535353'}}>{userFirstName ? String(userFirstName).charAt(0).toUpperCase() + String(userFirstName).slice(1) + "'s Progress" : "Your Progress"}</Text>
     
       <View style={{height: height, marginTop: Math.min(height * 0.05, 20)}}>
         {/* <ScrollView> */}
@@ -264,13 +264,18 @@ export default function ProfileScreen({navigation}) {
               Upgrade to Unlimited and
               gain access to the full library.
               </Text>
-
               <AppButton 
                   title="Get Memoir Unlimited" 
                   buttonStyles={styles.blueButton}
                   buttonTextStyles={styles.buttonText}
                   onPress={() => navigation.navigate('ProMemberScreen')}
                 /> */}
+              <AppButton 
+                  title="Send us beta feedback" 
+                  buttonStyles={styles.blueButton}
+                  buttonTextStyles={styles.buttonText}
+                  onPress={() => alert("beta feedback window opens")}
+                />
             </View>
             
           </View>

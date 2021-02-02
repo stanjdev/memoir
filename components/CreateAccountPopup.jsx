@@ -18,7 +18,7 @@ const provider = new firebase.auth.FacebookAuthProvider();
 import * as Facebook from 'expo-facebook';
 import * as AppleAuthentication from 'expo-apple-authentication';
 
-
+console.log(width, height)
 
 export default function CreateAccountPopup() {
   const navigation = useNavigation();
@@ -189,9 +189,9 @@ useEffect(() => {
   return (
     <Animatable.View style={styles.footerIntro} animation="fadeInUpBig">
       <View>
-        <Text style={{fontSize: 25, color: "#535353", textAlign: "center", width: 290, fontFamily: "Assistant-SemiBold", }}>Create a Free Account to View Your Favorites, Track Progress, and more.</Text>
+        <Text style={{fontSize: height < 600 ? 20 : height < 700 ? 22 : 25, color: "#535353", textAlign: "center", width: 290, fontFamily: "Assistant-SemiBold", }}>Create a Free Account to View Your Favorites, Track Progress, and more.</Text>
       </View>
-      <View style={{ height: 250, justifyContent: "space-between"}}>
+      <View style={{ height: 250, justifyContent:  height < 600 ? "space-around" : "space-between"}}>
         <AppButton 
           title="Sign in with Facebook" 
           buttonStyles={styles.facebookButton} 
@@ -236,7 +236,7 @@ useEffect(() => {
       <View style={{alignItems: "center"}}>
         <Text style={{fontSize: 15, color: "#535353", fontFamily: "Assistant-SemiBold"}}>Already Have an Account?</Text>
         <TouchableOpacity onPress={() => navigation.navigate('SignInScreen')}>
-          <Text style={{fontSize: 20, color: "#535353", fontFamily: "Assistant-SemiBold", padding: 10, paddingLeft: 20, paddingRight: 20, }}>Log-In</Text>
+          <Text style={{fontSize: height < 600 ? 18 : 20, color: "#535353", fontFamily: "Assistant-SemiBold", padding: 10, paddingLeft: 20, paddingRight: 20, }}>Log-In</Text>
         </TouchableOpacity>
 
         {/* <Button style={{fontSize: 20, color: "#535353", fontFamily: "Assistant-SemiBold"}} title="Log-In" onPress={() => navigation.navigate('SignInScreen')}></Button> */}
@@ -250,7 +250,6 @@ useEffect(() => {
 
 
 const styles = StyleSheet.create({
-
   footerIntro: {
     // borderWidth: 1,
     width: width,
@@ -264,13 +263,13 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     paddingVertical: 40,
     paddingHorizontal: 45,
-    justifyContent: "space-evenly",
+    justifyContent: height < 600 ? "space-between" : "space-evenly",
     alignItems: "center"
   },
   facebookButton: {
     backgroundColor: "#3681C7",
-    height: 63,
-    width: 327,
+    height: height < 600 ? 55 : height < 700 ? 59 : 63,
+    width: width < 350 ? width * 0.85 : 327,
     borderRadius: 7,
     alignItems: "center",
     justifyContent: "center",
@@ -279,21 +278,21 @@ const styles = StyleSheet.create({
     color: "#fff",
     flex: 1,
     textAlign: "center",
-    fontSize: 23,
+    fontSize: height < 600 ? 19 : height < 700 ? 21 : 23,
     fontFamily: "Assistant-SemiBold"
   },
   appleButton: {
     backgroundColor: "#1E1E1E",
-    height: 63,
-    width: 327,
+    height: height < 600 ? 55 : height < 700 ? 59 : 63,
+    width: width < 350 ? width * 0.85 : 327,
     borderRadius: 7,
     alignItems: "center",
     justifyContent: "center",
   },
   emailButton: {
     backgroundColor: "#FFF",
-    height: 63,
-    width: 327,
+    height: height < 600 ? 55 : height < 700 ? 59 : 63,
+    width: width < 350 ? width * 0.85 : 327,
     borderWidth: 2,
     borderRadius: 7,
     alignItems: "center",
@@ -303,7 +302,7 @@ const styles = StyleSheet.create({
     color: "#1E1E1E",
     flex: 1,
     textAlign: "center",
-    fontSize: 23,
-    fontFamily: "Assistant-SemiBold"
+    fontSize: height < 600 ? 19 : height < 700 ? 21 : 23,
+    fontFamily: "Assistant-SemiBold",
   }
 });

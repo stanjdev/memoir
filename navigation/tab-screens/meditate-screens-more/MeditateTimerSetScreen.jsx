@@ -197,9 +197,9 @@ export default function MeditateTimerSetScreen({ navigation, route }) {
 
             <View style={{width: width * 0.63, height: height * 0.45, justifyContent: "space-around", alignItems: "center", }}>
               <View style={{alignItems: "center"}}>
-                <Image source={require('../../../assets/screen-icons/clock.png')} style={{height: 37, }} resizeMode="contain"/>
-                <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 20, textAlign: "center", color: "#535353"}}>Session Duration:</Text>
-                <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 25, textAlign: "center", color: "#535353"}}>{minutes} {minutes === 1 ? "Minute" : "Minutes" }</Text>
+                <Image source={require('../../../assets/screen-icons/clock.png')} style={{height: height < 600 ? 30 : 37 }} resizeMode="contain"/>
+                <Text style={{fontFamily: "Assistant-SemiBold", fontSize: height < 600 ? 18 : 20, textAlign: "center", color: "#535353"}}>Session Duration:</Text>
+                <Text style={{fontFamily: "Assistant-SemiBold", fontSize: height < 600 ? 20 : 25, textAlign: "center", color: "#535353"}}>{minutes} {minutes === 1 ? "Minute" : "Minutes" }</Text>
                 
                 {/* <Picker
                   style={{borderWidth: 1, width: width * 0.9, height: height * 0.2}}
@@ -243,9 +243,9 @@ export default function MeditateTimerSetScreen({ navigation, route }) {
               </View>
               
               <View style={{alignItems: "center"}}>
-                <Image source={require('../../../assets/screen-icons/bell.png')} style={{height: 32, }} resizeMode="contain"/>
-                <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 20, textAlign: "center", color: "#535353"}}>Bell Sound Every:</Text>
-                <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 25, textAlign: "center", color: "#535353"}}>{bellIntervDisplay}</Text>
+                <Image source={require('../../../assets/screen-icons/bell.png')} style={{height: height < 600 ? 26 : 32 }} resizeMode="contain"/>
+                <Text style={{fontFamily: "Assistant-SemiBold", fontSize: height < 600 ? 18 : 20, textAlign: "center", color: "#535353"}}>Bell Sound Every:</Text>
+                <Text style={{fontFamily: "Assistant-SemiBold", fontSize: height < 600 ? 20 : 25, textAlign: "center", color: "#535353"}}>{bellIntervDisplay}</Text>
                 
 
                 <ScrollView 
