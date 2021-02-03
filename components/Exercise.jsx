@@ -127,11 +127,10 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
     }
 
     // else, if it wasn't cached, download a cached copy
-    console.log(`downloading ${fileType} to cache!`)
-
     const folder = fileType == "image" || fileType == "gif" ? "exercise-images" : fileType == "video" ? "videos" : null;
     const ref = storage.ref(`/${folder}/${asset}`);
     const uri = await ref.getDownloadURL();
+    console.log(`downloading ${fileType} to cache! ${uri}`);
 
     const newAsset = await FileSystem.downloadAsync(uri, path);
     if (fileType == "image")      setCachedImg( {uri: newAsset.uri} );

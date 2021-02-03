@@ -249,7 +249,7 @@ export default function BreatheScreen({navigation}) {
     const randIdx = Math.floor(Math.random() * (array.length - 1));
     let today = new Date().getDay();
     const chosenExNum = array[today];
-    console.log("chosenDailyExNum:", chosenExNum);
+    // console.log("chosenDailyExNum:", chosenExNum);
 
     return <Exercise 
               id={Exercises[chosenExNum].id} 
@@ -281,7 +281,6 @@ export default function BreatheScreen({navigation}) {
       {
         isReady ? 
         <View>
-          
 
           <View style={{marginTop: 50, justifyContent: "center", alignItems: "center"}}>
             {/* <Exercise uniqueSize="topBanner" navigation={navigation} image={Exercises[7].image} videoFile={Exercises[7].videoFile} modalIcon={Exercises[7].modalIcon} id={Exercises[7].id} autoCountDown={"2m"}/>  */}

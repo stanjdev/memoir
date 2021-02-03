@@ -132,7 +132,7 @@ const SettingOption = ({ text, action }) => (
 
 const styles = StyleSheet.create({
   item: {
-    width: 290,
+    width: width < 330 ? width * 0.8 : 290,
     height: Math.min(height * 0.09, 61),
     // height: height * 0.05,
     flexDirection: "row",

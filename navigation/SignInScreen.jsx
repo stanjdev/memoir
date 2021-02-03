@@ -174,8 +174,8 @@ export default function SignInScreen ({navigation}) {
           
           <View style={{ height: Math.max(height * 0.55, 450), marginTop: 0, alignItems: "center", justifyContent: "space-evenly"}}>
             <Image source={require("../assets/memoir-logo1.png")} resizeMode="contain" style={{height: 20}}/>
-            <View style={{ width: 323 }}>
-              <Text style={{fontSize: 26, color: "#717171", textAlign: "center", fontFamily: "Assistant-SemiBold", }}>Welcome Back! Enter Your Email &amp; Password to Log In</Text>
+            <View style={{ width: width < 330 ? width * 0.8 : 323 }}>
+              <Text style={{fontSize: width < 330 ? 20 : 26, color: "#717171", textAlign: "center", fontFamily: "Assistant-SemiBold", }}>Welcome Back! Enter Your Email &amp; Password to Log In</Text>
             </View>
 
             <View style={{height: 300, justifyContent: "space-between", alignItems: "center",}}>
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between", 
     alignItems: "center",
     height: 57.5,
-    width: 313,
+    width: width < 330 ? width * 0.8 : 313,
     borderRadius: 10,
     paddingRight: 15,
     borderColor: "#BDBDBD",
@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
   blueButton: {
     backgroundColor: "#3681C7",
     height: 62,
-    width: 313,
+    width: width < 330 ? width * 0.8 : 313,
     borderRadius: 24,
     alignItems: "center",
     justifyContent: "center",
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#3681C7",
     opacity: 0.5,
     height: 62,
-    width: 313,
+    width: width < 330 ? width * 0.8 : 313,
     borderRadius: 24,
     alignItems: "center",
     justifyContent: "center",

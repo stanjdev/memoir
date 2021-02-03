@@ -193,7 +193,7 @@ export default function SignUpScreen ({navigation}) {
           <View style={{ height: Math.max(height * 0.55, 450), marginTop: 0, alignItems: "center", justifyContent: "space-evenly", marginTop: 12}}>
             <Image source={require("../assets/memoir-logo1.png")} resizeMode="contain" style={{height: 20, width: 150, }}/>
             <View>
-              <Text style={{fontSize: 26, color: "#717171", textAlign: "center", fontFamily: "Assistant-SemiBold", width: 247}}>Enter Your Name and Email to Get Started</Text>
+              <Text style={{fontSize: width < 330 ? 20 : 26, color: "#717171", textAlign: "center", fontFamily: "Assistant-SemiBold", width: 247}}>Enter Your Name and Email to Get Started</Text>
             </View>
             <View style={{ height: 300, justifyContent: "space-around", alignItems: "center", }}>
               <View>
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // backgroundColor: "#EAEAEA",
     height: 57.5,
-    width: 313,
+    width: width < 330 ? width * 0.8 : 313,
     borderRadius: 10,
     paddingRight: 15,
     borderColor: "#BDBDBD",
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
   blueButton: {
     backgroundColor: "#3681C7",
     height: 62,
-    width: 313,
+    width: width < 330 ? width * 0.8 : 313,
     borderRadius: 24,
     alignItems: "center",
     justifyContent: "center",
@@ -352,7 +352,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#3681C7",
     opacity: 0.5,
     height: 62,
-    width: 313,
+    width: width < 330 ? width * 0.8 : 313,
     borderRadius: 24,
     alignItems: "center",
     justifyContent: "center",

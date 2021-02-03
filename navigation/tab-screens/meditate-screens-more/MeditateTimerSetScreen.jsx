@@ -15,7 +15,7 @@ const { width, height } = Dimensions.get('window');
 
 import { LinearGradient } from 'expo-linear-gradient';
 
-
+// import HorizontalPicker from 'react-native-horizontal-picker';
 
 import firebase from 'firebase';
 
@@ -40,7 +40,12 @@ export default function MeditateTimerSetScreen({ navigation, route }) {
   const renderMinsPickerItems = () => {
     let items = [];
     for (let i = 1; i <= 60; i++) {
-      items.push(<Image key={i} source={require('../../../assets/meditate-timer-set/bar-1.png')} resizeMode="contain" style={{margin: 3, height: 17}} />)
+      // if (i == 0 || i % 5 == 0) {
+      //   // items.push(<Text key={i}>{i}</Text>)
+      // } else {
+      //   items.push(<Image key={i} source={require('../../../assets/meditate-timer-set/bar-1.png')} resizeMode="contain" style={{margin: 3, height: 18}} />)
+      // }
+      items.push(<Image key={i} source={require('../../../assets/meditate-timer-set/bar-1.png')} resizeMode="contain" style={{margin: 3, height: 18}} />)
       // items.push(<Text key={i}> | </Text>)
     }
     return items;
@@ -214,7 +219,7 @@ export default function MeditateTimerSetScreen({ navigation, route }) {
 
                 {/* <LinearGradient 
                   colors={['#fff', 'transparent']}
-                  start={[0.2, 0.9]}
+                  start={[0.1, 0.4]}
                   // end={[0.1, 1]}
                   // locations={[0, 1]}
                   style={{
@@ -227,12 +232,15 @@ export default function MeditateTimerSetScreen({ navigation, route }) {
                   }}
                 /> */}
 
+
                 <ScrollView 
                   horizontal={true} 
                   showsHorizontalScrollIndicator={false}
                   onScroll={(e) => onChange(Math.floor(1 + e.nativeEvent.contentOffset.x / (e.nativeEvent.contentSize.width - e.nativeEvent.layoutMeasurement.width) * 59)) }
+                  // onScroll={(e) => console.log(Math.floor(1 + e.nativeEvent.contentOffset.x / (e.nativeEvent.contentSize.width - e.nativeEvent.layoutMeasurement.width) * 59)) }
                   /* OG 1.00 = e.nativeEvent.contentOffset.x / (e.nativeEvent.contentSize.width - e.nativeEvent.layoutMeasurement.width) */
                   scrollEventThrottle={16}
+                  contentOffset={{ x: 100, y: 0 }}
                   style={{ width: 200, maxHeight: 50 }} 
                 >
                   <View style={{flexDirection: "row", alignItems: "center",}}>

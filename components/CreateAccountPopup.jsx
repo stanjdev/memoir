@@ -60,7 +60,7 @@ export default function CreateAccountPopup() {
       }
 
     } else {
-      alert(type);
+      // alert(type);
     }
   }
 

@@ -16,7 +16,7 @@ export default function SplashScreen ({ route, navigation }) {
   useEffect(() => {
     let timeout = setTimeout(() => {
       navTo();
-    }, 1500);
+    }, 3000);
 
     return () => clearTimeout(timeout);
   }, [isFocused])
