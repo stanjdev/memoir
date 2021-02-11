@@ -17,6 +17,7 @@ import ProfileScreen from './tab-screens/ProfileScreen';
 import ProMemberScreen from './tab-screens/ProMemberScreen';
 import SettingsScreen from './tab-screens/profile-screens-more/SettingsScreen';
 import AccountInfoScreen from './tab-screens/profile-screens-more/setting-options/AccountInfoScreen';
+import ChangePasswordScreen from './tab-screens/profile-screens-more/setting-options/ChangePasswordScreen';
 
 // Custom Tab Icons
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
@@ -159,6 +160,7 @@ function ProfileStackScreen() {
       <ProfileStack.Screen name="ProMemberScreen" component={ProMemberScreen} options={{headerShown: false, ...TransitionPresets.ScaleFromCenterAndroid}}/>
       <ProfileStack.Screen name="SettingsScreen" component={SettingsScreen} options={{headerShown: false}}/>
       <ProfileStack.Screen name="AccountInfoScreen" component={AccountInfoScreen} options={{headerShown: false}}/>
+      <ProfileStack.Screen name="ChangePasswordScreen" component={ChangePasswordScreen} options={{headerShown: false}}/>
     </ProfileStack.Navigator>
   )
 }

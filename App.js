@@ -8,7 +8,6 @@ import Navigation from './navigation';
 import * as SplashScreen from 'expo-splash-screen';
 
 export default function App() {
-
   // useEffect( async () => {
   //   try {
   //     await SplashScreen.preventAutoHideAsync();

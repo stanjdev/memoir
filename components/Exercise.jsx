@@ -130,9 +130,11 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
     const folder = fileType == "image" || fileType == "gif" ? "exercise-images" : fileType == "video" ? "videos" : null;
     const ref = storage.ref(`/${folder}/${asset}`);
     const uri = await ref.getDownloadURL();
-    console.log(`downloading ${fileType} to cache! ${uri}`);
-
+    // console.log(`downloading ${fileType} to cache! uri: ${uri}`);
+    
     const newAsset = await FileSystem.downloadAsync(uri, path);
+    console.log(`Finished downloading ${fileType} to cache! newAsset: ${newAsset.uri}`);
+    // alert(`Finished downloading ${fileType} to cache! newAsset: ${newAsset.uri}`);
     if (fileType == "image")      setCachedImg( {uri: newAsset.uri} );
     else if (fileType == "video") setCachedVideo( {uri: newAsset.uri} );
     else return;

@@ -11,6 +11,9 @@ const { width, height } = Dimensions.get('window');
 // const bgImage = require('../../assets/splash/memoir-splash-thin-4x.png');
 import ProfileStatsBlock from '../../components/ProfileStatsBlock';
 
+import Modal from 'react-native-modal';
+import * as WebBrowser from 'expo-web-browser';
+
 import firebase from 'firebase';
 
 
@@ -97,17 +100,16 @@ export default function ProfileScreen({navigation}) {
   //   // fakeAddProgressData();
   // }, [])
 
+  // const fakeAddProgressData = async () => {
+  //   const progressPushRef = await firebase.database().ref(currUser.uid).child('progress');
 
-  const fakeAddProgressData = async () => {
-    const progressPushRef = await firebase.database().ref(currUser.uid).child('progress');
-
-    progressPushRef.set({
-      practiceTime: 2.7,
-      sessionsCompleted: 21,
-      currentStreak: 5,
-      bestStreak: 7
-    })
-  }
+  //   progressPushRef.set({
+  //     practiceTime: 2.7,
+  //     sessionsCompleted: 21,
+  //     currentStreak: 5,
+  //     bestStreak: 7
+  //   })
+  // }
 
 
 
@@ -135,12 +137,11 @@ export default function ProfileScreen({navigation}) {
 
 
 
-  // CONGRATULATIONS SPRITE MESSAGES!
+  // Congratulation Alerts 1
   const [dismissedTimeGoal, setDismissedTimeGoal] = useState(false);
   const [dismissedSessions, setDismissedSessions] = useState(false);
   const [dismissedCurrStreak, setDismissedCurrStreak] = useState(false);
   const bestStreakSoFar = useRef();
-  
   
   const timeConditions = practiceTime < 1800 ? 1800 : 
   practiceTime >= 1800 && practiceTime < 7200 ? 7200 :
@@ -160,39 +161,82 @@ export default function ProfileScreen({navigation}) {
 
 
     if (isFocused && practiceTime >= timeGoal.current && !dismissedTimeGoal && Math.trunc(timeGoal.current) !== 0) {
-      Alert.alert("Congrats!", `You've practiced for ${practiceTime < 3600 ? Math.trunc(practiceTime / 60) : Math.trunc(practiceTime / 60 / 60)} ${practiceTime < 3600 ? "minutes" : "hours"}!`, [
-        {text: "Awesome!", onPress: () => {
-          setDismissedTimeGoal(true);
-          setTimeout(() => {
-            timeGoal.current = timeConditions;
-            setDismissedTimeGoal(false);
-          }, 1000);
-        }}
-      ]);
+      setTimeout(() => {
+        setTimeGoalVisible(true);
+      }, 1500);
+      // Alert.alert("Congrats!", `You've practiced for ${practiceTime < 3600 ? Math.trunc(practiceTime / 60) : Math.trunc(practiceTime / 60 / 60)} ${practiceTime < 3600 ? "minutes" : "hours"}!`, [
+      //   {text: "Awesome!", onPress: () => {
+      //     setDismissedTimeGoal(true);
+      //     setTimeout(() => {
+      //       timeGoal.current = timeConditions;
+      //       setDismissedTimeGoal(false);
+      //     }, 1000);
+      //   }}
+      // ]);
     }
     console.log(practiceTime, fiveHrGoal.current, timeGoal.current);
 
 
     if (isFocused && sessionsCompleted % 10 == 0 && !dismissedSessions) {
-      Alert.alert("Congrats!", `You've completed ${sessionsCompleted} sessions!`, [
-        {text: "Awesome!", onPress: () => setDismissedSessions(true)}
-      ]);
+      setTimeout(() => {
+        setSessionsGoalVisible(true);
+      }, 1500);
+      // Alert.alert("Congrats!", `You've completed ${sessionsCompleted} sessions!`, [
+      //   {text: "Awesome!", onPress: () => setDismissedSessions(true)}
+      // ]);
     } 
 
     if (isFocused && currentStreak % 10 == 0 && !dismissedCurrStreak) {
-      Alert.alert("Congrats!", `You've hit a ${currentStreak} day streak!`, [
-        {text: "Awesome!", onPress: () => setDismissedCurrStreak(true)}
-      ]);
+      setTimeout(() => {
+        setCurrStreakGoalVisible(true);
+      }, 1500);
+      // Alert.alert("Congrats!", `You've hit a ${currentStreak} day streak!`, [
+      //   {text: "Awesome!", onPress: () => setDismissedCurrStreak(true)}
+      // ]);
     }
 
     if (isFocused && bestStreakSoFar.current && bestStreak !== bestStreakSoFar.current) {
-      Alert.alert("Congrats!", `New Best Streak! ${bestStreak} days!`, [
-        {text: "Awesome!"}
-      ]);
+      setTimeout(() => {
+        setBestStreakGoalVisible(true);
+      }, 1500);
+      // Alert.alert("Congrats!", `New Best Streak! ${bestStreak} days!`, [
+      //   {text: "Awesome!"}
+      // ]);
     }
     bestStreakSoFar.current = bestStreak;
 
   }, [isFocused])
+
+
+  // Congratulations Alerts 2 - CustomAlerts
+  const [timeGoalVisible, setTimeGoalVisible] = useState(false);
+  const dismissTimeGoalAlert = () => {
+    setTimeGoalVisible(false);
+    setDismissedTimeGoal(true);
+    setTimeout(() => {
+      timeGoal.current = timeConditions;
+      setDismissedTimeGoal(false);
+    }, 1000);
+  };
+
+  const [sessionsGoalVisible, setSessionsGoalVisible] = useState(false);
+  const dismissSessionsGoalAlert = () => {
+    setSessionsGoalVisible(false);
+    setDismissedSessions(true);
+  };
+
+  const [currStreakGoalVisible, setCurrStreakGoalVisible] = useState(false);
+  const dismissCurrStreakGoalVisible = () => {
+    setCurrStreakGoalVisible(false);
+    setDismissedCurrStreak(true);
+  };
+
+  const [bestStreakGoalVisible, setBestStreakGoalVisible] = useState(false);
+  const dismissBestStreakGoalVisible = () => {
+    setBestStreakGoalVisible(false);
+  };
+
+
 
 
 
@@ -245,6 +289,36 @@ export default function ProfileScreen({navigation}) {
             </View>
             } */}
 
+
+            <CustomAlert 
+              header="Great Job!"
+              message={`${practiceTime < 3600 ? Math.trunc(practiceTime / 60) : Math.trunc(practiceTime / 60 / 60)} Minutes of Practice Time`}
+              isVisible={timeGoalVisible}
+              onPress={dismissTimeGoalAlert}
+              />
+
+            <CustomAlert 
+              header="Well Done!"
+              message={`${sessionsCompleted} Total Sessions`}
+              isVisible={sessionsGoalVisible}
+              onPress={dismissSessionsGoalAlert}
+            />
+
+            <CustomAlert 
+              header="Nice Streak!"
+              message={`a ${currentStreak}-Day Streak`}
+              isVisible={currStreakGoalVisible}
+              onPress={dismissCurrStreakGoalVisible}
+            />
+
+            <CustomAlert 
+              header="New Best Streak! "
+              message={`${bestStreak} Days!`}
+              isVisible={bestStreakGoalVisible}
+              onPress={dismissBestStreakGoalVisible}
+            />
+
+
             <View style={{flexDirection:"row", flexWrap: "wrap", justifyContent: "center"}}>
               {renderPracticeTime()}
               {renderMovingSessionsGoal(sessionsCompleted)}
@@ -270,12 +344,27 @@ export default function ProfileScreen({navigation}) {
                   buttonTextStyles={styles.buttonText}
                   onPress={() => navigation.navigate('ProMemberScreen')}
                 /> */}
-              <AppButton 
-                  title="Send us beta feedback" 
-                  buttonStyles={styles.blueButton}
-                  buttonTextStyles={styles.buttonText}
-                  onPress={() => alert("beta feedback window opens")}
-                />
+
+              <View style={styles.buttonCard}>
+                <Text style={{width: 230, textAlign: "center", fontFamily: "Assistant-Regular", fontSize: 17, lineHeight: 19.96}}>We're currently in beta. Send us a suggestion or report a bug.</Text>
+                <AppButton 
+                    title="Send Us Feedback" 
+                    buttonStyles={styles.blueButton}
+                    buttonTextStyles={styles.buttonText}
+                    onPress={() => WebBrowser.openBrowserAsync("https://memoirapp.squarespace.com/contact")}
+                  />
+              </View>
+
+              {/* <View style={styles.buttonCard}>
+                <Text style={{width: 230, textAlign: "center", fontFamily: "Assistant-Regular", fontSize: 17, lineHeight: 19.96}}>Are you enjoying Memoir? Leave us a review in the App Store.</Text>
+                <AppButton 
+                    title="Write a Review" 
+                    buttonStyles={styles.blueButton}
+                    buttonTextStyles={styles.buttonText}
+                    onPress={() => alert("Opens iOS App Store")}
+                  />
+              </View> */}
+
             </View>
             
           </View>
@@ -296,15 +385,12 @@ export default function ProfileScreen({navigation}) {
 const styles = StyleSheet.create({
   blueButton: {
     backgroundColor: "#3681C7",
-    height: Math.min(height * 0.07, 58),
-    width: 283,
-    borderRadius: 15,
+    height: Math.min(height * 0.07, 44),
+    width: 225,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-    shadowRadius: 7,
-    shadowColor: "black",
-    shadowOpacity: 0.2,
-    shadowOffset: {width: 3, height: 3}
+
   },
   buttonText: {    
     color: "#fff",
@@ -312,5 +398,50 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 21,
     fontFamily: "Assistant-SemiBold"
+  },
+  buttonCard: {
+    // borderWidth: 1,
+    backgroundColor: "white",
+    height: Math.max(height * 0.2, 134),
+    width: 293,
+    borderRadius: 15,
+    shadowRadius: 4,
+    shadowColor: "black",
+    shadowOpacity: 0.3,
+    shadowOffset: {width: 2, height: 3},
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    marginTop: -20
   }
 })
+
+
+
+export function CustomAlert({header, message, isVisible, onPress}) {
+  return(
+    <Modal 
+      isVisible={isVisible}
+      deviceHeight={width}
+      deviceHeight={height}
+      style={{justifyContent: "center", alignItems: "center"}}
+      backdropOpacity={0.6}
+      animationInTiming={600}
+      animationOutTiming={600}
+      animationIn={"fadeInUp"}
+      animationOut={"fadeOutDown"}
+    >
+      <View style={{height: 208, width: 317, borderRadius: 15, backgroundColor: "white", justifyContent:"space-evenly", alignItems: "center"}}>
+        <View style={{justifyContent:"center", alignItems: "center"}}>
+          <Text style={{color: "#3681C7", fontSize: 26, fontFamily: "Assistant-SemiBold"}}>{header}</Text>
+          <Text style={{fontSize: 17, textAlign: "center", fontFamily: "Assistant-Regular", width: "70%"}}>You've accomplished{"\n"}{message}</Text>
+        </View>
+        <AppButton 
+          title="Continue" 
+          buttonStyles={styles.blueButton}
+          buttonTextStyles={styles.buttonText}
+          onPress={onPress}
+        />
+      </View>
+    </Modal>
+  )
+};

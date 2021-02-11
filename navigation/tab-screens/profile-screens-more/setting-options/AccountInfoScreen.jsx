@@ -168,7 +168,7 @@ export default function AccountInfoScreen ({navigation}) {
             <View style={{height: 400, justifyContent: "space-around", alignItems: "center", }}>
 
               <View>
-                <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>New First Name</Text>
+                <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>First Name</Text>
                 <View style={styles.inputsWhole}>
                   <TextInput 
                     placeholder="Your First Name"

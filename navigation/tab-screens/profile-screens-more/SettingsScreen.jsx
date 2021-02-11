@@ -86,23 +86,25 @@ export default function SettingsScreen({ navigation }) {
               {userToken ? 
               <View>
                 <SettingOption text={"Account Info"} action={() => navigation.navigate("AccountInfoScreen")}/>
-                <SettingOption text={"Notifications"} action={() => console.log("nothing yet!")}/>
+                {/* <SettingOption text={"Notifications"} action={() => console.log("nothing yet!")}/> */}
                 {/* <SettingOption text={"Billing Info"} action={() => console.log("nothing yet!")}/> */}
                 {/* <SettingOption text={"Subscriptions"} action={() => console.log("nothing yet!")}/> */}
                 {/* <SettingOption text={"Restore Purchase"} action={() => console.log("nothing yet!")}/> */}
-                <SettingOption text={"Support"} action={() => console.log("nothing yet!")}/>
-                <SettingOption text={"Change Password"} action={() => resetPassword(currUserEmail)}/>
-                <SettingOption text={"Terms & Conditions"} action={() => console.log("nothing yet!")}/>
-                <SettingOption text={"Privacy Policy"} action={() => WebBrowser.openBrowserAsync("https://www.privacypolicygenerator.info/live.php?token=JVOQUQnNzluF7M5IuHUKPcBXSlNLZBgX")}/>
+                {/* <SettingOption text={"Change Password"} action={() => resetPassword(currUserEmail)}/> */}
+                <SettingOption text={"Change Password"} action={() => navigation.navigate("ChangePasswordScreen")}/>
+                <SettingOption text={"Support"} action={() => WebBrowser.openBrowserAsync("https://memoirapp.squarespace.com/contact")}/>
+                <SettingOption text={"Terms & Conditions"} action={() => WebBrowser.openBrowserAsync("https://memoirapp.squarespace.com/terms-of-service")}/>
+                <SettingOption text={"Privacy Policy"} action={() => WebBrowser.openBrowserAsync("https://memoirapp.squarespace.com/privacy-policy")}/>
+                {/* <SettingOption text={"Privacy Policy"} action={() => WebBrowser.openBrowserAsync("https://www.privacypolicygenerator.info/live.php?token=JVOQUQnNzluF7M5IuHUKPcBXSlNLZBgX")}/> */}
                 <SettingOption text={"Log Out"} action={logOutAlert}/>
               </View>
               : 
               <View>
-                <SettingOption text={"Create Account"} action={() => navigation.goBack()}/>
-                <SettingOption text={"Notifications"} action={() => console.log("nothing yet!")}/>
-                <SettingOption text={"Support"} action={() => console.log("nothing yet!")}/>
-                <SettingOption text={"Terms & Conditions"} action={() => console.log("nothing yet!")}/>
-                <SettingOption text={"Privacy Policy"} action={() => WebBrowser.openBrowserAsync("https://www.privacypolicygenerator.info/live.php?token=JVOQUQnNzluF7M5IuHUKPcBXSlNLZBgX")}/>
+                {/* <SettingOption text={"Notifications"} action={() => console.log("nothing yet!")}/> */}
+                <SettingOption text={"Support"} action={() => WebBrowser.openBrowserAsync("https://memoirapp.squarespace.com/contact")}/>
+                <SettingOption text={"Terms & Conditions"} action={() => WebBrowser.openBrowserAsync("https://memoirapp.squarespace.com/terms-of-service")}/>
+                <SettingOption text={"Privacy Policy"} action={() => WebBrowser.openBrowserAsync("https://memoirapp.squarespace.com/privacy-policy")}/>
+                <SettingOption text={"Log In"} action={() => navigation.goBack()}/>
               </View>
               }
              
