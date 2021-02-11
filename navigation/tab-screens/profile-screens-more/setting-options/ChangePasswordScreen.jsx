@@ -1,14 +1,11 @@
 import React from 'react';
 import { Text, View, StyleSheet, StatusBar, Image, Dimensions, TouchableOpacity } from 'react-native';
-
+import { useFonts } from 'expo-font';
 import AppButton from '../../../../components/AppButton';
 import { AuthContext } from '../../../../components/context';
-import { useFonts } from 'expo-font';
-
 const { width, height } = Dimensions.get('window');
 
 import firebase from 'firebase';
-
 
 export default function ChangePasswordScreen ({navigation}) {
   let [fontsLoaded] = useFonts({

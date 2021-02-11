@@ -489,11 +489,6 @@ export default function Navigation({navigation}) {
   
 
 
-
-
-
-
-
   if (loginState.isLoading) {
     return (
       <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
@@ -501,9 +496,6 @@ export default function Navigation({navigation}) {
       </View>
     )
   }
-
-
-
 
 
 
@@ -520,7 +512,6 @@ export default function Navigation({navigation}) {
 
 
 
-
 import BottomTabNavigator from './BottomTabNavigator';
 import ProfileScreen from './tab-screens/ProfileScreen';
 import SplashScreen from './SplashScreen';
@@ -531,9 +522,7 @@ import UserWelcomeScreen from './UserWelcomeScreen';
 import MeditateExerciseScreen from '../navigation/tab-screens/meditate-screens-more/MeditateExerciseScreen';
 import ExerciseVideo from '../components/ExerciseVideo';
 
-
 const Stack = createStackNavigator();
-
 
 function RootNavigator() {
   return (
@@ -549,4 +538,4 @@ function RootNavigator() {
       <Stack.Screen options={{headerShown:false, ...TransitionPresets.ScaleFromCenterAndroid }} name="Profile" component={ProfileScreen} />
     </Stack.Navigator>
   )
-}
+};

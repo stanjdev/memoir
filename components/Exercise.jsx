@@ -1,21 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Text, View, Image, Dimensions, StyleSheet } from 'react-native';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { AuthContext } from '../components/context';
-
 import { useFonts } from 'expo-font';
-
 import shorthash from 'shorthash';
 import * as FileSystem from 'expo-file-system';
-
-
 import firebase from 'firebase';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, title, subTitle, navigation, onPress, videoFile, modalIcon, iconHeight, id, autoCountDown, customWidth, customVolume, isLiked, noFinishBell, notSignedIn }) {
-  
   const { userToken, userFavs } = useContext(AuthContext);
 
   const [liked, setLiked] = useState(false);
@@ -26,7 +19,6 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
   // console.log("is Liked:", isLiked)
   // console.log("user Favs:", userFavs)
 
-  
   let favIds = [];
   const updateLiked = () => {
     if (currUser) {
@@ -52,19 +44,11 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
     // setLiked(favIds.includes(id));
     
     // console.log(id)
-    // console.log("rerender!")
 
     // console.log(`fav ids: ${favIds} includes id: ${id} = ${favIds.includes(id)} from Exercise.jsx!`);
 
     // return () => favRef.off()
   })
-
-  // useEffect(() => {
-  //   toggleLikedIcon(favIds);
-  // }, [updateLiked])
-
-
-
 
   const [imgUrl, setImgUrl] = useState();
   const [videoUrl, setVideoUrl] = useState();
@@ -103,7 +87,6 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
   const [cachedImg, setCachedImg] = useState();
   const [cachedVideo, setCachedVideo] = useState();
 
-
   const cacheAsset = async asset => {
     // console.log(asset)
     const fileType = asset && await asset.match(/[^.]+$/g)[0] === "png" ? "image" : 
@@ -140,8 +123,6 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
     else return;
   }
 
-
-
   useEffect(() => {
     // checkAsync();
     // importData();
@@ -149,7 +130,7 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
     
     cacheAsset(image);
     cacheAsset(videoFile);
-    
+  
     // getImg();
     // getVid();
     // console.log(imgUrl);
@@ -157,12 +138,6 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
 
     // console.log(videoName)
   }, [])
-
-
-
-
-
-
 
 
   async function checkAsync () {
@@ -196,7 +171,6 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
       Alert.alert("Couldn't load data", error);
     }
   };
-
 
   const currentHour = new Date().getHours();
 
@@ -242,7 +216,7 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
       <Text style={styles.exerciseSubTitleFont}>{subTitle}</Text>
     </View>
   )
-}
+};
 
 
 const { width, height } = Dimensions.get('window');
@@ -251,10 +225,8 @@ const styles = StyleSheet.create({
   imageSmall: {
     width: width * 0.44,
     height: height * 0.35,
-    // borderWidth: 1, 
   },
   gifSmall: {
-    // borderWidth: 1, 
     width: width * 0.43,
     height: height * 0.31,
     marginBottom: 25,
@@ -284,4 +256,3 @@ const styles = StyleSheet.create({
     right: "18%"
   }
 }) 
-

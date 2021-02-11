@@ -1,17 +1,11 @@
 import * as React from 'react';
-import { Text, View, StatusBar, Button, Alert, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
-import AppButton from '../../components/AppButton';
+import { Text, View, StatusBar, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import { useFonts } from 'expo-font';
 import { AuthContext } from '../../components/context';
 import { useIsFocused } from '@react-navigation/native';
 import CreateAccountPopup from '../../components/CreateAccountPopup';
 
-import { useFonts } from 'expo-font';
-
 const { width, height } = Dimensions.get('window');
-// const bgImage = require('../../assets/splash/memoir-splash-thin-4x.png');
-import ProfileStatsBlock from '../../components/ProfileStatsBlock';
-
- 
 
 export default function ProMemberScreen({navigation}) {
   const isFocused = useIsFocused();
@@ -25,8 +19,6 @@ export default function ProMemberScreen({navigation}) {
       }, 500);
     }
   }, [isFocused])
-
-
 
   let [fontsLoaded] = useFonts({
     'Assistant': require('../../assets/fonts/Assistant/Assistant-VariableFont_wght.ttf'),
@@ -90,7 +82,7 @@ export default function ProMemberScreen({navigation}) {
     
     </ImageBackground>
   )
-}
+};
 
 
 const CheckItem = ({ text }) => (
@@ -98,8 +90,7 @@ const CheckItem = ({ text }) => (
     <Image source={require('../../assets/screen-icons/checkmark.png')} style={{height: 9.5, width: 12.46, marginRight: 10}} resizeMode="contain"/>
     <Text style={{color: "#fff", fontSize: 14.5, fontFamily: "Assistant-SemiBold"}}>{text}</Text>
   </View>
-)
-
+);
 
 
 const styles = StyleSheet.create({
@@ -123,4 +114,4 @@ const styles = StyleSheet.create({
     fontSize: 21,
     fontFamily: "Assistant-SemiBold"
   }
-})
+});

@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Image, TouchableOpacity, Dimensions, Animated } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, Dimensions } from 'react-native';
 import { useFonts } from 'expo-font';
 import { useIsFocused } from '@react-navigation/native'
-
-const { height, width } = Dimensions.get("window");
-
-import { ProgressBar, Colors } from 'react-native-paper';
+import { ProgressBar } from 'react-native-paper';
 import MaskedView from '@react-native-community/masked-view';
 import * as Animatable from 'react-native-animatable';
 
+const { height, width } = Dimensions.get("window");
 
 export default function ProfileStatsBlock({icon, title, mills, number, subtitle, subText, progress}) {
   let [fontsLoaded] = useFonts({
@@ -18,7 +16,6 @@ export default function ProfileStatsBlock({icon, title, mills, number, subtitle,
   });
 
   const isFocused = useIsFocused();
-
 
   const [prog, setProg] = useState(0.01);
   const [numBar, setNumBar] = useState();
@@ -62,7 +59,6 @@ export default function ProfileStatsBlock({icon, title, mills, number, subtitle,
 
   }, [isFocused, progress, number])
 
-  
   // failed attempt, can delete.
   // const renderNumBar = (number) => {
   //   let nums = [];
@@ -106,7 +102,6 @@ export default function ProfileStatsBlock({icon, title, mills, number, subtitle,
   //   )
   // }
 
-
   const renderNumBar = (number) => {
     let nums = [];
     // console.log("renderNumber:", number);
@@ -120,8 +115,6 @@ export default function ProfileStatsBlock({icon, title, mills, number, subtitle,
     }
     setNumBar(nums);
   }
-
-
 
 
   return (
@@ -183,14 +176,19 @@ export default function ProfileStatsBlock({icon, title, mills, number, subtitle,
           : null}
         </View>
       </View>
+  )
+};
 
 
 
+
+/* MOVE TO OTHER FILE: */
+/* 
+OG SQUARE PROGRESS components
       // <View style={{backgroundColor: "white", width: 151, height: Math.min(height * 0.25, 177), borderRadius: 20, margin: 7, shadowOffset: {width: 1, height: 1}, shadowColor: "black", shadowOpacity: 0.5, shadowRadius: 4, padding: 20}}>
       //   <Image source={icon} style={{height: 42}} resizeMode="contain"/>
       //   <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 16, color: "#717171"}}>{title}</Text>
       //   <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 45, color: "#3681C7"}}>{number}</Text>
       //   <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 14, color: "#717171"}}>{subtitle}</Text>
       // </View>
-  )
-}
+*/

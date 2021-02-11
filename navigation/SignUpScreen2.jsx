@@ -96,8 +96,6 @@ export default function SignUpScreen ({navigation, route}) {
   }, [userInfo.password, userInfo.passwordConfirm])
 
 
-
-
   const toggleShowPassword = () => {
     setUserInfo({
       ...userInfo,
@@ -139,8 +137,6 @@ export default function SignUpScreen ({navigation, route}) {
     };
     await signUp(inputEmail, inputPassword, inputFirstName);
   });
-
-
 
 
 

@@ -1,25 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StatusBar, Button, Alert, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import { Text, View, StatusBar, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { useFonts } from 'expo-font';
 import { AuthContext } from '../../components/context';
 import Exercise from '../../components/Exercise';
 import { useIsFocused } from '@react-navigation/native';
-
 import { ScrollView } from 'react-native-gesture-handler';
-
-import { useFonts } from 'expo-font';
-
-const { width, height } = Dimensions.get('window');
-
 import CreateAccountPopup from '../../components/CreateAccountPopup';
-
 import { Exercises } from '../../model/exercise-store';
-
 import { fireApp } from '../../firebase';
 import '@firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-
+const { width, height } = Dimensions.get('window');
 
 export default function FavoritesScreen({navigation}) {
   const isFocused = useIsFocused();
@@ -48,20 +40,15 @@ export default function FavoritesScreen({navigation}) {
   }, [isFocused])
 
 
-
-
-
   const [favs, setFavs] = useState([]);
   let favIds = [];
 
   const currUser = fireApp.auth().currentUser;
   
   const getFavorites = async() => {
-
     const favRef = currUser && fireApp.database().ref(currUser.uid).child('favorites');
     // logged in check
     if (currUser !== null) {
-      
       favRef.on("value", snapshot => {
         snapshot.forEach(node => {
           favIds.push(node.val().id)
@@ -84,11 +71,9 @@ export default function FavoritesScreen({navigation}) {
             let key = child.key;
             // console.log(favIds);
             // console.log(exId)
-            // console.log(key)
             
             // favs.push(exId)
             
-            console.log("favs length:", favs.length)
             // if (favIds.length !== favs.length) {
             setFavs(favs => [...favs, 
               <Exercise 
@@ -109,7 +94,6 @@ export default function FavoritesScreen({navigation}) {
               />
             ])
 
-            
             // favsArray.push(
             //   <Exercise 
             //     key={key} 
@@ -130,7 +114,6 @@ export default function FavoritesScreen({navigation}) {
             // )
             // setFavs(favsArray);
 
-
               // favs.push(
               //   <Exercise key={key} id={Exercises[exId].id} navigation={navigation} image={Exercises[exId].image} title={Exercises[exId].title} subTitle={Exercises[exId].subTitle} videoFile={Exercises[exId].videoFile} modalIcon={Exercises[exId].modalIcon} iconHeight={Exercises[exId].iconHeight} />
               // )
@@ -141,38 +124,8 @@ export default function FavoritesScreen({navigation}) {
   }
 
   useEffect(() => {
-    // if (userToken) {
-      getFavorites();
-    // } 
-    
-    // else if (favs.length < 1) {
-    //   setFavs([ 
-    //     <View key={"noFavs"}>
-    //       <View style={{ backgroundColor: "lavender", borderRadius: 7, height: height, width: width, marginLeft: -25}}>
-    //         <Text style={{textAlign: "center"}}>No Favorites</Text>
-    //       </View>
-    //     </View>
-    //   ])
-    // } else {
-    //   setFavs([ 
-    //     <View key={"noFavs"}>
-    //       <View style={{ backgroundColor: "lavender", borderRadius: 7, height: height, width: width, marginLeft: -25, justifyContent: "center"}}>
-    //         <Image source={require('../../assets/screen-icons/favorites-none-heart.png')} resizeMode="contain" style={{height: 56}} />
-    //         <Text style={{textAlign: "center"}}>You have no favorites.</Text>
-    //         <Text style={{textAlign: "center"}}>Tap the heart when viewing an exercise to add to this list.</Text>
-    //       </View>
-    //     </View>
-    //   ])
-    // }
-    console.log(`favorites: ${favs}`)
+    getFavorites();
   }, [userToken, currUser])
-
-
-  // function renderFavs() {
-  //   // console.log(favs)
-  //   return favs.map(fav => fav);
-  // }
-
 
 
   return (
@@ -199,17 +152,6 @@ export default function FavoritesScreen({navigation}) {
                 </View>
               }
 
-              {/* {renderFavs()} */}
-              
-              {/* <Exercise image={require("../../assets/exercises-images/jungle-green.png")} title="Box Breathing" subTitle="4 Second Box Pattern"/>
-              <Exercise image={require("../../assets/exercises-images/forest-orange.png")} title="Ride the Wave" subTitle="Slow Deep Breathing"/>
-              <Exercise image={require("../../assets/exercises-images/breathe-4x.png")} title="Breathe for Focus" subTitle="Get in the Zone"/>
-              <Exercise image={require("../../assets/exercises-images/minute-break-4x.png")} title="1 Minute Break" subTitle="60 Seconds of Zen"/>
-              <Exercise image={require("../../assets/exercises-images/forest-dawn-4x.png")} title="Box Breathing" subTitle="4 Second Box Pattern"/>
-              <Exercise image={require("../../assets/exercises-images/purple-4x.png")} title="Cosmos" subTitle="Relax with the Universe"/>
-              <Exercise image={require("../../assets/exercises-images/redrock-4x.png")} title="1 Minute Break" subTitle="60 Seconds of Zen"/>
-              <Exercise image={require("../../assets/exercises-images/aurora-4x.png")} title="Breathe for Focus" subTitle="Get in the Zone"/> */}
-
             </View>
           </View>
 
@@ -225,7 +167,4 @@ export default function FavoritesScreen({navigation}) {
 
     </View>
   )
-}
-
-
-
+};

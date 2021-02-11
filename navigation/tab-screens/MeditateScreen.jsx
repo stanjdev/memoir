@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StatusBar, Button, Alert, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import { Text, View, StatusBar, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import AppButton from '../../components/AppButton';
 import { useIsFocused } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -9,7 +9,6 @@ const bgImage = require('../../assets/splash/memoir-splash-thin-4x.png');
 // const bgImg = 'memoir-splash-thin-4x.png';
 
 // import { cacheAsset } from '../../components/cacheAsset';
-
 
 export default function MeditateScreen({navigation}) {
   const isFocused = useIsFocused();
@@ -56,7 +55,7 @@ export default function MeditateScreen({navigation}) {
       </View>
     </ImageBackground>
   )
-}
+};
 
 const styles = StyleSheet.create({
   blueButton: {
@@ -84,5 +83,4 @@ const styles = StyleSheet.create({
     fontSize: height < 600 ? 14 : 16,
     textAlign: "center"
   }
-})
-
+});

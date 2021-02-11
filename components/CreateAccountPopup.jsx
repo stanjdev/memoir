@@ -1,24 +1,19 @@
 import React, { useEffect, useContext } from 'react';
-import { Text, View, Button, StyleSheet, StatusBar, Image, Dimensions, ImageBackground, TouchableOpacity, Alert } from 'react-native';
-import AppButton from './AppButton';
-const { width, height } = Dimensions.get('window');
-
-import * as Animatable from 'react-native-animatable';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { useFonts } from 'expo-font';
 import { useNavigation } from '@react-navigation/native';
-
 import { AuthContext } from '../components/context';
+import AppButton from './AppButton';
+import * as Animatable from 'react-native-animatable';
+const { width, height } = Dimensions.get('window');
 
 // Firebase setup for FB
-import * as firebase from 'firebase';
+import firebase from 'firebase';
 const provider = new firebase.auth.FacebookAuthProvider();
 
-
-// Expo way
+// Expo APIs
 import * as Facebook from 'expo-facebook';
 import * as AppleAuthentication from 'expo-apple-authentication';
-
-console.log(width, height)
 
 export default function CreateAccountPopup() {
   const navigation = useNavigation();
@@ -30,10 +25,6 @@ export default function CreateAccountPopup() {
   });
 
   const { appleSignUp, appleTokenIn, userToken, fbSignUp, fbTokenIn } = useContext(AuthContext);
-
-
-
-
 
   const fbAppId = "200817071551403";
   const fbAppName = 'memoir'
@@ -64,10 +55,6 @@ export default function CreateAccountPopup() {
     }
   }
 
-
-
-
-
   // Not working with latest Expo SDK? 
   // async function fbSignIn () {
   //   try {
@@ -87,8 +74,6 @@ export default function CreateAccountPopup() {
   //     console.log(`Facebook Login Error: ${error}`)
   //   }
   // };
-
-
 
 
 /* 
@@ -114,17 +99,13 @@ This operation is not supported in the environment this application is runningon
   
 
 
+
 // Firebase way failed
 // const provider = new firebase.auth.OAuthProvider('apple.com');
 
 // const signInWithAppleFireBase = () => {
 //   firebase.auth().signInWithRedirect(provider);
 // }
-
-
-
-
-
 
 
 // EXPO AppleAuthentication + FIREBASE WEB APP WORKAROUND
@@ -137,7 +118,6 @@ const signInWithApple = async () => {
       ],
     });
 
-
     // if (credential.email !== null || credential.fullName.givenName !== null) {
     //   // create a new account with SignUp method with email, name, and userIdtoken.
     //   await appleSignUp(credential.email, credential.fullName.givenName, credential.fullName.familyName, credential.user)
@@ -148,12 +128,10 @@ const signInWithApple = async () => {
     //   console.log("tokenwithApple!")
     // }
 
-
     // signed in
     console.log(credential);
     await appleSignUp(credential.email, credential.fullName.givenName, credential.fullName.familyName, credential.user)
     console.log("signUpWithApple!")
-
 
     const appleUserInfoRef = await firebase.database().ref(credential.user).child('appleUserInfo');
     await appleUserInfoRef.once('value', async snapshot => {
@@ -180,10 +158,6 @@ useEffect(() => {
     navigation.navigate('UserWelcomeScreen')
   }
 }, [userToken, currUser])
-
-
-
-
 
 
   return (
@@ -220,7 +194,6 @@ useEffect(() => {
         style={{ width: 327, height: 63 }}
         onPress={}
       /> */}
-
         
         <AppButton 
           title="Sign up with Email" 
@@ -247,11 +220,8 @@ useEffect(() => {
 }
 
 
-
-
 const styles = StyleSheet.create({
   footerIntro: {
-    // borderWidth: 1,
     width: width,
     flex: 4.5,
     height: Math.min(height * 0.79, 600),

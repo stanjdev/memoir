@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
-import { Text, View, StatusBar, Button, Alert, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, ScrollView, TimePickerAndroid } from 'react-native';
+import { Text, View, StatusBar, Image, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 import AppButton from '../../components/AppButton';
 import { AuthContext } from '../../components/context';
 import { useIsFocused } from '@react-navigation/native';
@@ -39,7 +39,6 @@ export default function ProfileScreen({navigation}) {
     'Assistant-Regular': require('../../assets/fonts/Assistant/static/Assistant-Regular.ttf'),
     'Assistant-SemiBold': require('../../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   });
-
 
 
   const [userProgress, setUserProgress] = useState({
@@ -110,7 +109,6 @@ export default function ProfileScreen({navigation}) {
   //     bestStreak: 7
   //   })
   // }
-
 
 
   const fiveHrGoal = useRef();

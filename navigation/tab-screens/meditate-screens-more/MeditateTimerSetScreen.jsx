@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { Text, View, StatusBar, ScrollView, Button, Alert, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { Text, View, StatusBar, ScrollView, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import AppButton from '../../../components/AppButton';
 import { useIsFocused } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -7,23 +7,20 @@ import { AuthContext } from '../../../components/context';
 import * as Haptics from 'expo-haptics';
 
 const bgImage = require('../../../assets/splash/memoir-splash-thin-4x.png');
+const { width, height } = Dimensions.get('window');
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
-
-const { width, height } = Dimensions.get('window');
-
 import { LinearGradient } from 'expo-linear-gradient';
-
 // import HorizontalPicker from 'react-native-horizontal-picker';
 
 import firebase from 'firebase';
 
 
 export default function MeditateTimerSetScreen({ navigation, route }) {
-  const [minutes, setMinutes] = React.useState(10);
-  const [bellIntervDisplay, setBellIntervDisplay] = React.useState("30 Seconds");
-  const [bellInterv, setBellInterv] = React.useState(30000);
+  const [minutes, setMinutes] = useState(10);
+  const [bellIntervDisplay, setBellIntervDisplay] = useState("30 Seconds");
+  const [bellInterv, setBellInterv] = useState(30000);
 
   const { userToken } = useContext(AuthContext);
 
@@ -111,7 +108,6 @@ export default function MeditateTimerSetScreen({ navigation, route }) {
   });
 
 
-
   const currUser = firebase.auth().currentUser;
   const progressRef = currUser ? firebase.database().ref(currUser.uid).child('progress') : null;
 
@@ -175,17 +171,12 @@ export default function MeditateTimerSetScreen({ navigation, route }) {
     } 
   }
 
-
   const startMeditation = () => {
-    // console.log("started meditation!");
     incrementStreak();
     setTimeout(() => {
       navigation.navigate('MeditateExerciseScreen', { minutes, bellInterv, bgImage });
     }, 0);
   }
-
-
-
 
 
 
@@ -214,9 +205,6 @@ export default function MeditateTimerSetScreen({ navigation, route }) {
                   {renderMinsPickerItems()}
                 </Picker> */}
 
-                <View >
-                </View>
-
                 {/* <LinearGradient 
                   colors={['#fff', 'transparent']}
                   start={[0.1, 0.4]}
@@ -231,7 +219,6 @@ export default function MeditateTimerSetScreen({ navigation, route }) {
                     right: 100, 
                   }}
                 /> */}
-
 
                 <ScrollView 
                   horizontal={true} 
@@ -285,7 +272,6 @@ export default function MeditateTimerSetScreen({ navigation, route }) {
               </View>
             </View>
 
-
             <AppButton 
               title="Start" 
               buttonStyles={styles.blueButton}
@@ -321,5 +307,4 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     fontFamily: "Assistant-SemiBold"
   }
-})
-
+});

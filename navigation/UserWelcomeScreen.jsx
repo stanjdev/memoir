@@ -11,7 +11,6 @@ const bgImage = require('../assets/splash/user-welcome-bg-4x.png');
 // const bgImg = "user-welcome-bg-4x.png";
 // import { cacheAsset } from '../components/cacheAsset';
 
-
 export default function UserWelcomeScreen ({navigation}) {
   const { userToken, userFirstName } = useContext(AuthContext);
 

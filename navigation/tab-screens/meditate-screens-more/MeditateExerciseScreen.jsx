@@ -42,8 +42,6 @@ export default function MeditateExerciseScreen({ route, navigation }) {
   //   console.log("AppState:", appState.current);
   // }
 
-
-
   
   let [fontsLoaded] = useFonts({
     'Assistant': require('../../../assets/fonts/Assistant/Assistant-VariableFont_wght.ttf'),
@@ -72,13 +70,6 @@ export default function MeditateExerciseScreen({ route, navigation }) {
 
 
 
-
-
-
-
-
-
-  
 
 
 
@@ -163,10 +154,6 @@ export default function MeditateExerciseScreen({ route, navigation }) {
   //   // when you are done using the Sound object
   //   return () => bellSound.unloadAsync();
   // })
-
-
-
-
 
 
 

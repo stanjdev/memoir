@@ -1,30 +1,10 @@
 import firebase from 'firebase';
-// import fireApp from '../firebase';
-
-// const retrieveFile = async (fileName) => {
-//   let fileRef = fireApp.storage().ref('/' + fileName);
-//   const url = await fileRef.getDownloadURL().then(url => {
-//     // console.log(url);
-//     return url;
-//   });
-// }
 
 const retrieveFile = async (fileName) => {
   let fileRef = firebase.storage().ref('/' + fileName);
   const url = await fileRef.getDownloadURL();
   return url;
 }
-
-// firebase.storage().ref('/' + fileName).getDownloadURL().then(url => url)
-
-const loadFile = (fileName) => {
-  setTimeout(() => {
-    return retrieveFile(fileName).then(response => response["_W"])
-  }, 0);
-}
-
-
-
 
 export const Exercises = {
   1: {
@@ -99,7 +79,6 @@ export const Exercises = {
     video file: {"uri":{"_U":0,"_V":1,"_W":"https://firebasestorage.googleapis.com/v0/b/memoir-mobile.appspot.com/o/videos%2Fyin-yang.mp4?alt=media&token=6a78b856-dfb9-430d-879e-c5ca5df9a31a","_X":null}}
     */
 
-    // videoFile: loadFile('videos/yin-yang.mp4'),
     modalIcon: require('../assets/exercises-images/modal-icons/wave.png'),
     iconHeight: 35,
     color: "orange"

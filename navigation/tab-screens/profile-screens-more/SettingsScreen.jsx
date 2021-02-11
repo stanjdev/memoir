@@ -1,21 +1,13 @@
 import * as React from 'react';
-import { Text, View, StatusBar, Button, Alert, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
-import AppButton from '../../../components/AppButton';
+import { Text, View, StatusBar, Alert, Image, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import { useFonts } from 'expo-font';
 import { AuthContext } from '../../../components/context';
 import { useIsFocused } from '@react-navigation/native';
-import CreateAccountPopup from '../../../components/CreateAccountPopup';
-
-import { useFonts } from 'expo-font';
-
-const { width, height } = Dimensions.get('window');
-// const bgImage = require('../../../assets/splash/memoir-splash-thin-4x.png');
-import ProfileStatsBlock from '../../../components/ProfileStatsBlock';
-
-import firebase from 'firebase';
-
-import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
 
+const { width, height } = Dimensions.get('window');
+
+import firebase from 'firebase';
 
 export default function SettingsScreen({ navigation }) {
   const isFocused = useIsFocused();
@@ -54,7 +46,6 @@ export default function SettingsScreen({ navigation }) {
     'Assistant-Regular': require('../../../assets/fonts/Assistant/static/Assistant-Regular.ttf'),
     'Assistant-SemiBold': require('../../../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   });
-
 
 
   // Change Password button
@@ -110,11 +101,8 @@ export default function SettingsScreen({ navigation }) {
              
 
             </View>
-
           </View>
-
         {/* </ScrollView> */}
-
       </View>
 
       {/* { showPopUp ? <CreateAccountPopup /> : null } */}

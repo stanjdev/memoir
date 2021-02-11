@@ -2,7 +2,6 @@ import * as React from 'react';
 import { createStackNavigator, CreateStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { BottomTabView, createBottomTabNavigator, CreateBottomTagNavigator } from '@react-navigation/bottom-tabs';
 
-
 // ACTUAL SCREENS
 import BreatheScreen from './tab-screens/BreatheScreen';
 import ExerciseVideo from '../components/ExerciseVideo';

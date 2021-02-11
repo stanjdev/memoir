@@ -1,16 +1,13 @@
 import React, { useContext, useEffect } from 'react';
-import { AuthContext } from '../components/context';
 import { Text, View, StyleSheet, StatusBar, Image, Dimensions, ImageBackground, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { useFonts } from 'expo-font';
+import { AuthContext } from '../components/context';
 import Feather from 'react-native-vector-icons/Feather';
 import * as Animatable from 'react-native-animatable';
-
 import AppButton from '../components/AppButton';
-import { useFonts } from 'expo-font';
 
 const { width, height } = Dimensions.get('window');
 import firebase from 'firebase';
-
-
 
 export default function SignUpScreen ({navigation}) {
   let [fontsLoaded] = useFonts({
@@ -29,7 +26,6 @@ export default function SignUpScreen ({navigation}) {
     }
   }, [userToken, currUser])
 
-  
 
   const [userInfo, setUserInfo] = React.useState({
     firstName: '',

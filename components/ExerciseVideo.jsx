@@ -1,27 +1,22 @@
 import React, { useEffect, useState, useRef, useContext, useCallback } from 'react';
 import { Text, Modal, View, ScrollView, StatusBar, Alert, Image, Pressable, Dimensions, StyleSheet, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, Animated, AppState } from 'react-native';
-import AppButton from './AppButton';
-import { useIsFocused } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
+import { useIsFocused } from '@react-navigation/native';
+import { useKeepAwake } from 'expo-keep-awake';
+import { AuthContext } from '../components/context';
+import AppButton from './AppButton';
+import DoubleClick from 'react-native-double-tap';
+
+import * as SplashScreen from 'expo-splash-screen';
 // const bgImage = require('../assets/splash/memoir-splash-thin-4x.png');
-import { useNavigation } from '@react-navigation/native';
 
 import { Audio, Video } from 'expo-av';
 import { setAudioModeAsync } from 'expo-av/build/Audio';
 
 import { fireApp } from '../firebase';
-
-import { AuthContext } from '../components/context';
-
-import { useKeepAwake } from 'expo-keep-awake';
-
-const { width, height } = Dimensions.get('window');
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import DoubleClick from 'react-native-double-tap';
-
-import * as SplashScreen from 'expo-splash-screen';
+const { width, height } = Dimensions.get('window');
 
 export default function ExerciseVideo({ route, navigation }) {
   useKeepAwake();
@@ -75,7 +70,6 @@ export default function ExerciseVideo({ route, navigation }) {
   };
 
 
-  
   let lastPress = null;
   const handlePress = () => {
     
@@ -207,7 +201,6 @@ export default function ExerciseVideo({ route, navigation }) {
   }
 
 
-
   const exerciseInterv = useRef(null);
   useEffect(() => {
     if (exerciseInterv.current) clearInterval(exerciseInterv.current);
@@ -234,7 +227,6 @@ export default function ExerciseVideo({ route, navigation }) {
   }, 1000);
 
   
-
   // COUNTDOWN for Exercise vids
   const runExerciseClock = () => {
     if (secs > 0) {
@@ -277,15 +269,11 @@ export default function ExerciseVideo({ route, navigation }) {
 }
   
 
-
 function keepGoing() {
   setDisplayTimerDuration(false);
   setExerciseFinished(false);
   toggleClock();
 }
-
-
-
 
 
 
@@ -317,14 +305,6 @@ function keepGoing() {
   //   console.log(JSON.stringify({...panResponder.panHandlers}))
   //   return () => clearTimeout(inactiveTimeout)
   // },)
-
-
-
-
-
-
-
-
 
 
 
@@ -742,7 +722,7 @@ function keepGoing() {
         if (!favs.includes(id)) {
           databaseRef.set({
             "id": id,
-          }).then(() => console.log(`added video ${id}!`))
+          }).then(() => console.log(`favorited video ${id}!`))
           toggleLike(favs.includes(id))
         } else {
         // Remove from favorites

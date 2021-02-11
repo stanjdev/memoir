@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, StatusBar, Image, Dimensions } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-
 import AppButton from '../components/AppButton';
 const { width, height } = Dimensions.get('window');
-
 
 export default function SplashScreen ({ route, navigation }) {
   const isFocused = useIsFocused();
@@ -21,17 +19,12 @@ export default function SplashScreen ({ route, navigation }) {
     return () => clearTimeout(timeout);
   }, [isFocused])
 
-
   return (
     <View style={styles.container}>
       <StatusBar hidden={true}/>
-      {/* <ImageBackground source={bgImage} style={styles.bgImage}>
-        
-      </ImageBackground> */}
       <View>
         <AppButton
           buttonStyles={styles.blueButton} 
-          // onPress={() => navigation.navigate('GetStartedScreen')}
           onPress={navTo}
         />
         <Image 
@@ -41,7 +34,7 @@ export default function SplashScreen ({ route, navigation }) {
       </View>
     </View>
   )
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -50,11 +43,6 @@ const styles = StyleSheet.create({
   image: {
     height: height,
     width: width,
-  },
-  bgImage: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center"
   },
   body: {
     flex: 2,
@@ -71,7 +59,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
   blueButton: {
-    // backgroundColor: "#3681C7",
     height: height,
     width: width,
     position: "absolute",
