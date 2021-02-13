@@ -247,8 +247,6 @@ export default function MeditateExerciseScreen({ route, navigation }) {
 
 
 
-
-
   useEffect(() => {
     // MOUNT
     loadSound();

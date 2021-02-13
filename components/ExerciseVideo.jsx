@@ -11,7 +11,7 @@ import * as SplashScreen from 'expo-splash-screen';
 // const bgImage = require('../assets/splash/memoir-splash-thin-4x.png');
 
 import { Audio, Video } from 'expo-av';
-import { setAudioModeAsync } from 'expo-av/build/Audio';
+import { PitchCorrectionQuality, setAudioModeAsync } from 'expo-av/build/Audio';
 
 import { fireApp } from '../firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -142,7 +142,7 @@ export default function ExerciseVideo({ route, navigation }) {
         <TouchableOpacity 
           onPress={() => pressTimerChoice(time)}
           key={time} 
-          style={{ padding: 10, paddingRight: 27, paddingLeft: 27}}
+          style={{ padding: 10, paddingRight: 27, paddingLeft: 27 }}
         >
           <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 19, color: "white"}}>{time}</Text>
         </TouchableOpacity>
@@ -844,15 +844,50 @@ function keepGoing() {
 
 
 
-
-
-
   // console.log("video file: " + JSON.stringify(videoFile))
   // console.log("video url from firebase storage: " + JSON.stringify(videoUrl))
 
 
 
 
+
+  // const _handleVideoRef = component => {
+  //   const playbackObject = component;
+  //   playbackObject.pitchCorrectionQuality.High
+  // }
+  
+  const [videoSpeed, setVideoSpeed] = useState(1.0);
+  const [correctPitch, setCorrectPitch] = useState(true);
+  const speeds = {
+    "Slow": 0.75,
+    "Medium": 1.0,
+    "Fast": 1.25,
+  };
+  const renderSpeedOptions = () => {
+    let options = [];
+    for (const speed in speeds) {
+      options.push(
+      <TouchableOpacity
+        onPress={() => {
+          setVideoSpeed(speeds[speed]);
+          setCorrectPitch(false);
+          setTimeout(() => {
+            setCorrectPitch(true);
+          }, 100);
+        }}
+        key={speed}
+        style={{ padding: 10, paddingRight: 27, paddingLeft: 27 }}
+      >
+        <Text style={{fontFamily: "Assistant-SemiBold", fontSize: 19, color: "white"}}>{speed}</Text>
+      </TouchableOpacity>
+      )
+    }
+    return options;
+  };
+
+  // useEffect(() => {
+  //   setCorrectPitch(true);
+  // }, [videoSpeed, renderSpeedOptions])
 
 
 
@@ -863,7 +898,6 @@ function keepGoing() {
         // source={ videoFile }
         // source={{ uri: videoUrl }}
         source={ cachedVideo }
-        rate={1.0}
         volume={customVolume || 0.75}
         isMuted={bellMuted}
         // isMuted={true}
@@ -872,6 +906,9 @@ function keepGoing() {
         // shouldPlay={false}
         isLooping
         style={{ width: width, height: height }}
+        // rate={videoSpeed}
+        // shouldCorrectPitch={correctPitch}
+        // rate={1.5}
       />
       {isFocused ? <StatusBar hidden={false} barStyle="light-content"/> : null} 
 
@@ -916,13 +953,15 @@ function keepGoing() {
       </View>
 
 
-
       <Animated.View style={{ height: height, width: width, position: "absolute", opacity: overlayFade }}>
         <View style={{ borderColor: "white", position: "absolute", height: height}}>
           <View style={{ width: width, flexDirection: "row", alignItems: "center", marginTop: height * 0.07, zIndex: 100}}>
             <TouchableOpacity onPress={goBack} style={{ padding: 15, }}>
               <Image source={require('../assets/screen-icons/back-arrow-white.png')} style={{height: 20, marginLeft: 0}} resizeMode="contain"/>
             </TouchableOpacity>
+
+            {/* {renderSpeedOptions()} */}
+
           </View>
 
           <Animated.View style={[ {position: "absolute", bottom: height * 0.18, width: width, } ]}>

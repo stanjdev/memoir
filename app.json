@@ -25,6 +25,7 @@
     "facebookScheme": "fb200817071551403",
     "facebookAppId": "200817071551403",
     "facebookDisplayName": "memoir",
+    "facebookAutoInitEnabled": true,
     "scheme": "com.memoir.memoir-app",
     "ios": {
       "supportsTablet": true,

@@ -1,15 +1,13 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { Text, View, StatusBar, Image, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
-import AppButton from '../../components/AppButton';
+import { useFonts } from 'expo-font';
 import { AuthContext } from '../../components/context';
 import { useIsFocused } from '@react-navigation/native';
+import ProfileStatsBlock from '../../components/ProfileStatsBlock';
 import CreateAccountPopup from '../../components/CreateAccountPopup';
-
-import { useFonts } from 'expo-font';
+import AppButton from '../../components/AppButton';
 
 const { width, height } = Dimensions.get('window');
-// const bgImage = require('../../assets/splash/memoir-splash-thin-4x.png');
-import ProfileStatsBlock from '../../components/ProfileStatsBlock';
 
 import Modal from 'react-native-modal';
 import * as WebBrowser from 'expo-web-browser';
@@ -33,13 +31,11 @@ export default function ProfileScreen({navigation}) {
     }
   }, [isFocused])
 
-
   let [fontsLoaded] = useFonts({
     'Assistant': require('../../assets/fonts/Assistant/Assistant-VariableFont_wght.ttf'),
     'Assistant-Regular': require('../../assets/fonts/Assistant/static/Assistant-Regular.ttf'),
     'Assistant-SemiBold': require('../../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   });
-
 
   const [userProgress, setUserProgress] = useState({
     practiceTime: 0,
@@ -57,7 +53,6 @@ export default function ProfileScreen({navigation}) {
   const currUser = firebase.auth().currentUser;
   const progressRef = currUser ? firebase.database().ref(currUser.uid).child('progress') : null;
 
-
   const getProgress = () => {
     progressRef.on('value', snapshot => {
       if (snapshot.val()) {
@@ -71,18 +66,9 @@ export default function ProfileScreen({navigation}) {
           bestStreakMonth: snapshot.val().bestStreakMonth || 0,
           bestStreakYear: snapshot.val().bestStreakYear || 0
         })
-      } 
-      // else {
-      //   setUserProgress({
-      //     practiceTime: 0,
-      //     sessionsCompleted: 0,
-      //     currentStreak: 0,
-      //     bestStreak: 0,
-      //   })
-      // }
+      }
     })
   };
-
 
   useEffect(() => {
     if (currUser) {
@@ -91,7 +77,6 @@ export default function ProfileScreen({navigation}) {
 
   }, [userToken, currUser])
 
-  
 
   // useEffect(() => {
   //   // console.log(userProgress)
@@ -123,16 +108,15 @@ export default function ProfileScreen({navigation}) {
       count++;
     }
     let ceil = (count * fiveHours / 60 / 60);
-    let totalMills = count * fiveHours;
-    fiveHrGoal.current = totalMills;
+    let totalSeconds = count * fiveHours;
+    fiveHrGoal.current = totalSeconds;
     
-    return practiceTime < 1800 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" mills={practiceTime} number={(practiceTime / 60 ).toFixed(1)} subtitle="Minutes" subText="30 min Goal" progress={(Math.max(practiceTime, 0.01) / 60 / 60) / 0.5}/> 
+    return practiceTime < 1800 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" seconds={practiceTime} number={(practiceTime / 60 ).toFixed(1)} subtitle="Minutes" subText="30 min Goal" progress={(Math.max(practiceTime, 0.01) / 60 / 60) / 0.5}/> 
     : practiceTime >= 1800 && practiceTime < 7200 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(1)} subtitle="Hours" subText="2hr Goal" progress={(practiceTime / 60 / 60) / 2}/> 
     : practiceTime >= 7200 && practiceTime < 18000 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(1)} subtitle="Hours" subText="5hr Goal" progress={(practiceTime / 60 / 60) / 5}/> 
     : practiceTime >= fiveHours ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(1)} subtitle="Hours" subText={`${ceil}hr Goal`} progress={(practiceTime / 60 / 60) / ceil}/> 
     : <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number="0" subtitle="Hours" subText="5hr Goal" progress={0.01}/>
   }
-
 
 
   // Congratulation Alerts 1
@@ -157,7 +141,6 @@ export default function ProfileScreen({navigation}) {
     if (sessionsCompleted % 10 !== 0) setDismissedSessions(false);
     if (currentStreak % 10 !== 0) setDismissedCurrStreak(false);
 
-
     if (isFocused && practiceTime >= timeGoal.current && !dismissedTimeGoal && Math.trunc(timeGoal.current) !== 0) {
       setTimeout(() => {
         setTimeGoalVisible(true);
@@ -173,7 +156,6 @@ export default function ProfileScreen({navigation}) {
       // ]);
     }
     console.log(practiceTime, fiveHrGoal.current, timeGoal.current);
-
 
     if (isFocused && sessionsCompleted % 10 == 0 && !dismissedSessions) {
       setTimeout(() => {
@@ -236,8 +218,6 @@ export default function ProfileScreen({navigation}) {
 
 
 
-
-
   const renderMovingSessionsGoal = (sessionsCompleted) => {
     let rightMostNum = sessionsCompleted % 10;
     let remainder = 10 - rightMostNum;
@@ -253,10 +233,7 @@ export default function ProfileScreen({navigation}) {
   }
 
 
-
   return (
-    // <ImageBackground source={bgImage} style={{ flex: 1, resizeMode: "cover", justifyContent: "flex-start",}}>
-    // </ImageBackground>
     <View style={{ backgroundColor:"white", flex: 1, resizeMode: "cover", justifyContent: "flex-start",}}>
       {isFocused ? <StatusBar barStyle="dark-content" hidden={false}/> : null}
       <TouchableOpacity onPress={() => navigation.goBack()} style={{position: "absolute", left: width * 0.02, top: height * 0.045, zIndex: 100, padding: 15}}>
@@ -343,25 +320,22 @@ export default function ProfileScreen({navigation}) {
                   onPress={() => navigation.navigate('ProMemberScreen')}
                 /> */}
 
-              <View style={styles.buttonCard}>
-                <Text style={{width: 230, textAlign: "center", fontFamily: "Assistant-Regular", fontSize: 17, lineHeight: 19.96}}>We're currently in beta. Send us a suggestion or report a bug.</Text>
-                <AppButton 
-                    title="Send Us Feedback" 
-                    buttonStyles={styles.blueButton}
-                    buttonTextStyles={styles.buttonText}
-                    onPress={() => WebBrowser.openBrowserAsync("https://memoirapp.squarespace.com/contact")}
-                  />
-              </View>
+              <FeedbackCard 
+                text="We're currently in beta. Send us a suggestion or report a bug."
+                callToActionText="Send Us Feedback"
+                url="https://memoirapp.squarespace.com/contact"
+              />
 
-              {/* <View style={styles.buttonCard}>
-                <Text style={{width: 230, textAlign: "center", fontFamily: "Assistant-Regular", fontSize: 17, lineHeight: 19.96}}>Are you enjoying Memoir? Leave us a review in the App Store.</Text>
-                <AppButton 
-                    title="Write a Review" 
-                    buttonStyles={styles.blueButton}
-                    buttonTextStyles={styles.buttonText}
-                    onPress={() => alert("Opens iOS App Store")}
-                  />
-              </View> */}
+              {/* <FeedbackCard 
+                text="Are you enjoying Memoir? Leave us a review in the App Store."
+                callToActionText="Write a Review"
+                url="https://memoirapp.squarespace.com/contact"
+              />
+              <FeedbackCard 
+                text="Enjoying Memoir? Leave us a review in the Google Play Store."
+                callToActionText="Write a Review"
+                url="https://memoirapp.squarespace.com/contact"
+              /> */}
 
             </View>
             
@@ -377,30 +351,28 @@ export default function ProfileScreen({navigation}) {
     </View>
     
   )
-}
+};
 
 
 const styles = StyleSheet.create({
   blueButton: {
     backgroundColor: "#3681C7",
-    height: Math.min(height * 0.07, 44),
+    height: width < 330 ? 35 : Math.min(height * 0.07, 44),
     width: 225,
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-
   },
   buttonText: {    
     color: "#fff",
     flex: 1,
     textAlign: "center",
-    fontSize: 21,
+    fontSize: width < 330 ? 19 : 21,
     fontFamily: "Assistant-SemiBold"
   },
   buttonCard: {
-    // borderWidth: 1,
     backgroundColor: "white",
-    height: Math.max(height * 0.2, 134),
+    height: width < 330 ? 90 : Math.min(height * 0.2, 134),
     width: 293,
     borderRadius: 15,
     shadowRadius: 4,
@@ -410,10 +382,30 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     alignItems: "center",
     marginTop: -20
+  },
+  cardText: {
+    width: 230, 
+    textAlign: "center", 
+    fontFamily: "Assistant-Regular", 
+    fontSize: width < 330 ? 15 : 17, 
+    lineHeight: width < 330 ? 17 : 19.96
   }
-})
+});
 
 
+export function FeedbackCard({text, callToActionText, url}) {
+  return (
+    <View style={styles.buttonCard}>
+      <Text style={styles.cardText}>{text}</Text>
+      <AppButton 
+          title={callToActionText} 
+          buttonStyles={styles.blueButton}
+          buttonTextStyles={styles.buttonText}
+          onPress={() => WebBrowser.openBrowserAsync(url)}
+        />
+    </View>
+  )
+};
 
 export function CustomAlert({header, message, isVisible, onPress}) {
   return(

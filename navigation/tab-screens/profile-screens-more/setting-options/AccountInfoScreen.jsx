@@ -15,7 +15,6 @@ export default function AccountInfoScreen ({navigation}) {
     'Assistant-Regular': require('../../../../assets/fonts/Assistant/static/Assistant-Regular.ttf'),
     'Assistant-SemiBold': require('../../../../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   });
-
   
   const [userInfo, setUserInfo] = React.useState({
     firstName: '',
@@ -94,7 +93,6 @@ export default function AccountInfoScreen ({navigation}) {
   }
 
 
-
   // includes validation check when user unfocuses on the firstName TextInput:
   const handleValidFirstName = (val) => {
     if (val.length !== 0) {
@@ -126,7 +124,6 @@ export default function AccountInfoScreen ({navigation}) {
     }
   }
 
-
   
   const handleUpdate = useCallback( async (inputName, inputEmail, inputPassword) => {
     if (userInfo.firstName.length === 0 || userInfo.email.length === 0 || userInfo.password.length === 0) {
@@ -144,9 +141,6 @@ export default function AccountInfoScreen ({navigation}) {
   });
 
 
-
-
-
   return (
     <View style={styles.container}>
       <StatusBar hidden={false}/>
@@ -157,7 +151,6 @@ export default function AccountInfoScreen ({navigation}) {
           </TouchableOpacity>
           
           <View style={{ height: Math.max(height * 0.55, 450), marginTop: 0, alignItems: "center", justifyContent: "space-evenly"}}>
-            {/* <Image source={require("../../../../assets/memoir-logo1.png")} resizeMode="contain" style={{height: 20}}/> */}
             <View style={{ width: 323 }}>
               <Text style={{fontSize: 26, color: "#717171", textAlign: "center", fontFamily: "Assistant-SemiBold", }}>Account Info</Text>
             </View>
@@ -197,8 +190,6 @@ export default function AccountInfoScreen ({navigation}) {
                 </Animatable.View>
                 }
               </View>
-
-
 
               <View>
                 <Text style={{fontFamily: "Assistant-Regular", fontSize: 18.21}}>Email Address</Text>
@@ -247,7 +238,6 @@ export default function AccountInfoScreen ({navigation}) {
                 </View>
               </View>
 
-
               <AppButton 
                 title="Update" 
                 buttonStyles={!(userInfo.firstName && userInfo.email) ? 
@@ -256,20 +246,14 @@ export default function AccountInfoScreen ({navigation}) {
                 } 
                 buttonTextStyles={styles.buttonText} 
                 disabled={!(userInfo.firstName && userInfo.email)}
-                // onPress={() => navigation.navigate('UserWelcomeScreen')}
-                // onPress={() => {handleLogin(userInfo.email, userInfo.password)}}
                 onPress={() => handleUpdate(userInfo.firstName, userInfo.email, userInfo.password)}
-                // onPress={() => alert(loginState.useToken)}
-                // onPress={() => alert(userInfo.firstName)}
               />
             </View>
           </View>
-
-
         </View>
     </View>
   )
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -297,7 +281,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     paddingVertical: 50,
     paddingHorizontal: 45,
-    // justifyContent: "space-evenly",
     alignItems: "center",
   },
   inputsWhole: {
@@ -313,7 +296,6 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   inputs: {
-    // borderWidth: 1,d
     width: "90%",
     padding: 15,
     fontSize: 19.17,

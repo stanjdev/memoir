@@ -217,7 +217,8 @@ export default function BreatheScreen({navigation}) {
 
   function renderExercises(array) {
     for (let i = 0; i < 5; i++) {
-      if (Exercises[array[i]].color == Exercises[array[i + 1]].color) {
+      if (Exercises[array[i]].color == Exercises[array[i + 1]].color || 
+          Exercises[array[i]].shape == Exercises[array[i + 1]].shape) {
         array.push(...array.splice(i + 1, 1));
       }
     };
@@ -252,25 +253,22 @@ export default function BreatheScreen({navigation}) {
     // console.log("chosenDailyExNum:", chosenExNum);
 
     return <Exercise 
-              id={Exercises[chosenExNum].id} 
-              key={Exercises[chosenExNum].id}
-              navigation={navigation} 
-              uniqueSize={Exercises[chosenExNum].uniqueImg && "topBanner"}
-              image={currentHour >= 20 || currentHour <= 3 ? Exercises[chosenExNum].uniqueImgEvening : Exercises[chosenExNum].uniqueImg || null} 
-              gif={Exercises[chosenExNum].gif || undefined}
-              title={Exercises[chosenExNum].title} 
-              subTitle={Exercises[chosenExNum].subTitle} 
-              videoFile={Exercises[chosenExNum].videoFile || null} 
-              modalIcon={Exercises[chosenExNum].modalIcon || null} 
-              iconHeight={Exercises[chosenExNum].iconHeight || null} 
-              customVolume={Exercises[chosenExNum].customVolume || null}
-              isLiked={favIds.includes(chosenExNum)}
-              autoCountDown={"2m"}
-            />
+            id={Exercises[chosenExNum].id} 
+            key={Exercises[chosenExNum].id}
+            navigation={navigation} 
+            uniqueSize={Exercises[chosenExNum].uniqueImg && "topBanner"}
+            image={currentHour >= 20 || currentHour <= 3 ? Exercises[chosenExNum].uniqueImgEvening : Exercises[chosenExNum].uniqueImg || null} 
+            gif={Exercises[chosenExNum].gif || undefined}
+            title={Exercises[chosenExNum].title} 
+            subTitle={Exercises[chosenExNum].subTitle} 
+            videoFile={Exercises[chosenExNum].videoFile || null} 
+            modalIcon={Exercises[chosenExNum].modalIcon || null} 
+            iconHeight={Exercises[chosenExNum].iconHeight || null} 
+            customVolume={Exercises[chosenExNum].customVolume || null}
+            isLiked={favIds.includes(chosenExNum)}
+            autoCountDown={"2m"}
+          />
   };
-
-
-
 
 
 
@@ -379,7 +377,6 @@ export default function BreatheScreen({navigation}) {
           onError={console.warn}
         />
       }
-     
 
     </ScrollView>
   )

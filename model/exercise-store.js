@@ -17,7 +17,8 @@ export const Exercises = {
     modalIcon: require('../assets/exercises-images/modal-icons/flower.png'),
     iconHeight: 70,
     customVolume: 0.22,
-    color: "green"
+    color: "green",
+    shape: "flower"
   },
   2: {
     id: 2,
@@ -31,7 +32,8 @@ export const Exercises = {
     videoFile: 'circles.mp4',
     modalIcon: require('../assets/exercises-images/modal-icons/audi.png'),
     iconHeight: 39,
-    color: "purple"
+    color: "purple",
+    shape: "circle"
   },
   3: {
     id: 3,
@@ -45,7 +47,8 @@ export const Exercises = {
     videoFile: '4-7-9-wheel.mp4',
     modalIcon: require('../assets/exercises-images/modal-icons/zen-circle.png'),
     iconHeight: 48,
-    color: "orange"
+    color: "orange",
+    shape: "circle"
   },
   4: {
     id: 4,
@@ -59,7 +62,8 @@ export const Exercises = {
     videoFile: "box-breathing.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/arrow-squares.png'),
     iconHeight: 60,
-    color: "green"
+    color: "green",
+    shape: "square"
   },
   5: {
     id: 5,
@@ -81,7 +85,8 @@ export const Exercises = {
 
     modalIcon: require('../assets/exercises-images/modal-icons/wave.png'),
     iconHeight: 35,
-    color: "orange"
+    color: "orange",
+    shape: "yinyang"
   },
   6: {
     id: 6,
@@ -97,7 +102,8 @@ export const Exercises = {
     modalIcon: require('../assets/exercises-images/modal-icons/moon.png'),
     iconHeight: 38,
     noFinishBell: true,
-    color: "blue"
+    color: "blue",
+    shape: "crescent"
   },
   7: {
     id: 7,
@@ -110,7 +116,8 @@ export const Exercises = {
     modalIcon: require('../assets/exercises-images/modal-icons/pyramid.png'),
     autoCountDown: "2m",
     iconHeight: 95,
-    color: "blue"
+    color: "blue",
+    shape: "triangle"
     /* 
       <TouchableOpacity onPress={() => navigation.navigate("ExerciseVideo", { videoFile: require('../../assets/video-exercises/daily-exhale.mp4'), modalIcon: require('../../assets/exercises-images/modal-icons/breathe-waves.png') })}>
         <Image 
@@ -176,7 +183,8 @@ export const Exercises = {
     // videoFile: require('../assets/video-exercises/box-breathing.mp4'),
     modalIcon: require('../assets/exercises-images/modal-icons/cut-triangle.png'),
     iconHeight: 85,
-    color: "green"
+    color: "green",
+    shape: "triangle"
     /* 
 <Exerciseimage={require("../../assets/exercises-images/forest-dawn-4x.png")} subTitle="4 Second Box Pattern"/>
 */
@@ -192,7 +200,8 @@ export const Exercises = {
     modalIcon: require('../assets/exercises-images/modal-icons/hexagon.png'),
     iconHeight: 80,
     noFinishBell: true,
-    color: "green"
+    color: "green",
+    shape: "hexagon"
   },
   13: {
     id: 13,
@@ -204,7 +213,8 @@ export const Exercises = {
     modalIcon: require('../assets/exercises-images/modal-icons/flower.png'),
     iconHeight: 70,
     customVolume: 0.4,
-    color: "yellow"
+    color: "yellow",
+    shape: "flower"
   },
   14: {
     id: 14,
@@ -215,7 +225,8 @@ export const Exercises = {
     videoFile: "box-breathing-3.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/arrow-squares.png'),
     iconHeight: 60,
-    color: "blue"
+    color: "blue",
+    shape: "square"
   },
   15: {
     id: 15,
@@ -227,7 +238,8 @@ export const Exercises = {
     modalIcon: require('../assets/exercises-images/modal-icons/pyramid.png'),
     autoCountDown: "2m",
     iconHeight: 95,
-    color: "yellow"
+    color: "yellow",
+    shape: "triangle"
   },
   16: {
     id: 16,
@@ -240,7 +252,8 @@ export const Exercises = {
     modalIcon: require('../assets/exercises-images/modal-icons/audi.png'),
     iconHeight: 38,
     noFinishBell: true,
-    color: "blue"
+    color: "blue",
+    shape: "circle"
   },
   17: {
     id: 17,
@@ -251,7 +264,8 @@ export const Exercises = {
     videoFile: '4-7-8-forest.mp4',
     modalIcon: require('../assets/exercises-images/modal-icons/zen-circle.png'),
     iconHeight: 48,
-    color: "green"
+    color: "green",
+    shape: "circle"
   },
   18: {
     id: 18,
@@ -262,7 +276,8 @@ export const Exercises = {
     videoFile: "triangle-warm.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/cut-triangle.png'),
     iconHeight: 85,
-    color: "orange"
+    color: "orange",
+    shape: "triangle"
   },
   19: {
     id: 19,
@@ -273,7 +288,8 @@ export const Exercises = {
     videoFile: "triangle-green.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/cut-triangle.png'),
     iconHeight: 85,
-    color: "green"
+    color: "green",
+    shape: "triangle"
   },
   20: {
     id: 20,
@@ -283,7 +299,8 @@ export const Exercises = {
     subTitle: "Refresh & Reinvigorate",
     videoFile: "accordion-1.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/breathe-waves.png'),
-    color: "orange"
+    color: "orange",
+    shape: "mixed"
   },
   21: {
     id: 21,
@@ -294,7 +311,8 @@ export const Exercises = {
     videoFile: "yinyang-orange.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/wave.png'),
     iconHeight: 35,
-    color: "orange"
+    color: "orange",
+    shape: "yinyang"
   },
   22: {
     id: 22,
@@ -305,7 +323,8 @@ export const Exercises = {
     videoFile: "3-circles.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/3-circles.png'),
     iconHeight: 65,
-    color: "green"
+    color: "green",
+    shape: "flower"
   },
   23: {
     id: 23,
@@ -316,7 +335,8 @@ export const Exercises = {
     videoFile: "crazy-triangles.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/breathe-waves.png'),
     // iconHeight: 39,
-    color: "pink"
+    color: "pink",
+    shape: "circle"
   },
   24: {
     id: 24,
@@ -328,7 +348,8 @@ export const Exercises = {
     videoFile: "purple-morph.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/breathe-waves.png'),
     noFinishBell: true,
-    color: "purple"
+    color: "purple",
+    shape: "mixed"
   },
   25: {
     id: 25,
@@ -340,7 +361,8 @@ export const Exercises = {
     videoFile: "infinity-purple.mp4",
     modalIcon: require('../assets/exercises-images/modal-icons/infinity.png'),
     noFinishBell: true,
-    color: "dark"
+    color: "dark",
+    shape: "circle"
   },
   26: {
 

@@ -2,7 +2,6 @@ import React from 'react';
 import { Text, View, StyleSheet, StatusBar, Image, Dimensions, TouchableOpacity } from 'react-native';
 import { useFonts } from 'expo-font';
 import AppButton from '../../../../components/AppButton';
-import { AuthContext } from '../../../../components/context';
 const { width, height } = Dimensions.get('window');
 
 import firebase from 'firebase';
@@ -22,7 +21,6 @@ export default function ChangePasswordScreen ({navigation}) {
     firebase.auth().sendPasswordResetEmail(email).then(error => error ? null : alert("Password email sent. Check your email!")).catch(error => alert(error))
   }
 
-
   return (
     <View style={styles.container}>
       <StatusBar hidden={false}/>
@@ -33,7 +31,6 @@ export default function ChangePasswordScreen ({navigation}) {
           </TouchableOpacity>
           
           <View style={{ height: Math.max(height * 0.55, 450), marginTop: 0, alignItems: "center", justifyContent: "space-evenly"}}>
-            {/* <Image source={require("../../../../assets/memoir-logo1.png")} resizeMode="contain" style={{height: 20}}/> */}
             <View style={{ width: 323 }}>
               <Text style={{fontSize: 26, color: "#717171", textAlign: "center", fontFamily: "Assistant-SemiBold", }}>Change Password</Text>
             </View>
@@ -81,7 +78,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     paddingVertical: 50,
     paddingHorizontal: 45,
-    // justifyContent: "space-evenly",
     alignItems: "center",
   },
   inputsWhole: {
@@ -97,7 +93,6 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   inputs: {
-    // borderWidth: 1,d
     width: "90%",
     padding: 15,
     fontSize: 19.17,
