@@ -30,9 +30,11 @@ export default function ProfileStatsBlock({icon, title, seconds, number, subtitl
     // Render the "bar" of numbers
     let nums = [];
     if (number > 0) {
-      for (let i = 0; i <= number; i += number / 5) {
+      for (let i = 0; i < number; i += number / 5) {
         nums.push(<Text key={`${title} ${i}`} style={styles.numStyles}>{ Math.trunc(number) !== number ? i.toFixed(1) : Math.trunc(i) }</Text>);
       }
+      // Whole numbers should be fine, but floats are trickier when dividing by 5, you may not always reach the final number from the previous for loop
+      nums.push(<Text key={`${title} ${number}`} style={styles.numStyles}>{ number }</Text>);
     }
     setNumBar(nums);
   };

@@ -83,18 +83,18 @@ export default function SettingsScreen({ navigation }) {
                 {/* <SettingOption text={"Restore Purchase"} action={() => console.log("nothing yet!")}/> */}
                 {/* <SettingOption text={"Change Password"} action={() => resetPassword(currUserEmail)}/> */}
                 <SettingOption text={"Change Password"} action={() => navigation.navigate("ChangePasswordScreen")}/>
-                <SettingOption text={"Support"} action={() => WebBrowser.openBrowserAsync("https://memoirapp.squarespace.com/contact")}/>
-                <SettingOption text={"Terms & Conditions"} action={() => WebBrowser.openBrowserAsync("https://memoirapp.squarespace.com/terms-of-service")}/>
-                <SettingOption text={"Privacy Policy"} action={() => WebBrowser.openBrowserAsync("https://memoirapp.squarespace.com/privacy-policy")}/>
+                <SettingOption text={"Support"} action={() => WebBrowser.openBrowserAsync("http://memoir.design/contact")}/>
+                <SettingOption text={"Terms & Conditions"} action={() => WebBrowser.openBrowserAsync("http://memoir.design/terms-of-service")}/>
+                <SettingOption text={"Privacy Policy"} action={() => WebBrowser.openBrowserAsync("http://memoir.design/privacy-policy")}/>
                 {/* <SettingOption text={"Privacy Policy"} action={() => WebBrowser.openBrowserAsync("https://www.privacypolicygenerator.info/live.php?token=JVOQUQnNzluF7M5IuHUKPcBXSlNLZBgX")}/> */}
                 <SettingOption text={"Log Out"} action={logOutAlert}/>
               </View>
               : 
               <View>
                 {/* <SettingOption text={"Notifications"} action={() => console.log("nothing yet!")}/> */}
-                <SettingOption text={"Support"} action={() => WebBrowser.openBrowserAsync("https://memoirapp.squarespace.com/contact")}/>
-                <SettingOption text={"Terms & Conditions"} action={() => WebBrowser.openBrowserAsync("https://memoirapp.squarespace.com/terms-of-service")}/>
-                <SettingOption text={"Privacy Policy"} action={() => WebBrowser.openBrowserAsync("https://memoirapp.squarespace.com/privacy-policy")}/>
+                <SettingOption text={"Support"} action={() => WebBrowser.openBrowserAsync("http://memoir.design/contact")}/>
+                <SettingOption text={"Terms & Conditions"} action={() => WebBrowser.openBrowserAsync("http://memoir.design/terms-of-service")}/>
+                <SettingOption text={"Privacy Policy"} action={() => WebBrowser.openBrowserAsync("http://memoir.design/privacy-policy")}/>
                 <SettingOption text={"Log In"} action={() => navigation.goBack()}/>
               </View>
               }

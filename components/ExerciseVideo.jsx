@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useContext, useCallback } from 'rea
 import { Text, Modal, View, ScrollView, StatusBar, Alert, Image, Pressable, Dimensions, StyleSheet, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, Animated, AppState } from 'react-native';
 import { useFonts } from 'expo-font';
 import { useIsFocused } from '@react-navigation/native';
-import { useKeepAwake } from 'expo-keep-awake';
+import { useKeepAwake, deactivateKeepAwake, activateKeepAwake } from 'expo-keep-awake';
 import { AuthContext } from '../components/context';
 import AppButton from './AppButton';
 import DoubleClick from 'react-native-double-tap';
@@ -195,6 +195,7 @@ export default function ExerciseVideo({ route, navigation }) {
 
   const startExercise = () => {
     setModalVisible(!modalVisible);
+    loadAndPlayMusic();
     console.log("exercise started!");
     incrementStreak();
     if (!runningClock && autoCountDown) toggleClock();
@@ -243,15 +244,16 @@ export default function ExerciseVideo({ route, navigation }) {
       clear();
       Alert.alert("Timer Complete", "Great job, you’ve completed your breath work session!", [
         {text: "Keep Going", onPress: () => keepGoing()}, 
-        {text: "Finish", style: "cancel", onPress: () => navigation.goBack()}
+        {text: "Finish", style: "cancel", onPress: () => navigation.navigate("Profile")}
       ]);
       // setBellMuted(true);
       touchScreenToggleControls();
       console.log('else hit! Finished!');
-      loadFinishedSound();
+      !noFinishBell && loadFinishedSound();
       clearInterval(exerciseInterv.current);
       bellSound.unloadAsync();
       playingAudio.current.stopAsync();
+      deactivateKeepAwake();
       // setTimeout(() => {
       //   navigation.navigate("Memoir");
       // }, 2000);
@@ -416,11 +418,11 @@ function keepGoing() {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     if (!modalVisible && !exerciseFinished && !paused) {
-      loadAndPlayMusic();
+      // loadAndPlayMusic();
       if (autoCountDown) {
         console.log("autoCountdown!", autoCountDown);
         runAutoCountDown(autoCountDown);
@@ -440,9 +442,36 @@ function keepGoing() {
         playingAudio.current.playAsync();
       }
     }
-  });
+  }, );
 
+  // CLEAN UP, NO MUSIC AFTER UNMOUNTING
+  useEffect(() => {
+    return () => {
+      // console.log("playingAudio.current: ", playingAudio.current);
+      if (playingAudio.current) {
+        playingAudio.current.stopAsync();
+      }
+      music.unloadAsync();
+    }
+  }, [])
 
+  const goBack = () => {
+    updateUserTime();
+    navigation.goBack();
+    if (playingAudio.current) {
+      playingAudio.current.stopAsync();
+    }
+    music.unloadAsync();
+  };
+  
+  const fromModalGoBack = () => {
+    setModalVisible(!modalVisible);
+    navigation.goBack();
+    if (playingAudio.current) {
+      playingAudio.current.stopAsync();
+    }
+    music.unloadAsync();
+  };
 
 
 
@@ -500,16 +529,7 @@ function keepGoing() {
   //   return () => updateUserTime()
   // }, [])
 
-  const goBack = () => {
-    updateUserTime();
-    navigation.goBack();
-  }
-  
-  
-  const fromModalGoBack = () => {
-    navigation.goBack();
-    setModalVisible(!modalVisible);
-  }
+
 
 
 

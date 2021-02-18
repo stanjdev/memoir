@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useCallback, useContext } from 'rea
 import { Animated, Text, View, StatusBar, Button, Alert, Vibration, Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, AppState } from 'react-native';
 import AppButton from '../../../components/AppButton';
 import { useIsFocused } from '@react-navigation/native';
+import { useKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import { useFonts } from 'expo-font';
 const bgImage = require('../../../assets/splash/memoir-splash-thin-4x.png');
 import { useNavigation } from '@react-navigation/native';
@@ -10,7 +11,6 @@ import { AuthContext } from '../../../components/context';
 // import BackgroundTimer from 'react-native-background-timer'; ONLY WORKS IN 'BARE' WORKFLOW IT SEEMS.
 
 import { Audio } from 'expo-av';
-import { useKeepAwake } from 'expo-keep-awake';
 
 const { width, height } = Dimensions.get('window');
 
@@ -177,7 +177,7 @@ export default function MeditateExerciseScreen({ route, navigation }) {
           time = "0" + time;
       }
       return time;
-  }
+  };
 
 
   // useInterval() ATTEMPT - ghetto, but works for the most part. once it hits 00:00, it still hits the else, and still runs every second. BUT DESTRUCTURING THE CLEAR() METHOD FROM USEINTERVAL FUNCTION AND CALLING THAT WORKS!
@@ -200,6 +200,7 @@ export default function MeditateExerciseScreen({ route, navigation }) {
       // console.log('else');
       loadFinishedSound(); // final 3 bells because of the 2 sec setTimeout below.
       clear();
+      deactivateKeepAwake();
       setTimeout(() => {
         finishedSound.unloadAsync(); // cuts off the sound
         bellSound.unloadAsync(); // 

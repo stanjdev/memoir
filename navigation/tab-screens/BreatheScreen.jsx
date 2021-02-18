@@ -239,6 +239,7 @@ export default function BreatheScreen({navigation}) {
         modalIcon={Exercises[x].modalIcon || null} 
         iconHeight={Exercises[x].iconHeight || null} 
         customVolume={Exercises[x].customVolume || null}
+        noFinishBell={Exercises[x].noFinishBell || null}
         isLiked={favIds.includes(x)}
       />
     )

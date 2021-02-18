@@ -535,7 +535,7 @@ function RootNavigator() {
       <Stack.Screen options={{headerShown:false, ...TransitionPresets.ModalTransition }} name="SignUpScreen2" component={SignUpScreen2} />
       <Stack.Screen options={{headerShown:false, ...TransitionPresets.RevealFromBottomAndroid }} name="SignInScreen" component={SignInScreen} />
       <Stack.Screen options={{headerShown:false, ...TransitionPresets.FadeFromBottomAndroid }} name="UserWelcomeScreen" component={UserWelcomeScreen} />
-      <Stack.Screen options={{headerShown:false, ...TransitionPresets.ScaleFromCenterAndroid }} name="Profile" component={ProfileScreen} />
+      {/* <Stack.Screen options={{headerShown:false, ...TransitionPresets.ScaleFromCenterAndroid }} name="Profile" component={ProfileScreen} /> */}
     </Stack.Navigator>
   )
 };

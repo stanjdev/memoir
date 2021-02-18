@@ -323,18 +323,18 @@ export default function ProfileScreen({navigation}) {
               <FeedbackCard 
                 text="We're currently in beta. Send us a suggestion or report a bug."
                 callToActionText="Send Us Feedback"
-                url="https://memoirapp.squarespace.com/contact"
+                url="http://memoir.design/contact"
               />
 
               {/* <FeedbackCard 
                 text="Are you enjoying Memoir? Leave us a review in the App Store."
                 callToActionText="Write a Review"
-                url="https://memoirapp.squarespace.com/contact"
+                url="http://memoir.design/contact"
               />
               <FeedbackCard 
                 text="Enjoying Memoir? Leave us a review in the Google Play Store."
                 callToActionText="Write a Review"
-                url="https://memoirapp.squarespace.com/contact"
+                url="http://memoir.design/contact"
               /> */}
 
             </View>
