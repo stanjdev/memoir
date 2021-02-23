@@ -319,10 +319,12 @@ export default function Navigation({navigation}) {
       // console.log("fetchSignInMethodsForEmail: " + JSON.stringify(await fireApp.auth().fetchSignInMethodsForEmail(email)))
       // console.log(userId);
 
-      if ((await fireApp.auth().fetchSignInMethodsForEmail(email || `${userId}@fbid.com`)).length > 0) {
+      if ((await fireApp.auth().fetchSignInMethodsForEmail(`${userId}@fbid.com`)).length > 0) {
+        console.log("signIntoFirebase!", email, userId);
         await fireApp
           .auth()
-          .signInWithEmailAndPassword(email || `${userId}@fbid.com`, userId);
+          .signInWithEmailAndPassword(`${userId}@fbid.com`, userId);
+          // .signInWithEmailAndPassword(email || `${userId}@fbid.com`, userId); // since email will be optional opt-in
           
         const currUser = fireApp.auth().currentUser;
         let userFirstName, userEmail, userToken;
@@ -348,7 +350,7 @@ export default function Navigation({navigation}) {
           // });
 
           try {
-            const credential = firebase.auth.EmailAuthProvider.credential(email || `${userId}@fbid.com`, userId);
+            const credential = firebase.auth.EmailAuthProvider.credential(`${userId}@fbid.com`, userId);
             await firebase.auth().currentUser.linkWithCredential(credential)
               .then(async usercred => {
                 const user = usercred.user;

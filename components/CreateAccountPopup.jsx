@@ -31,7 +31,7 @@ export default function CreateAccountPopup() {
 
   const signInWithFacebook = async () => {
     await Facebook.initializeAsync({fbAppId, fbAppName});
-    const {type, token} =  await Facebook.logInWithReadPermissionsAsync({ permissions: ['public_profile', 'email', 'user_friends'] })
+    const {type, token} = await Facebook.logInWithReadPermissionsAsync({ permissions: ['public_profile', 'email'] })
     // console.log("Token: ", token)
     if (type === "success") {
       const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,first_name,last_name,email`)

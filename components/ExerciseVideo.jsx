@@ -927,9 +927,10 @@ function keepGoing() {
         isLooping
         style={{ width: width, height: height }}
         // rate={videoSpeed}
-        // shouldCorrectPitch={correctPitch}
+        // shouldCorrectPitch={true}
         // rate={1.5}
       />
+
       {isFocused ? <StatusBar hidden={false} barStyle="light-content"/> : null} 
 
 
