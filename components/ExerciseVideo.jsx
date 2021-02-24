@@ -1,14 +1,10 @@
-import React, { useEffect, useState, useRef, useContext, useCallback } from 'react';
-import { Text, Modal, View, ScrollView, StatusBar, Alert, Image, Pressable, Dimensions, StyleSheet, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, Animated, AppState } from 'react-native';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { Text, Modal, View, ScrollView, StatusBar, Alert, Image, Pressable, Dimensions, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Animated, AppState } from 'react-native';
 import { useFonts } from 'expo-font';
 import { useIsFocused } from '@react-navigation/native';
 import { useKeepAwake, deactivateKeepAwake, activateKeepAwake } from 'expo-keep-awake';
-import { AuthContext } from '../components/context';
 import AppButton from './AppButton';
 import DoubleClick from 'react-native-double-tap';
-
-import * as SplashScreen from 'expo-splash-screen';
-// const bgImage = require('../assets/splash/memoir-splash-thin-4x.png');
 
 import { Audio, Video } from 'expo-av';
 import { PitchCorrectionQuality, setAudioModeAsync } from 'expo-av/build/Audio';
@@ -20,14 +16,6 @@ const { width, height } = Dimensions.get('window');
 
 export default function ExerciseVideo({ route, navigation }) {
   useKeepAwake();
-  
-  // useEffect(() => {
-  //   SplashScreen.preventAutoHideAsync();
-  //   setTimeout(() => {
-  //     SplashScreen.hideAsync();
-  //   }, 300);
-  // }, [])
-
   const isFocused = useIsFocused();
 
   let [fontsLoaded] = useFonts({
@@ -38,18 +26,13 @@ export default function ExerciseVideo({ route, navigation }) {
 
   const { id, videoFile, videoUrl, cachedVideo, modalIcon, iconHeight, autoCountDown, customVolume, noFinishBell, modalText, uniqueImgEvening } = route.params;
 
-  const { signOut, userToken, userFirstName } = useContext(AuthContext);
-
   const [modalVisible, setModalVisible] = useState(true);
   const [exerciseFinished, setExerciseFinished] = useState(false);
   const [paused, setPaused] = useState(false);
-  const [videoBellVolume, setVideoBellVolume] = useState(0.0);
-  const [bellVolume, setBellVolume] = useState("1.0");
   const [showTimerScroller, setShowTimerScroller] = useState(true);
   const [displayTimerDuration, setDisplayTimerDuration] = useState(false);
   const [overlay, setOverlay] = useState(true);
   const [sessionSecs, setSessionSecs] = useState(0);
-
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const overlayFade = useRef(new Animated.Value(0)).current;
 
@@ -72,17 +55,15 @@ export default function ExerciseVideo({ route, navigation }) {
 
   let lastPress = null;
   const handlePress = () => {
-    
     const time = new Date().getTime();
     const delta = time - lastPress;
     const DOUBLE_PRESS_DELAY = 400;
   
-
     if (lastPress && delta < DOUBLE_PRESS_DELAY) {
       handleDoublePress();
     } else {
       touchScreenToggleControls();
-      console.log('single press!')
+      console.log('single press!');
       lastPress = time;
     }  
   }
@@ -92,15 +73,10 @@ export default function ExerciseVideo({ route, navigation }) {
     pause();
   }
 
-  const handleSinglePress = () => {
-    touchScreenToggleControls();
-  }
-
-
   const touchScreenToggleControls = () => {
     setOverlay(!overlay);
     overlayFader();
-  }
+  };
 
 
   const toggleShowTimerScroller = () => {
@@ -184,13 +160,11 @@ export default function ExerciseVideo({ route, navigation }) {
   useEffect(() => {
     if (runningClock) toggleClock();
     // MOUNT
-    // console.log("exercise screen mounted!");
-    // console.log(`Video File: ${videoFile}`);
+    // console.log(`Video File onMount: ${videoFile}`);
 
     // UNMOUNT
     return () => clearInterval(exerciseInterv.current);
   }, []);
-
 
 
   const startExercise = () => {
@@ -201,6 +175,34 @@ export default function ExerciseVideo({ route, navigation }) {
     if (!runningClock && autoCountDown) toggleClock();
   }
 
+  const pause = () => {
+    toggleClock();
+    setPaused(!paused);
+  }
+
+  const goBack = () => {
+    updateUserTime();
+    navigation.goBack();
+    if (playingAudio.current) {
+      playingAudio.current.stopAsync();
+    }
+    music.unloadAsync();
+  };
+  
+  const fromModalGoBack = () => {
+    setModalVisible(!modalVisible);
+    navigation.goBack();
+    if (playingAudio.current) {
+      playingAudio.current.stopAsync();
+    }
+    music.unloadAsync();
+  };
+
+  function keepGoing() {
+    setDisplayTimerDuration(false);
+    setExerciseFinished(false);
+    toggleClock();
+  };
 
   const exerciseInterv = useRef(null);
   useEffect(() => {
@@ -220,7 +222,7 @@ export default function ExerciseVideo({ route, navigation }) {
       clearInterval(exerciseInterv.current);
     }
     // console.log("runningClock", runningClock);
-  })
+  });
 
 
   const [toggleClock, runningClock, clear] = useInterval(() => {
@@ -260,7 +262,7 @@ export default function ExerciseVideo({ route, navigation }) {
     }
     console.log("runExerciseClock sessionSecs: " + sessionSecs);
     setSessionSecs(sessionSecs => sessionSecs += 1);
-  }
+  };
 
   // Add leading zero to numbers 9 or below (purely for aesthetics):
   function leadingZero(time) {
@@ -268,134 +270,14 @@ export default function ExerciseVideo({ route, navigation }) {
         time = "0" + time;
     }
     return time;
-}
-  
-
-function keepGoing() {
-  setDisplayTimerDuration(false);
-  setExerciseFinished(false);
-  toggleClock();
-}
-
-
-
-
-  
-  // // inactivity, hide the overlay controls - DIDN'T WORK
-  // // https://codedaily.io/tutorials/140/How-to-Detect-Touch-Inactivity-with-a-PanResponder-in-React-Native
-  
-  // const [inactive, setInactive] = useState(true);
-  // let inactiveTimeout;
-  // const [panResponder, setPanresponder] = useState();
-
-  // useEffect(() => {
-  //   const panResponder = PanResponder.create({
-  //     onMoveShouldSetPanResponderCapture: () => {
-  //       clearTimeout(inactiveTimeout)
-  //       setInactive(inactive => {
-  //         if (!inactive) return null;
-  //         return false;
-  //       });
-  //       inactiveTimeout = setTimeout(() => {
-  //         setInactive(true);
-  //       }, 3000);
-  //       return false;
-  //     }
-  //   })
-  //   setPanresponder(panResponder)
-  //   console.log("inactive: " + inactive)
-  //   console.log(JSON.stringify({...panResponder.panHandlers}))
-  //   return () => clearTimeout(inactiveTimeout)
-  // },)
-
-
-
-
-
-  // const fadeBellVolume = () => {
-  //   const fadeEffect = setInterval(() => {
-  //     if (videoBellVolume < 1.0) {
-  //       setVideoBellVolume(videoBellVolume => videoBellVolume + 0.1);
-  //       clearInterval(fadeEffect);
-  //     } else {
-  //       clearInterval(fadeEffect);
-  //     }
-  //     console.log(videoBellVolume);
-  //     clearInterval(fadeEffect);
-  //   }, 200);
-  // }
-
-  const [volumeOn, setVolumeOn] = useState(false);
-
-  // const fadeBellVolume = () => {
-  //   bellVolume = volumeOn ? 1.0 : 0.0;
-  //   setVolumeOn(!volumeOn);
-  //   const fadeEffect = setInterval(() => {
-  //     if (!volumeOn) {
-  //       if (bellVolume < 1.0) {
-  //         bellVolume = bellVolume + 0.1;
-  //       } else {
-  //         clearInterval(fadeEffect);
-  //       }
-  //     }
-  //     if (volumeOn) {
-  //       if (bellVolume > 0.0) {
-  //         bellVolume = bellVolume - 0.1;
-  //       } else {
-  //         clearInterval(fadeEffect);
-  //       }
-  //     }
-  //     console.log(bellVolume);
-  //     console.log(volumeOn);
-  //   }, 50);
-  // };
-
-
-  // LAST ATTEMPT: https://stackblitz.com/edit/react-rj8nrb https://docs.expo.io/versions/latest/sdk/video/ 
-  const fadeBellVolume = () => {
-    setVolumeOn(!volumeOn);
-
-    // volumeOn ? setBellVolume("1.0") : setBellVolume("0.0");
-    // if (bellVolume > 1.0) clearInterval(fadeEffect);
-    // if (bellVolume < 0.0) clearInterval(fadeEffect);
-    const fadeEffect = setInterval(() => {
-      if (!volumeOn) {
-        if (bellVolume > 0) {
-          setBellVolume(bellVolume => bellVolume - 0.1);
-        } else {
-          clearInterval(fadeEffect);
-          // setVolumeOn(!volumeOn);
-        }
-      }
-
-      if (volumeOn) {
-        if (bellVolume < 1) {
-          setBellVolume(bellVolume => bellVolume + 0.1);
-        } else {
-          clearInterval(fadeEffect);
-          // setVolumeOn(!volumeOn);
-        }
-      }
-    }, 500);
-    // if (fadeEffect) clearInterval(fadeEffect);
   };
+  
 
 
-
-
-
-
-
-
-
-
-  // MAY BE USEFUL FOR MUSIC / WHITE NOISE audio
-  // BELL SOUND - useInterval()
+  // BELL, MUSIC - useInterval()
   const bellSound = new Audio.Sound();
   const music = new Audio.Sound();
   Audio.setAudioModeAsync({playsInSilentModeIOS: true});
-
-  const playingAudio = useRef();
 
   const loadFinishedSound = async () => {
     if (noFinishBell) return;
@@ -406,9 +288,10 @@ function keepGoing() {
     } catch (error) {
       console.log(error);
     }
-    // // https://docs.expo.io/versions/latest/sdk/audio/?redirected#parameters
+    // https://docs.expo.io/versions/latest/sdk/audio/?redirected#parameters
   }
 
+  const playingAudio = useRef();
   const loadAndPlayMusic = async () => {
     try {
       await music.loadAsync(require('../assets/audio/bg-music.mp3'));
@@ -430,7 +313,6 @@ function keepGoing() {
     }
     return () => music.unloadAsync();
   }, [modalVisible]);
-
 
   useEffect(() => {
     if (playingAudio.current && !exerciseFinished) {
@@ -455,47 +337,11 @@ function keepGoing() {
     }
   }, [])
 
-  const goBack = () => {
-    updateUserTime();
-    navigation.goBack();
-    if (playingAudio.current) {
-      playingAudio.current.stopAsync();
-    }
-    music.unloadAsync();
-  };
-  
-  const fromModalGoBack = () => {
-    setModalVisible(!modalVisible);
-    navigation.goBack();
-    if (playingAudio.current) {
-      playingAudio.current.stopAsync();
-    }
-    music.unloadAsync();
-  };
 
 
-
-
-
-
-
+  // FIREBASE
   const currUser = fireApp.auth().currentUser;
   const progressRef = currUser ? fireApp.database().ref(currUser.uid).child('progress') : null;
-
-  // Increment User Practice Time - THIS WAY POST REQUESTS THE DB EVERY SECOND. NOT OPTIMAL
-  async function incrementUserTime() {
-    if (currUser) {
-      let timeSoFar;
-      progressRef.once('value', snapshot => {
-        timeSoFar = snapshot.val().practiceTime;
-      })
-
-      await progressRef.update({
-        practiceTime: timeSoFar += sessionSecs
-      })
-    }
-  }
-
 
   // WITH SAFETY CHECK ADDED - for users with no existing progress data objects
   // INSTEAD OF DB POST REQUESTING EVERY SECOND with incrementUserTime(), THIS INCREMENTS LOCALLY, THEN WHEN USER FINISHES EXERCISE WITH ALERT POPUP ORRR UNMOUNTS EXERCISE, THEN UPDATE THE PRACTICE TIME BY ADDING THE SO FAR WITH THIS LOCALLY INCREMENTED SECONDS TRACKER.
@@ -519,18 +365,14 @@ function keepGoing() {
           practiceTime: timeSoFar += sessionSecs
         })
       })
-
       setSessionSecs(0);
     } 
-  }
+  };
 
   // // DOES NOT WORK after it's unmounted.
   // useEffect(() => {
   //   return () => updateUserTime()
   // }, [])
-
-
-
 
 
   // // AppState attempt for when user leaves app, NOT WORKING
@@ -554,15 +396,6 @@ function keepGoing() {
   //   console.log("AppState", appState.current);
   //   console.log(appStateVisible)
   // }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -594,7 +427,6 @@ function keepGoing() {
       });
     }
   };
-
 
 
   // WITH SAFETY CHECK ADDED - for users with no existing progress data objects
@@ -655,35 +487,17 @@ function keepGoing() {
 
       });
     } 
-  }
-
-
-
-
-  
-
-
-
-
-
-
-
+  };
 
   // DATE OBJECT for 24 hour attempt
   // https://stackoverflow.com/questions/51405133/check-if-a-date-is-24-hours-old/51405252
-
   // let now = Date.now();
   // console.log(now)
   // let oneDay = new Date().getTime() + (1 * 24 * 60 * 60 * 1000);
   // console.log(oneDay)
 
-
-
-
-
   // const fakeAddProgressData = async () => {
   //   const progressPushRef = await firebase.database().ref(currUser.uid).child('progress');
-
   //   progressPushRef.set({
   //     practiceTime: 2.7,
   //     sessionsCompleted: 21,
@@ -691,9 +505,6 @@ function keepGoing() {
   //     bestStreak: 7
   //   })
   // }
-
-
-
 
 
   const favRef = currUser && fireApp.database().ref(currUser.uid).child('favorites');
@@ -709,7 +520,6 @@ function keepGoing() {
   }
 
   const toggleFavorite = async () => {
-    
     // get a unique key
     if (currUser !== null) {
       const databaseRef = await fireApp.database().ref(currUser.uid).child('favorites').push();
@@ -729,7 +539,6 @@ function keepGoing() {
       })
       
       favRef.once("value", (snapshot) => {
-        
         // // // if no favs, add one:
         // if (snapshot.numChildren() == 0) {
         //   databaseRef.set({
@@ -759,27 +568,19 @@ function keepGoing() {
         }
       })
     }
-  }
+  };
 
   useEffect(() => {
     console.log(`fav ids: ${favIds} and id: ${id} = ${favIds.includes(id)}`);
     setLiked(favIds.includes(id));
-
     // return () => favRef.off()
   }, [])
-
-
 
   const [liked, setLiked] = useState(false);
   const toggleLike = (bool) => {
     // setLiked(!liked);
     setLiked(bool);
-  }
-
-
-
-
-
+  };
 
 
   // simple bell mute function
@@ -817,16 +618,10 @@ function keepGoing() {
   // }, [bellMuted]);
 
 
-
   const [musicMuted, setMusicMuted] = useState(false);
   const toggleMusic = () => {
     setMusicMuted(!musicMuted);
     // toggleUserAudioPrefs("music", musicMuted, setMusicMuted);
-  }
-
-  const pause = () => {
-    toggleClock();
-    setPaused(!paused);
   }
 
 
@@ -861,14 +656,6 @@ function keepGoing() {
       });
     }
   };
-
-
-
-  // console.log("video file: " + JSON.stringify(videoFile))
-  // console.log("video url from firebase storage: " + JSON.stringify(videoUrl))
-
-
-
 
 
   // const _handleVideoRef = component => {
@@ -910,9 +697,7 @@ function keepGoing() {
   // }, [videoSpeed, renderSpeedOptions])
 
 
-
   return (
-    
     <View style={{ flex: 1, resizeMode: "cover", position: "relative", zIndex: -10,}} >
       <Video
         // source={ videoFile }
@@ -932,7 +717,6 @@ function keepGoing() {
       />
 
       {isFocused ? <StatusBar hidden={false} barStyle="light-content"/> : null} 
-
 
       {/* <TouchableWithoutFeedback 
         onPress={touchScreenToggleControls} 
@@ -976,12 +760,14 @@ function keepGoing() {
 
       <Animated.View style={{ height: height, width: width, position: "absolute", opacity: overlayFade }}>
         <View style={{ borderColor: "white", position: "absolute", height: height}}>
-          <View style={{ width: width, flexDirection: "row", alignItems: "center", marginTop: height * 0.07, zIndex: 100}}>
+          <View style={{ width: width, flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: height * 0.07, zIndex: 100}}>
             <TouchableOpacity onPress={goBack} style={{ padding: 15, }}>
               <Image source={require('../assets/screen-icons/back-arrow-white.png')} style={{height: 20, marginLeft: 0}} resizeMode="contain"/>
             </TouchableOpacity>
 
-            {/* {renderSpeedOptions()} */}
+            {/* <View style={{flexDirection: "column"}}>
+              {renderSpeedOptions()}
+            </View> */}
 
           </View>
 
@@ -1009,7 +795,6 @@ function keepGoing() {
             </View>
           </Animated.View>
 
-
           <View style={{...styles.borderControl}, { position: "absolute", bottom: 0, flexDirection: "row", justifyContent: "space-evenly", width: width, height: height * 0.12 }}>
             <TouchableOpacity style={styles.exerciseControls, {padding: 13, paddingLeft: 11} } onPress={ toggleFavorite }>
               {liked ? 
@@ -1036,9 +821,7 @@ function keepGoing() {
         </View>
       </Animated.View>
       
-
       
-
       <View style={{flex: 1, justifyContent: "center", alignItems: "center", marginTop: 22}}>
         <Modal
           animationType="slide"
@@ -1047,9 +830,9 @@ function keepGoing() {
           onRequestClose={() => { Alert.alert("Modal has been closed.") }}
         >
           
-          <TouchableOpacity onPress={fromModalGoBack} style={{ padding: 15, width: width * 0.2, position: "absolute", top: 50, }}>
-            <Image source={require('../assets/screen-icons/back-arrow-white.png')} style={{height: 20, marginLeft: 0}} resizeMode="contain"/>
-          </TouchableOpacity>
+        <TouchableOpacity onPress={fromModalGoBack} style={{ padding: 15, width: width * 0.2, position: "absolute", top: 50, }}>
+          <Image source={require('../assets/screen-icons/back-arrow-white.png')} style={{height: 20, marginLeft: 0}} resizeMode="contain"/>
+        </TouchableOpacity>
 
           <View style={{backgroundColor: "white", height: height * 0.74, borderRadius: 20, justifyContent: "space-between", alignItems: "center", width: width * 0.9, ...styles.modalView }}>
             <View style={{width: width < 380 ? width * 0.69 : width * 0.63, height: height * 0.45, justifyContent: "space-between", alignItems: "center" }}>
@@ -1097,7 +880,7 @@ function keepGoing() {
 
     </View>
   )
-}
+};
 
 
 const styles = StyleSheet.create({
@@ -1152,17 +935,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     // width: width * 0.51
   }
-})
-
-
-
+});
 
 
 
 // the callback was countDown() or loadSound()
 // toggle() is called whenever the pause and play button is pressed
 // useRef.current() to store a value that persists between renders. 
-
 
 // useINTERVAL ATTEMPT
 function useInterval(callback, delay) {
