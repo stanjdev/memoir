@@ -14,3 +14,4 @@ web-build/
 
 # Firebase config
 ./config.js
+firebase.js
