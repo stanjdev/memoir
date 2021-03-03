@@ -15,6 +15,7 @@ const provider = new firebase.auth.FacebookAuthProvider();
 // Expo APIs
 import * as Facebook from 'expo-facebook';
 import * as AppleAuthentication from 'expo-apple-authentication';
+import * as GoogleSignIn from 'expo-google-sign-in';
 
 export default function CreateAccountPopup() {
   const navigation = useNavigation();
@@ -53,7 +54,7 @@ export default function CreateAccountPopup() {
       }
 
     } else {
-      alert(type);
+      // alert(`Error type: ${type}`);
     }
   }
 
@@ -154,7 +155,18 @@ const signInWithApple = async () => {
 
 
 const signInWithGoogle = async () => {
-  alert("Google sign in coming soon!");
+  alert("Google sign in");
+  
+  // https://docs.expo.io/versions/latest/sdk/google-sign-in
+  // try {
+  //   await GoogleSignIn.askForPlayServicesAsync();
+  //   const { type, user } = await GoogleSignIn.signInAsync();
+  //   if (type === 'success') {
+  //     this._syncUserWithStateAsync();
+  //   }
+  // } catch ({ message }) {
+  //   alert('login: Error:' + message);
+  // }
 };
 
 

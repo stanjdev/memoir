@@ -54,7 +54,8 @@
     "react-native-video": "^5.1.1",
     "react-native-web": "~0.13.12",
     "shorthash": "0.0.2",
-    "expo-device": "~2.4.0"
+    "expo-device": "~2.4.0",
+    "expo-google-sign-in": "~8.4.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"

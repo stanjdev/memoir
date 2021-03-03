@@ -33,20 +33,20 @@ export default function BreatheScreen({navigation}) {
   const [isReady, setIsReady] = useState(false);
 
   async function _loadAssetsAsync() {
-    const imageAssets = cacheImages([
-      // require("../../assets/exercises-images/flower-of-life.png"),
-      // require("../../assets/exercises-images/circles.png"),
-      // require("../../assets/exercises-images/4-7-9-wheel.png"),
-      // require("../../assets/exercises-images/box-breathing.png"),
-      // require("../../assets/exercises-images/yin-yang.png"),
-      // require("../../assets/exercises-images/horiz-deep-breaths.png"),
-      // require("../../assets/exercises-images/redrock-4x.png"),
-      // require("../../assets/exercises-images/aurora-4x.png"),
-      // require("../../assets/exercises-images/crescent-moon.png"),
-      // require("../../assets/exercises-images/forest-dawn-4x.png"),
-      // require("../../assets/exercises-images/cosmos.png"),
-    ]);
-    await Promise.all([...imageAssets]);
+    // const imageAssets = cacheImages([
+    //   // require("../../assets/exercises-images/flower-of-life.png"),
+    //   // require("../../assets/exercises-images/circles.png"),
+    //   // require("../../assets/exercises-images/4-7-9-wheel.png"),
+    //   // require("../../assets/exercises-images/box-breathing.png"),
+    //   // require("../../assets/exercises-images/yin-yang.png"),
+    //   // require("../../assets/exercises-images/horiz-deep-breaths.png"),
+    //   // require("../../assets/exercises-images/redrock-4x.png"),
+    //   // require("../../assets/exercises-images/aurora-4x.png"),
+    //   // require("../../assets/exercises-images/crescent-moon.png"),
+    //   // require("../../assets/exercises-images/forest-dawn-4x.png"),
+    //   // require("../../assets/exercises-images/cosmos.png"),
+    // ]);
+    // await Promise.all([...imageAssets]);
   }
 
 
