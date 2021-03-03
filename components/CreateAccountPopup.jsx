@@ -6,6 +6,7 @@ import { AuthContext } from '../components/context';
 import AppButton from './AppButton';
 import * as Animatable from 'react-native-animatable';
 const { width, height } = Dimensions.get('window');
+import * as Device from 'expo-device';
 
 // Firebase setup for FB
 import firebase from 'firebase';
@@ -33,7 +34,7 @@ export default function CreateAccountPopup() {
     await Facebook.initializeAsync({fbAppId, fbAppName});
     const {type, token} = await Facebook.logInWithReadPermissionsAsync({ permissions: ['public_profile', 'email'] })
     // console.log("Token: ", token)
-    if (type === "success") {
+    if (type == "success") {
       const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,first_name,last_name,email`)
       const json = await response.json();
       console.log("facebook response: ", json);
@@ -47,11 +48,12 @@ export default function CreateAccountPopup() {
       try {
         await fbSignUp(email, first_name, last_name, userId, token);
       } catch (error) {
+        alert(error);
         console.log(error);
       }
 
     } else {
-      // alert(type);
+      alert(type);
     }
   }
 
@@ -148,7 +150,13 @@ const signInWithApple = async () => {
       // handle other errors
     }
   }
-}
+};
+
+
+const signInWithGoogle = async () => {
+  alert("Google sign in coming soon!");
+};
+
 
 
 const currUser = firebase.auth().currentUser;
@@ -176,6 +184,7 @@ useEffect(() => {
           size={28}
           color={"white"}
         />
+        {Device.osName == "iOS" ? 
         <AppButton 
           title="Sign in with Apple" 
           buttonStyles={styles.appleButton} 
@@ -186,6 +195,19 @@ useEffect(() => {
           size={28}
           color={"white"}
         />
+        :
+        <AppButton 
+          title="Sign in with Google" 
+          buttonStyles={styles.googleButton} 
+          buttonTextStyles={styles.buttonText} 
+          onPress={signInWithGoogle}
+          icon={"Fontisto"}
+          name={"google"}
+          size={28}
+          color={"white"}
+        />
+        // null
+        }
 
       {/* <AppleAuthentication.AppleAuthenticationButton
         buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
@@ -253,6 +275,14 @@ const styles = StyleSheet.create({
   },
   appleButton: {
     backgroundColor: "#1E1E1E",
+    height: height < 600 ? 55 : height < 700 ? 59 : 63,
+    width: width < 350 ? width * 0.85 : 327,
+    borderRadius: 7,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  googleButton: {
+    backgroundColor: "#34A853",
     height: height < 600 ? 55 : height < 700 ? 59 : 63,
     width: width < 350 ? width * 0.85 : 327,
     borderRadius: 7,

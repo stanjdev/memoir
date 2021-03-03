@@ -5,6 +5,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { useKeepAwake, deactivateKeepAwake, activateKeepAwake } from 'expo-keep-awake';
 import AppButton from './AppButton';
 import DoubleClick from 'react-native-double-tap';
+import useInterval from '../hooks/useInterval';
 
 import { Audio, Video } from 'expo-av';
 import { PitchCorrectionQuality, setAudioModeAsync } from 'expo-av/build/Audio';
@@ -698,7 +699,7 @@ export default function ExerciseVideo({ route, navigation }) {
 
 
   return (
-    <View style={{ flex: 1, resizeMode: "cover", position: "relative", zIndex: -10,}} >
+    <View style={{ flex: 1, resizeMode: "cover", position: "relative", zIndex: -10, height: height, width: width, backgroundColor: "black" }} >
       <Video
         // source={ videoFile }
         // source={{ uri: videoUrl }}
@@ -716,7 +717,7 @@ export default function ExerciseVideo({ route, navigation }) {
         // rate={1.5}
       />
 
-      {isFocused ? <StatusBar hidden={false} barStyle="light-content"/> : null} 
+      {isFocused ? <StatusBar hidden={true} barStyle="light-content"/> : null} 
 
       {/* <TouchableWithoutFeedback 
         onPress={touchScreenToggleControls} 
@@ -936,45 +937,3 @@ const styles = StyleSheet.create({
     // width: width * 0.51
   }
 });
-
-
-
-// the callback was countDown() or loadSound()
-// toggle() is called whenever the pause and play button is pressed
-// useRef.current() to store a value that persists between renders. 
-
-// useINTERVAL ATTEMPT
-function useInterval(callback, delay) {
-  const savedCallback = useRef();
-  const intervalId = useRef(null);
-  const [currentDelay, setDelay] = useState(delay);
-
-  const toggleRunning = useCallback(
-    () => setDelay(currentDelay => (currentDelay === null ? delay : null)),
-    [delay]
-  );
-
-  const clear = useCallback(() => clearInterval(intervalId.current), []);
-
-  // Remember the latest function. Store it in the useRef().current
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
-
-  // Set up the interval.
-  useEffect(() => {
-    function tick() {
-      savedCallback.current();
-    }
-
-    if (intervalId.current) clear();
-
-    if (currentDelay !== null) {
-      intervalId.current = setInterval(tick, currentDelay);
-    }
-
-    return clear;
-  }, [currentDelay, clear]);
-
-  return [toggleRunning, !!currentDelay, clear];
-}

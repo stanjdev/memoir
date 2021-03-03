@@ -6,6 +6,8 @@ import { useIsFocused } from '@react-navigation/native';
 import ProfileStatsBlock from '../../components/ProfileStatsBlock';
 import CreateAccountPopup from '../../components/CreateAccountPopup';
 import AppButton from '../../components/AppButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Device from 'expo-device';
 
 const { width, height } = Dimensions.get('window');
 
@@ -14,11 +16,10 @@ import * as WebBrowser from 'expo-web-browser';
 
 import firebase from 'firebase';
 
-
 export default function ProfileScreen({navigation}) {
   const isFocused = useIsFocused();
   const { signOut, userToken, userFirstName } = useContext(AuthContext);
-
+  
   const [showPopUp, setShowPopup] = useState(false);
   
   useEffect(() => {
@@ -107,20 +108,32 @@ export default function ProfileScreen({navigation}) {
       past5Hours -= fiveHours;
       count++;
     }
-    let ceil = (count * fiveHours / 60 / 60);
+    // FOR HOURS.
+    // let ceil = (count * fiveHours / 60 / 60);
+    let ceil = (count * fiveHours / 60);
     let totalSeconds = count * fiveHours;
     fiveHrGoal.current = totalSeconds;
     
-    return practiceTime < 1800 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" seconds={practiceTime} number={(practiceTime / 60 ).toFixed(1)} subtitle="Minutes" subText="30 min Goal" progress={(Math.max(practiceTime, 0.01) / 60 / 60) / 0.5}/> 
-    : practiceTime >= 1800 && practiceTime < 7200 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(1)} subtitle="Hours" subText="2hr Goal" progress={(practiceTime / 60 / 60) / 2}/> 
-    : practiceTime >= 7200 && practiceTime < 18000 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(1)} subtitle="Hours" subText="5hr Goal" progress={(practiceTime / 60 / 60) / 5}/> 
-    : practiceTime >= fiveHours ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(1)} subtitle="Hours" subText={`${ceil}hr Goal`} progress={(practiceTime / 60 / 60) / ceil}/> 
-    : <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number="0" subtitle="Hours" subText="5hr Goal" progress={0.01}/>
+    return practiceTime >= 60 && practiceTime <= 119 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" seconds={practiceTime} number={Math.floor(practiceTime / 60)} subtitle="Minute" subText="30 Minute Goal" progress={(Math.max(practiceTime, 0.01) / 60 / 60) / 0.5}/> 
+    : practiceTime < 1800 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" seconds={practiceTime} number={Math.floor(practiceTime / 60 )} subtitle="Minutes" subText="30 Minute Goal" progress={(Math.max(practiceTime, 0.01) / 60 / 60) / 0.5}/> 
+    : practiceTime >= 1800 && practiceTime < 7200 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={Math.floor(practiceTime / 60)} subtitle="Minutes" subText="120 Minute Goal" progress={(practiceTime / 60 / 60) / 2}/> 
+    : practiceTime >= 7200 && practiceTime < 18000 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={Math.floor(practiceTime / 60)} subtitle="Minutes" subText="300 Minute Goal" progress={(practiceTime / 60 / 60) / 5}/> 
+    : practiceTime >= fiveHours ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={Math.floor(practiceTime / 60 )} subtitle="Minutes" subText={`${ceil} Minute Goal`} progress={(practiceTime / 60) / ceil}/> 
+    : <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number="0" subtitle="Minutes" subText="300 Minute Goal" progress={0.01}/>
+    
+    // FOR HOURS.
+    // return practiceTime >= 60 && practiceTime <= 119 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" seconds={practiceTime} number={Math.floor(practiceTime / 60 )} subtitle="Minute" subText="30 Minute Goal" progress={(Math.max(practiceTime, 0.01) / 60 / 60) / 0.5}/> 
+    // : practiceTime < 1800 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" seconds={practiceTime} number={(practiceTime / 60 ).toFixed(1)} subtitle="Minutes" subText="30 min Goal" progress={(Math.max(practiceTime, 0.01) / 60 / 60) / 0.5}/> 
+    // : practiceTime >= 1800 && practiceTime < 7200 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(1)} subtitle="Hours" subText="2hr Goal" progress={(practiceTime / 60 / 60) / 2}/> 
+    // : practiceTime >= 7200 && practiceTime < 18000 ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(1)} subtitle="Hours" subText="5hr Goal" progress={(practiceTime / 60 / 60) / 5}/> 
+    // : practiceTime >= fiveHours ? <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number={(practiceTime / 60 / 60).toFixed(1)} subtitle="Hours" subText={`${ceil}hr Goal`} progress={(practiceTime / 60 / 60) / ceil}/> 
+    // : <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-timer.png')} title="Total Practice Time" number="0" subtitle="Hours" subText="5hr Goal" progress={0.01}/>
   }
 
 
   // Congratulation Alerts 1
   const [dismissedTimeGoal, setDismissedTimeGoal] = useState(false);
+
   const [dismissedSessions, setDismissedSessions] = useState(false);
   const [dismissedCurrStreak, setDismissedCurrStreak] = useState(false);
   const bestStreakSoFar = useRef();
@@ -132,11 +145,17 @@ export default function ProfileScreen({navigation}) {
   
   const timeGoal = useRef();
   useEffect(() => {
-    timeGoal.current = timeConditions
+    console.log("practiceTime: ", practiceTime);
+    timeGoal.current = timeConditions;
   }, [])
 
 
   useEffect(() => {
+    // setTimeout(async () => {
+    //   setDismissedTimeGoal(await AsyncStorage.getItem("dismissedTimeGoal") || false);
+    //   console.log(dismissedTimeGoal);
+    // }, 0);
+
     if (sessionsCompleted == 0 || currentStreak == 0) return;
     if (sessionsCompleted % 10 !== 0) setDismissedSessions(false);
     if (currentStreak % 10 !== 0) setDismissedCurrStreak(false);
@@ -155,7 +174,7 @@ export default function ProfileScreen({navigation}) {
       //   }}
       // ]);
     }
-    console.log(practiceTime, fiveHrGoal.current, timeGoal.current);
+    console.log(practiceTime, timeGoal.current, fiveHrGoal.current);
 
     if (isFocused && sessionsCompleted % 10 == 0 && !dismissedSessions) {
       setTimeout(() => {
@@ -193,9 +212,11 @@ export default function ProfileScreen({navigation}) {
   const dismissTimeGoalAlert = () => {
     setTimeGoalVisible(false);
     setDismissedTimeGoal(true);
+    // AsyncStorage.setItem('dismissedTimeGoal', true);
     setTimeout(() => {
       timeGoal.current = timeConditions;
       setDismissedTimeGoal(false);
+      // AsyncStorage.setItem('dismissedTimeGoal', false);
     }, 1000);
   };
 
@@ -267,7 +288,8 @@ export default function ProfileScreen({navigation}) {
 
             <CustomAlert 
               header="Great Job!"
-              message={`${practiceTime < 3600 ? Math.trunc(practiceTime / 60) : Math.trunc(practiceTime / 60 / 60)} Minutes of Practice Time`}
+              // message={`${practiceTime < 3600 ? Math.trunc(practiceTime / 60) : Math.trunc(practiceTime / 60 / 60)} Minutes of Practice Time`}
+              message={`${Math.trunc(practiceTime / 60)} Minutes of Practice Time`}
               isVisible={timeGoalVisible}
               onPress={dismissTimeGoalAlert}
               />
@@ -326,16 +348,19 @@ export default function ProfileScreen({navigation}) {
                 url="http://memoir.design/contact"
               />
 
-              {/* <FeedbackCard 
-                text="Are you enjoying Memoir? Leave us a review in the App Store."
-                callToActionText="Write a Review"
-                url="http://memoir.design/contact"
-              />
-              <FeedbackCard 
-                text="Enjoying Memoir? Leave us a review in the Google Play Store."
-                callToActionText="Write a Review"
-                url="http://memoir.design/contact"
-              /> */}
+              {/* {Device.osName == "iOS" ? 
+                <FeedbackCard 
+                  text="Are you enjoying Memoir? Leave us a review in the App Store."
+                  callToActionText="Write a Review"
+                  url="http://memoir.design/contact"
+                />
+              :
+                <FeedbackCard 
+                  text="Enjoying Memoir? Leave us a review in the Google Play Store."
+                  callToActionText="Write a Review"
+                  url="http://memoir.design/contact"
+                />
+              } */}
 
             </View>
             

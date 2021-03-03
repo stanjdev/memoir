@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, Dimensions, StyleSheet } from 'react-native';
 const { width, height } = Dimensions.get('window');
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import * as FileSystem from 'expo-file-system';
 import firebase from 'firebase';
 
@@ -69,7 +69,7 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
 
 
   const JumboExercise = () => (
-    <TouchableOpacity onPress={() => notSignedIn ? console.log("not signed in!") : 
+    <TouchableWithoutFeedback onPress={() => notSignedIn ? console.log("not signed in!") : 
       navigation.navigate("ExerciseVideo", { 
         id, 
         videoFile, 
@@ -86,11 +86,11 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
         style={{ height: height * 0.4, width: width * 0.9, }}
         resizeMode="contain"
       />
-    </TouchableOpacity> 
+    </TouchableWithoutFeedback> 
   );
 
   const HorizontalExercise = () => (
-    <TouchableOpacity onPress={() => notSignedIn ? console.log("not signed in!") : 
+    <TouchableWithoutFeedback onPress={() => notSignedIn ? console.log("not signed in!") : 
       navigation.navigate("ExerciseVideo", { 
         id, 
         videoFile, 
@@ -105,12 +105,12 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
         style={{width: width * customWidth, height: height * 0.17 }}
         resizeMode="contain" 
       />
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   );
 
   const ThumbnailExercise = () => (
     <View style={styles.imageSmallContainer}>
-      <TouchableOpacity onPress={() => notSignedIn ? console.log("not signed in!") : 
+      <TouchableWithoutFeedback onPress={() => notSignedIn ? console.log("not signed in!") : 
         navigation.navigate("ExerciseVideo", { 
           id, 
           videoFile, 
@@ -130,7 +130,7 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
         {liked ? 
         <Image source={require('../assets/exercises-images/liked-heart.png')} style={styles.heart} resizeMode="contain"/>
         : null}
-      </TouchableOpacity>
+      </TouchableWithoutFeedback>
       <Text style={styles.exerciseTitleFont}>{title}</Text>
       <Text style={styles.exerciseSubTitleFont}>{subTitle}</Text>
     </View>

@@ -74,13 +74,19 @@ export default function ProfileStatsBlock({icon, title, seconds, number, subtitl
               style={{ 
                 flexDirection: 'column', 
                 height: 40, 
-                width: seconds && seconds < 3 ? 30 
+                width: seconds && seconds < 3 ? 30
                         : Math.trunc(number) !== number && number > 0 ? width * (String(number).length + 1) / 25 
-                        : number > 0 ? width * String(number).length / 15.5
+                        : number > 0 ? (String(number).length + 1) * 16.5
                         : 30, 
+                // Old width settings:
+                // width: seconds && seconds < 3 ? 30 
+                //         : Math.trunc(number) !== number && number > 0 ? width * (String(number).length + 1) / 25 
+                //         : number > 0 ? width * String(number).length / 15.5
+                //         : 30, 
               }}
               maskElement={
-                <View>
+               /* to see border: style={{borderWidth: 1}} */
+               <View>
                   {
                     number > 0 ?
                     <Animatable.View animation={animation}>
@@ -140,7 +146,8 @@ const styles = StyleSheet.create({
     color: "#717171"
   },
   numBarMaskStyle: {
-    flex: 1, backgroundColor: "#3681C7"
+    flex: 1, 
+    backgroundColor: "#3681C7",
   },
   subTitleStyle: {
     fontFamily: "Assistant-SemiBold", 

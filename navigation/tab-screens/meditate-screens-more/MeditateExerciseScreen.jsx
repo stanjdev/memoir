@@ -7,6 +7,7 @@ import { useFonts } from 'expo-font';
 const bgImage = require('../../../assets/splash/memoir-splash-thin-4x.png');
 import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../../../components/context';
+import useInterval from '../../../hooks/useInterval';
 
 // import BackgroundTimer from 'react-native-background-timer'; ONLY WORKS IN 'BARE' WORKFLOW IT SEEMS.
 
@@ -426,49 +427,3 @@ const styles = StyleSheet.create({
     fontFamily: "Assistant-SemiBold"
   }
 })
-
-
-
-
-
-
-// the callback was countDown() or loadSound()
-// toggle() is called whenever the pause and play button is pressed
-// useRef.current() to store a value that persists between renders. 
-
-
-// useINTERVAL ATTEMPT
-function useInterval(callback, delay) {
-  const savedCallback = useRef();
-  const intervalId = useRef(null);
-  const [currentDelay, setDelay] = useState(delay);
-
-  const toggleRunning = useCallback(
-    () => setDelay(currentDelay => (currentDelay === null ? delay : null)),
-    [delay]
-  );
-
-  const clear = useCallback(() => clearInterval(intervalId.current), []);
-
-  // Remember the latest function. Store it in the useRef().current
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
-
-  // Set up the interval.
-  useEffect(() => {
-    function tick() {
-      savedCallback.current();
-    }
-
-    if (intervalId.current) clear();
-
-    if (currentDelay !== null) {
-      intervalId.current = setInterval(tick, currentDelay);
-    }
-
-    return clear;
-  }, [currentDelay, clear]);
-
-  return [toggleRunning, !!currentDelay, clear];
-}
