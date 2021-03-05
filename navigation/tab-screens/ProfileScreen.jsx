@@ -252,7 +252,7 @@ export default function ProfileScreen({navigation}) {
     return <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-arrow.png')} title="Current Streak" number={currentStreak} subtitle={currentStreak === 1 ? "Day" : "Days"} subText={`${ceil} Day Streak Goal`} progress={ Math.max(currentStreak, 0.01) / ceil}/>
   }
 
-  console.log("curUser:", currUser.isAnonymous);
+  // console.log("currUser is not anonymous:", currUser && !currUser.isAnonymous);
 
   return (
     <View style={{ backgroundColor:"white", flex: 1, resizeMode: "cover", justifyContent: "flex-start",}}>
@@ -285,7 +285,7 @@ export default function ProfileScreen({navigation}) {
             </View>
             } */}
 
-            {currUser.isAnonymous ? null : 
+            {currUser && !currUser.isAnonymous ? 
               <>
                 <CustomAlert 
                   header="Great Job!"
@@ -316,6 +316,7 @@ export default function ProfileScreen({navigation}) {
                   onPress={dismissBestStreakGoalVisible}
                 />
               </>
+              : null
             }
 
 
