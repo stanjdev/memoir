@@ -28,11 +28,11 @@ export default function CreateAccountPopup() {
 
   const { appleSignUp, appleTokenIn, userToken, fbSignUp, fbTokenIn } = useContext(AuthContext);
 
-  const fbAppId = "200817071551403";
-  const fbAppName = 'memoir'
+  const appId = "200817071551403";
+  const appName = 'memoir'
 
   const signInWithFacebook = async () => {
-    await Facebook.initializeAsync({fbAppId, fbAppName});
+    await Facebook.initializeAsync({ appId, appName });
     const {type, token} = await Facebook.logInWithReadPermissionsAsync({ permissions: ['public_profile', 'email'] })
     // console.log("Token: ", token)
     if (type == "success") {

@@ -1,54 +1,20 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Text, View, StatusBar, Image, Dimensions, StyleSheet, TouchableOpacity, RefreshControl } from 'react-native';
+import { Text, View, StatusBar, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 const { width, height } = Dimensions.get('window');
-import { Asset } from 'expo-asset';
 import { AuthContext } from '../../components/context';
-
-import Exercise from '../../components/Exercise';
 import { useIsFocused } from '@react-navigation/native';
-
-import { Exercises } from '../../model/exercise-store';
-
 import { ScrollView } from 'react-native-gesture-handler';
-
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
-// import { AppLoading } from 'expo';
+import Exercise from '../../components/Exercise';
+import { Exercises } from '../../model/exercise-store';
 
 import firebase from 'firebase';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
-// https://docs.expo.io/guides/preloading-and-caching-assets/?redirected#publishing-assets
-function cacheImages(images) {
-  return images.map(image => Asset.fromModule(image).downloadAsync());
-}
 
 export default function BreatheScreen({navigation}) {
   const isFocused = useIsFocused();
 
-  const { userToken } = useContext(AuthContext);
-
   const [isReady, setIsReady] = useState(false);
-
-  async function _loadAssetsAsync() {
-    // const imageAssets = cacheImages([
-    //   // require("../../assets/exercises-images/flower-of-life.png"),
-    //   // require("../../assets/exercises-images/circles.png"),
-    //   // require("../../assets/exercises-images/4-7-9-wheel.png"),
-    //   // require("../../assets/exercises-images/box-breathing.png"),
-    //   // require("../../assets/exercises-images/yin-yang.png"),
-    //   // require("../../assets/exercises-images/horiz-deep-breaths.png"),
-    //   // require("../../assets/exercises-images/redrock-4x.png"),
-    //   // require("../../assets/exercises-images/aurora-4x.png"),
-    //   // require("../../assets/exercises-images/crescent-moon.png"),
-    //   // require("../../assets/exercises-images/forest-dawn-4x.png"),
-    //   // require("../../assets/exercises-images/cosmos.png"),
-    // ]);
-    // await Promise.all([...imageAssets]);
-  }
-
 
   let [fontsLoaded] = useFonts({
     'Assistant': require('../../assets/fonts/Assistant/Assistant-VariableFont_wght.ttf'),
@@ -56,8 +22,8 @@ export default function BreatheScreen({navigation}) {
     'Assistant-SemiBold': require('../../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   });
 
+
   const currentHour = new Date().getHours();
-  // console.log(currentHour)
 
   const [selectedCategory, setSelectedCategory] = useState(currentHour >= 20 || currentHour <= 3 ? "Sleep" : "New");
 
@@ -66,7 +32,6 @@ export default function BreatheScreen({navigation}) {
     "New": "New",
     "Popular": "Popular",
   }
-
   const renderCategoryOptions = () => {
     return Object.keys(categoryOptions).map((option, i) => {
       return (
@@ -94,7 +59,6 @@ export default function BreatheScreen({navigation}) {
 
 
 
-
   const currUser = firebase.auth().currentUser;
   const favRef = currUser ? firebase.database().ref(currUser.uid).child('favorites') : null;
 
@@ -115,29 +79,9 @@ export default function BreatheScreen({navigation}) {
     }
   }, [])
 
-  const checkIfLiked = (exId) => {
-    console.log("Breathe Screen favs:", favIds.includes(exId))
-    return favIds.includes(exId);
-  }
-
-
-
-  // const [refreshing, setRefreshing] = React.useState(false);
-
-  // const onRefresh = React.useCallback(() => {
-  //   setRefreshing(true);
-
-  //   setTimeout(() => {
-  //     setRefreshing(false)
-  //   }, 0);
-  // }, []);
-
-  // useEffect(() => {
-  //   onRefresh();
-  // }, [])
 
   /* 
-  Daily's
+  Dailys:
   1-5, 7, 11-15, 17-24
 
   Evenings:
@@ -224,7 +168,6 @@ export default function BreatheScreen({navigation}) {
     };
 
     array = array.slice(0, 5);
-    // console.log("arr length:", array.length)
     return array.map(x => 
       <Exercise 
         id={Exercises[x].id} 
@@ -272,11 +215,9 @@ export default function BreatheScreen({navigation}) {
   };
 
 
-
   return(
     <ScrollView style={{backgroundColor: "white"}}>
       {isFocused ? <StatusBar hidden={false} barStyle="dark-content"/> : null} 
-      {/* <RefreshControl refreshing={refreshing} /> */}
       {
         isReady ? 
         <View>
@@ -340,7 +281,6 @@ export default function BreatheScreen({navigation}) {
             : null
           } */}
 
-
             <ScrollView horizontal={true} style={selectedCategory === "Sleep" ? styles.showScroll : styles.hideScroll} showsHorizontalScrollIndicator={false}>
               {/* <Exercise id={Exercises[6].id} navigation={navigation} image={Exercises[6].image} title={Exercises[6].title} subTitle={Exercises[6].subTitle} videoFile={Exercises[6].videoFile} modalIcon={Exercises[6].modalIcon} iconHeight={Exercises[6].iconHeight} noFinishBell={Exercises[6].noFinishBell}/>
               <Exercise id={Exercises[10].id} navigation={navigation} image={Exercises[10].image} title={Exercises[10].title} subTitle={Exercises[10].subTitle} videoFile={Exercises[10].videoFile} /> */}
@@ -357,8 +297,6 @@ export default function BreatheScreen({navigation}) {
               {renderExercises(popular)}
             </ScrollView>
          
-            
-          
             {/* <ScrollView horizontal={true} style={{flexDirection: "row", marginLeft: 25}} showsHorizontalScrollIndicator={false}>
               {
                 selectedCategory === "Sleep" ? recommendedToday
@@ -366,14 +304,13 @@ export default function BreatheScreen({navigation}) {
                 : selectedCategory === "Popular" ? popular : null
               }
             </ScrollView> */}
-
           
         </View>
   
         : 
         // null
         <AppLoading 
-          startAsync={_loadAssetsAsync}
+          startAsync={() => console.log("startAsync!")}
           onFinish={() => setIsReady(true)}
           onError={console.warn}
         />
@@ -413,4 +350,4 @@ const styles = StyleSheet.create({
     marginLeft: 25,
     display: "none"
   }
-})
+});

@@ -238,7 +238,6 @@ export default function ProfileScreen({navigation}) {
   };
 
 
-
   const renderMovingSessionsGoal = (sessionsCompleted) => {
     let rightMostNum = sessionsCompleted % 10;
     let remainder = 10 - rightMostNum;
@@ -253,6 +252,7 @@ export default function ProfileScreen({navigation}) {
     return <ProfileStatsBlock icon={require('../../assets/screen-icons/profile-arrow.png')} title="Current Streak" number={currentStreak} subtitle={currentStreak === 1 ? "Day" : "Days"} subText={`${ceil} Day Streak Goal`} progress={ Math.max(currentStreak, 0.01) / ceil}/>
   }
 
+  console.log("curUser:", currUser.isAnonymous);
 
   return (
     <View style={{ backgroundColor:"white", flex: 1, resizeMode: "cover", justifyContent: "flex-start",}}>
@@ -285,35 +285,38 @@ export default function ProfileScreen({navigation}) {
             </View>
             } */}
 
+            {currUser.isAnonymous ? null : 
+              <>
+                <CustomAlert 
+                  header="Great Job!"
+                  // message={`${practiceTime < 3600 ? Math.trunc(practiceTime / 60) : Math.trunc(practiceTime / 60 / 60)} Minutes of Practice Time`}
+                  message={`${Math.trunc(practiceTime / 60)} Minutes of Practice Time`}
+                  isVisible={timeGoalVisible}
+                  onPress={dismissTimeGoalAlert}
+                  />
 
-            <CustomAlert 
-              header="Great Job!"
-              // message={`${practiceTime < 3600 ? Math.trunc(practiceTime / 60) : Math.trunc(practiceTime / 60 / 60)} Minutes of Practice Time`}
-              message={`${Math.trunc(practiceTime / 60)} Minutes of Practice Time`}
-              isVisible={timeGoalVisible}
-              onPress={dismissTimeGoalAlert}
-              />
+                <CustomAlert 
+                  header="Well Done!"
+                  message={`${sessionsCompleted} Total Sessions`}
+                  isVisible={sessionsGoalVisible}
+                  onPress={dismissSessionsGoalAlert}
+                />
 
-            <CustomAlert 
-              header="Well Done!"
-              message={`${sessionsCompleted} Total Sessions`}
-              isVisible={sessionsGoalVisible}
-              onPress={dismissSessionsGoalAlert}
-            />
+                <CustomAlert 
+                  header="Nice Streak!"
+                  message={`a ${currentStreak}-Day Streak`}
+                  isVisible={currStreakGoalVisible}
+                  onPress={dismissCurrStreakGoalVisible}
+                />
 
-            <CustomAlert 
-              header="Nice Streak!"
-              message={`a ${currentStreak}-Day Streak`}
-              isVisible={currStreakGoalVisible}
-              onPress={dismissCurrStreakGoalVisible}
-            />
-
-            <CustomAlert 
-              header="New Best Streak! "
-              message={`${bestStreak} Days!`}
-              isVisible={bestStreakGoalVisible}
-              onPress={dismissBestStreakGoalVisible}
-            />
+                <CustomAlert 
+                  header="New Best Streak! "
+                  message={`${bestStreak} Days!`}
+                  isVisible={bestStreakGoalVisible}
+                  onPress={dismissBestStreakGoalVisible}
+                />
+              </>
+            }
 
 
             <View style={{flexDirection:"row", flexWrap: "wrap", justifyContent: "center"}}>
