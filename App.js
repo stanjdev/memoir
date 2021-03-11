@@ -8,21 +8,24 @@ import Navigation from './navigation';
 import * as SplashScreen from 'expo-splash-screen';
 
 export default function App() {
-  // useEffect( async () => {
-  //   try {
-  //     await SplashScreen.preventAutoHideAsync();
-  //   } catch (error) {
-  //     console.warn(e);
-  //   }
+  // useEffect(() => {
+  //   setTimeout(async () => {
+  //     try {
+  //       await SplashScreen.preventAutoHideAsync();
+  //     } catch (error) {
+  //       console.warn(error);
+  //     }
+  //   }, 0);
 
   //   return () => SplashScreen.hideAsync();
   // }, [])
 
   useEffect(() => {
-    SplashScreen.preventAutoHideAsync();
-    setTimeout(() => {
-      SplashScreen.hideAsync();
-    }, 300);
+    setTimeout(async () => {
+      await SplashScreen.preventAutoHideAsync();
+      // await SplashScreen.hideAsync();
+    }, 0);
+    return () => SplashScreen.hideAsync();
   }, [])
 
   return (

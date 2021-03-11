@@ -16,6 +16,8 @@ const provider = new firebase.auth.FacebookAuthProvider();
 import * as Facebook from 'expo-facebook';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import * as GoogleSignIn from 'expo-google-sign-in';
+import * as Google from 'expo-google-app-auth';
+// import * as Google from 'expo-auth-session/providers/google';
 
 export default function CreateAccountPopup() {
   const navigation = useNavigation();
@@ -155,10 +157,15 @@ const signInWithApple = async () => {
 
 
 const signInWithGoogle = async () => {
-  alert("Google sign in");
-  
-  // https://docs.expo.io/versions/latest/sdk/google-sign-in
+  // alert("Google sign in!");
+
+  const { type, accessToken, user } = await Google.logInAsync({ clientId: "376333982321-r3nbc2oomnjnvvtbmt6v8s5r002s6nk8.apps.googleusercontent.com" })
+
+
+
+  // // https://docs.expo.io/versions/latest/sdk/google-sign-in
   // try {
+  //   // await GoogleSignIn.initAsync();
   //   await GoogleSignIn.askForPlayServicesAsync();
   //   const { type, user } = await GoogleSignIn.signInAsync();
   //   if (type === 'success') {
@@ -185,60 +192,57 @@ useEffect(() => {
       <View>
         <Text style={{fontSize: height < 600 ? 20 : height < 700 ? 22 : 25, color: "#535353", textAlign: "center", width: 290, fontFamily: "Assistant-SemiBold", }}>Create a Free Account to View Your Favorites, Track Progress, and more.</Text>
       </View>
-      <View style={{ height: 250, justifyContent:  height < 600 ? "space-around" : "space-between"}}>
-        <AppButton 
-          title="Sign in with Facebook" 
-          buttonStyles={styles.facebookButton} 
-          buttonTextStyles={styles.buttonText} 
-          onPress={signInWithFacebook}
-          icon={"FontAwesome"}
-          name={"facebook-square"}
-          size={28}
-          color={"white"}
-        />
-        {Device.osName == "iOS" ? 
-        <AppButton 
-          title="Sign in with Apple" 
-          buttonStyles={styles.appleButton} 
-          buttonTextStyles={styles.buttonText} 
-          onPress={signInWithApple}
-          icon={"Fontisto"}
-          name={"apple"}
-          size={28}
-          color={"white"}
-        />
-        :
-        <AppButton 
-          title="Sign in with Google" 
-          buttonStyles={styles.googleButton} 
-          buttonTextStyles={styles.buttonText} 
-          onPress={signInWithGoogle}
-          icon={"Fontisto"}
-          name={"google"}
-          size={28}
-          color={"white"}
-        />
-        // null
-        }
+      <View style={{ height: 250, justifyContent: height < 600 ? "space-around" : "space-between"}}>
+        <View style={{height: "100%", justifyContent: Device.osName == "iOS" ? "space-between" : "space-evenly"}}>
+          <AppButton 
+            title="Sign in with Facebook" 
+            buttonStyles={styles.facebookButton} 
+            buttonTextStyles={styles.buttonText} 
+            onPress={signInWithFacebook}
+            icon={"FontAwesome"}
+            name={"facebook-square"}
+            size={28}
+            color={"white"}
+          />
+          
+          {Device.osName == "iOS" ? 
+            <AppButton 
+              title="Sign in with Apple" 
+              buttonStyles={styles.appleButton} 
+              buttonTextStyles={styles.buttonText} 
+              onPress={signInWithApple}
+              icon={"Fontisto"}
+              name={"apple"}
+              size={28}
+              color={"white"}
+            />
+          :
+            // <AppButton 
+            //   title="Sign in with Google" 
+            //   buttonStyles={styles.googleButton} 
+            //   buttonTextStyles={styles.buttonText} 
+            //   onPress={signInWithGoogle}
+            //   icon={"Fontisto"}
+            //   name={"google"}
+            //   size={28}
+            //   color={"white"}
+            // />
 
-      {/* <AppleAuthentication.AppleAuthenticationButton
-        buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-        buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-        cornerRadius={5}
-        style={{ width: 327, height: 63 }}
-        onPress={}
-      /> */}
-        
-        <AppButton 
-          title="Sign up with Email" 
-          buttonStyles={styles.emailButton} 
-          buttonTextStyles={styles.emailButtonText} 
-          onPress={() => navigation.navigate('SignUpScreen')}
-          icon={"Fontisto"}
-          name={"email"}
-          size={28}
-          color={"black"}
-        />
+            null
+          }
+          
+          <AppButton 
+            title="Sign up with Email" 
+            buttonStyles={styles.emailButton} 
+            buttonTextStyles={styles.emailButtonText} 
+            onPress={() => navigation.navigate('SignUpScreen')}
+            icon={"Fontisto"}
+            name={"email"}
+            size={28}
+            color={"black"}
+          />
+        </View>
+
       </View>
       <View style={{alignItems: "center"}}>
         <Text style={{fontSize: 15, color: "#535353", fontFamily: "Assistant-SemiBold"}}>Already Have an Account?</Text>

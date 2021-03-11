@@ -310,7 +310,7 @@ export default function BreatheScreen({navigation}) {
         : 
         // null
         <AppLoading 
-          startAsync={() => console.log("startAsync!")}
+          startAsync={() => console.log("startAsync AppLoading BreatheScreen!")}
           onFinish={() => setIsReady(true)}
           onError={console.warn}
         />

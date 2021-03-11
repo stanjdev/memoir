@@ -160,6 +160,7 @@ export default function ProfileScreen({navigation}) {
     if (sessionsCompleted % 10 !== 0) setDismissedSessions(false);
     if (currentStreak % 10 !== 0) setDismissedCurrStreak(false);
 
+    console.log(practiceTime, timeGoal.current, fiveHrGoal.current);
     if (isFocused && practiceTime >= timeGoal.current && !dismissedTimeGoal && Math.trunc(timeGoal.current) !== 0) {
       setTimeout(() => {
         setTimeGoalVisible(true);
@@ -174,7 +175,7 @@ export default function ProfileScreen({navigation}) {
       //   }}
       // ]);
     }
-    console.log(practiceTime, timeGoal.current, fiveHrGoal.current);
+    
 
     if (isFocused && sessionsCompleted % 10 == 0 && !dismissedSessions) {
       setTimeout(() => {

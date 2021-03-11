@@ -218,7 +218,7 @@ export default function Navigation({navigation}) {
                 dispatch({ type: "SIGNUP", email: userEmail, token: userToken, firstName: userFirstName })
               }
             })
-            console.log("Anonymous account successfully upgraded with Email!", user);
+            console.log("Anonymous account successfully upgraded with Email!", user.email);
           })
       } catch (error) {
         console.log("Error upgrading anonymous account with email", error);
@@ -516,7 +516,7 @@ export default function Navigation({navigation}) {
 
 import BottomTabNavigator from './BottomTabNavigator';
 import ProfileScreen from './tab-screens/ProfileScreen';
-import SplashScreen from './SplashScreen';
+import MySplashScreen from './MySplashScreen';
 import SignInScreen from './SignInScreen';
 import SignUpScreen from './SignUpScreen';
 import SignUpScreen2 from './SignUpScreen2';
@@ -529,7 +529,7 @@ const Stack = createStackNavigator();
 function RootNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen options={{headerShown:false, ...TransitionPresets.ScaleFromCenterAndroid }} name="SplashScreen" component={SplashScreen} />
+      <Stack.Screen options={{headerShown:false, ...TransitionPresets.ScaleFromCenterAndroid }} name="MySplashScreen" component={MySplashScreen} />
       <Stack.Screen options={{headerShown:false, ...TransitionPresets.ScaleFromCenterAndroid }} name="Memoir" component={BottomTabNavigator} />
       <Stack.Screen options={{headerShown:false, ...TransitionPresets.ScaleFromCenterAndroid }} name="MeditateExerciseScreen" component={MeditateExerciseScreen} />
       <Stack.Screen options={{headerShown:false, ...TransitionPresets.RevealFromBottomAndroid }} name="ExerciseVideo" component={ExerciseVideo} />

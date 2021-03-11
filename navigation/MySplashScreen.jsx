@@ -4,7 +4,7 @@ import { useIsFocused } from '@react-navigation/native';
 import AppButton from '../components/AppButton';
 const { width, height } = Dimensions.get('window');
 
-export default function SplashScreen ({ route, navigation }) {
+export default function MySplashScreen ({ route, navigation }) {
   const isFocused = useIsFocused();
 
   const navTo = () => route.params ? 

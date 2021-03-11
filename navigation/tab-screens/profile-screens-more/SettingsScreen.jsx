@@ -4,6 +4,7 @@ import { useFonts } from 'expo-font';
 import { AuthContext } from '../../../components/context';
 import { useIsFocused } from '@react-navigation/native';
 import * as WebBrowser from 'expo-web-browser';
+import Constants from 'expo-constants';
 
 const { width, height } = Dimensions.get('window');
 
@@ -23,7 +24,7 @@ export default function SettingsScreen({ navigation }) {
 
   const signOutToHome = () => {
     signOut();
-    navigation.navigate("SplashScreen", { fromLogout: true });
+    navigation.navigate("MySplashScreen", { fromLogout: true });
 
     // setTimeout(() => {
     //   navigation.navigate("Profile");
@@ -55,7 +56,6 @@ export default function SettingsScreen({ navigation }) {
   const resetPassword = (email) => {
     firebase.auth().sendPasswordResetEmail(email).then(error => error ? null : alert("Password email sent. Check your email!")).catch(error => alert(error))
   }
-
 
   return (
     // <ImageBackground source={bgImage} style={{ flex: 1, resizeMode: "cover", justifyContent: "flex-start",}}>
@@ -101,6 +101,7 @@ export default function SettingsScreen({ navigation }) {
              
 
             </View>
+             <Text style={{color: "grey", position: "absolute", bottom: height * 0.15}}>Version {Constants.manifest.version}</Text>
           </View>
         {/* </ScrollView> */}
       </View>
