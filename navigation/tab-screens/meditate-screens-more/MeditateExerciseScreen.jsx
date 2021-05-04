@@ -216,7 +216,15 @@ export default function MeditateExerciseScreen({ route, navigation }) {
 
   // BELL SOUND - useInterval()  
   const bellSound = new Audio.Sound();
-  Audio.setAudioModeAsync({playsInSilentModeIOS: true, staysActiveInBackground: true});
+  Audio.setAudioModeAsync({
+    playsInSilentModeIOS: true, 
+    staysActiveInBackground: true,
+    interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+    shouldDuckAndroid: true,
+    playThroughEarpieceAndroid: true,
+    allowsRecordingIOS: true,
+    interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+  });
 
   const playBell = async () => await bellSound.replayAsync();
   const playBellFirst = async () => await bellSound.playAsync();

@@ -27,17 +27,17 @@
     "facebookDisplayName": "memoir",
     "scheme": "com.memoir.memoir-app",
     "ios": {
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "audio"
+        ]
+      },
       "supportsTablet": true,
       "usesAppleSignIn": true,
       "bundleIdentifier": "com.memoir.memoir-app",
       "config": {
         "usesNonExemptEncryption": false
-     },
-     "infoPlist": {
-        "UIBackgroundModes": [
-          "audio"
-        ]
-      }
+     }
     },
     "android": {
       "package": "com.memoir.memoir",
