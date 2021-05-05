@@ -45,12 +45,6 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/app-icon.png",
         "backgroundColor": "#FFFFFF"
-      },
-      "config": {
-        "googleSignIn": {
-          "apiKey": "AIzaSyBdArOtMj7Hy5zB11mdiz3wbEJdt-52moo",
-          "certificateHash": "8751417521C608244B6BFD6C81F402861AD810F2E5EE2AD110636DD9CFA9CE61"
-        }
       }
     },
     "web": {

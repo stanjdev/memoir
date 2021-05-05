@@ -15,7 +15,7 @@ const provider = new firebase.auth.FacebookAuthProvider();
 // Expo APIs
 import * as Facebook from 'expo-facebook';
 import * as AppleAuthentication from 'expo-apple-authentication';
-import * as GoogleSignIn from 'expo-google-sign-in';
+// import * as GoogleSignIn from 'expo-google-sign-in';
 import * as Google from 'expo-google-app-auth';
 // import * as Google from 'expo-auth-session/providers/google';
 
