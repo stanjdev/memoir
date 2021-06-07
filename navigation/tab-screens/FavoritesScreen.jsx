@@ -137,7 +137,7 @@ export default function FavoritesScreen({navigation}) {
         {isFocused ? <StatusBar barStyle="dark-content" hidden={false}/> : null}
         {fontsLoaded ?
 
-        <View style={{marginTop: 50, }}>
+        <View style={{marginTop: 50, marginBottom: 50}}>
           <Text style={{textAlign: "center", fontSize: 23, fontFamily: "Assistant-SemiBold", color: "#535353"}}>{userFirstName ? String(userFirstName).charAt(0).toUpperCase() + String(userFirstName).slice(1) + "'s Favorites" : "Favorites"}</Text>
           <View style={{ marginLeft: Math.min(5, width * 0.05) }}>
             <View style={{flex: 1, flexDirection: "row", justifyContent: "flex-start", alignContent: "stretch", padding: width * 0.05, flexWrap: "wrap", }}>

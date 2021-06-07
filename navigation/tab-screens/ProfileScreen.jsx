@@ -347,25 +347,25 @@ export default function ProfileScreen({navigation}) {
                   onPress={() => navigation.navigate('ProMemberScreen')}
                 /> */}
 
-              <FeedbackCard 
+              {/* <FeedbackCard 
                 text="We're currently in beta. Send us a suggestion or report a bug."
                 callToActionText="Send Us Feedback"
                 url="http://memoir.design/contact"
-              />
+              /> */}
 
-              {/* {Device.osName == "iOS" ? 
+              {Device.osName == "iOS" ? 
                 <FeedbackCard 
                   text="Are you enjoying Memoir? Leave us a review in the App Store."
                   callToActionText="Write a Review"
-                  url="http://memoir.design/contact"
+                  url="https://apps.apple.com/us/app/memoir-breathing/id1544869710"
                 />
               :
                 <FeedbackCard 
                   text="Enjoying Memoir? Leave us a review in the Google Play Store."
                   callToActionText="Write a Review"
-                  url="http://memoir.design/contact"
+                  url="https://play.google.com/store/apps/details?id=com.memoir.memoir"
                 />
-              } */}
+              }
 
             </View>
             

@@ -3,7 +3,7 @@
     "name": "Memoir",
     "description": "Memoir promotes mindfulness and serenity through deep breathing and meditation exercises. Users can sign in with their Facebook, Apple ID, or email to save their favorite exercises and track their personal exercise progress.",
     "slug": "Memoir",
-    "version": "1.1.6",
+    "version": "1.1.7",
     "orientation": "portrait",
     "icon": "./assets/app-icon.png",
     "splash": {

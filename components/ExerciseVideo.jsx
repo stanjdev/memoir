@@ -110,6 +110,7 @@ export default function ExerciseVideo({ route, navigation }) {
     "15m": {mins: 15, secs: 0},
     "20m": {mins: 20, secs: 0},
     "30m": {mins: 30, secs: 0},
+    "OFF": null
   };
 
   const renderTimerOptions = () => {
@@ -129,6 +130,17 @@ export default function ExerciseVideo({ route, navigation }) {
   };
 
   const pressTimerChoice = (time) => {
+    if (time === "OFF") {
+      setTimerRunning(false);
+      setDisplayTimerDuration(false);
+      setTimerDuration(null);
+      if (runningClock) {
+        toggleClock();
+        setShowTimerScroller(!showTimerScroller);
+        fade();
+      }
+      return;
+    }
     setTimerDuration(timerDurationsOptions[time]);
     setDisplayTimerDuration(true);
     toggleShowTimerScroller();

@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, Dimensions, StyleSheet } from 'react-native';
 const { width, height } = Dimensions.get('window');
+import { useFonts } from 'expo-font';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import * as FileSystem from 'expo-file-system';
 import firebase from 'firebase';
-
+import { Video } from 'expo-av';
 
 export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, title, subTitle, navigation, videoFile, modalIcon, iconHeight, id, autoCountDown, customWidth, customVolume, isLiked, noFinishBell, notSignedIn }) {
   const currentHour = new Date().getHours();
   const [liked, setLiked] = useState(false);
   const currUser = firebase.auth().currentUser;
   const favRef = currUser && firebase.database().ref(currUser.uid).child('favorites');
+
+  let [fontsLoaded] = useFonts({
+    'Assistant': require('../assets/fonts/Assistant/Assistant-VariableFont_wght.ttf'),
+    'Assistant-Regular': require('../assets/fonts/Assistant/static/Assistant-Regular.ttf'),
+    'Assistant-SemiBold': require('../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
+  });
 
   useEffect(() => {
     updateLiked();
@@ -80,12 +87,48 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
         customVolume: customVolume || null, 
         noFinishBell: noFinishBell || null, 
         modalText: currentHour >= 20 || currentHour <= 3 ? "eveningWindDown" : "dailyExhale" 
-      })}>
-      <Image 
+      })}
+      >
+
+      {/* <Image 
         source={ cachedImg }
         style={{ height: height * 0.4, width: width * 0.9, }}
         resizeMode="contain"
-      />
+      /> */}
+
+      <View style={{
+        shadowColor: "#000",
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 3,
+        alignItems: "center"
+      }}>
+        <Video
+          source={ cachedVideo }
+          isMuted={true}
+          resizeMode="cover"
+          shouldPlay={true}
+          isLooping
+          style={{ 
+            width: width * 0.85, 
+            height: 280, 
+            marginTop: 10,
+            marginBottom: 20,
+            borderRadius: 33, 
+            
+          }}
+        />
+        <Text style={{ 
+          position: "absolute", 
+          bottom: 40, 
+          textAlign: "center", 
+          fontFamily: "Assistant-SemiBold", 
+          fontSize: width < 350 ? 18 : 20.96, 
+          letterSpacing: 0.3, 
+          color: "white" 
+          }}>{currentHour >= 20 || currentHour <= 3 ? "Your Evening Wind-Down" : "Your Daily Exhale" }</Text>  
+      </View>
+
     </TouchableWithoutFeedback> 
   );
 
