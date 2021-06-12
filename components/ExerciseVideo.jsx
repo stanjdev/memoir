@@ -550,6 +550,7 @@ export default function ExerciseVideo({ route, navigation }) {
         })
         // console.log(favs.includes(id))
       })
+      console.log(favs);
       
       favRef.once("value", (snapshot) => {
         // // // if no favs, add one:
@@ -560,12 +561,12 @@ export default function ExerciseVideo({ route, navigation }) {
         // }
 
         // if vidID not found in database, add it
-        console.log(favs);
         if (!favs.includes(id)) {
           databaseRef.set({
             "id": id,
-          }).then(() => console.log(`favorited video ${id}!`))
-          toggleLike(favs.includes(id))
+          }).then(() => console.log(`favorited video ${id}!`));
+          toggleLike(favs.includes(id));
+          return;
         } else {
         // Remove from favorites
           snapshot.forEach(child => {
@@ -574,10 +575,11 @@ export default function ExerciseVideo({ route, navigation }) {
   
             // console.log(key);
             if (id === exId) {
-              fireApp.database().ref(currUser.uid).child(`favorites/${key}`).remove().then(() => console.log(`Unfavorited video ${exId}!`))
+              fireApp.database().ref(currUser.uid).child(`favorites/${key}`).remove()
+              .then(() => console.log(`Unfavorited video ${exId}!`))
             }
           })
-          toggleLike(!favs.includes(id))
+          toggleLike(!favs.includes(id));
         }
       })
     }
@@ -590,7 +592,7 @@ export default function ExerciseVideo({ route, navigation }) {
   }, [])
 
   const [liked, setLiked] = useState(false);
-  const toggleLike = (bool) => {
+  const toggleLike = bool => {
     // setLiked(!liked);
     setLiked(bool);
   };
