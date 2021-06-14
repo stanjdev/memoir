@@ -32,15 +32,17 @@
       "bundleIdentifier": "com.memoir.memoir-app",
       "config": {
         "usesNonExemptEncryption": false
-     }
+     },
+     "appStoreUrl": "https://apps.apple.com/us/app/memoir-breathing/id1544869710"
     },
     "android": {
       "package": "com.memoir.memoir",
-      "versionCode": 5,
+      "versionCode": 7,
       "adaptiveIcon": {
         "foregroundImage": "./assets/app-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.memoir.memoir"
     },
     "web": {
       "favicon": "./assets/memoir-logo.png"
