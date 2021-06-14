@@ -96,12 +96,32 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
         resizeMode="contain"
       /> */}
 
+      <View style={{display: "flex", flexDirection: "row", alignItems: "flex-end", marginTop: height < 700 ? 0 : 8, marginBottom: 5}}>
+        <Text style={{ 
+          // position: "absolute",
+          // bottom: 40,
+          fontFamily: "Assistant-SemiBold", 
+          fontSize: width < 350 ? 22 : 23, 
+          letterSpacing: 0.3,
+          }}>
+            {currentHour >= 20 || currentHour <= 3 ? "Your Evening Wind-Down" : "Your Daily Exhale" }
+        </Text>
+        <Text style={{
+          fontFamily: "Assistant-SemiBold", 
+          fontSize: 14, 
+          lineHeight: 20, 
+          margin: 3, 
+          marginLeft: 6, 
+          color: "#737373"}}>
+            Tap to Begin
+          </Text>
+      </View>
       <View style={{
         shadowColor: "#000",
         shadowOffset: { width: 2, height: 2 },
         shadowOpacity: 0.5,
         shadowRadius: 3,
-        alignItems: "center"
+        // alignItems: "center",
       }}>
         <Video
           source={ cachedVideo }
@@ -115,18 +135,9 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
             marginTop: 10,
             marginBottom: 20,
             borderRadius: 33, 
-            
+            backgroundColor: "black"
           }}
         />
-        <Text style={{ 
-          position: "absolute", 
-          bottom: 40, 
-          textAlign: "center", 
-          fontFamily: "Assistant-SemiBold", 
-          fontSize: width < 350 ? 18 : 20.96, 
-          letterSpacing: 0.3, 
-          color: "white" 
-          }}>{currentHour >= 20 || currentHour <= 3 ? "Your Evening Wind-Down" : "Your Daily Exhale" }</Text>  
       </View>
 
     </TouchableWithoutFeedback> 

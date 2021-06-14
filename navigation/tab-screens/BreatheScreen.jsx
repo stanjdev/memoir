@@ -58,7 +58,6 @@ export default function BreatheScreen({navigation}) {
   }
 
 
-
   const currUser = firebase.auth().currentUser;
   const favRef = currUser ? firebase.database().ref(currUser.uid).child('favorites') : null;
 
@@ -231,8 +230,8 @@ export default function BreatheScreen({navigation}) {
             }
           </View>
           
-          <View style={{marginLeft: 25}}>
-            <Text style={{fontFamily: "Assistant-SemiBold", fontSize: width < 350 ? 23 : 26 }}>Recommended For You</Text>
+          <View style={{marginLeft: 25, marginTop: 7, marginBottom: height < 700 ? 12 : 3}}>
+            <Text style={{fontFamily: "Assistant-SemiBold", fontSize: width < 350 ? 22 : 23 }}>Recommended For You</Text>
           </View>
           
           <ScrollView horizontal={true} style={{flexDirection: "row", marginLeft: 25}} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
@@ -328,12 +327,12 @@ const styles = StyleSheet.create({
   },
   selected: {
     fontFamily: "Assistant-SemiBold", 
-    fontSize: width < 350 ? 23 : 26, 
+    fontSize: width < 350 ? 22 : 23, 
     color: "black",
   },
   unSelected: {
     fontFamily: "Assistant-SemiBold", 
-    fontSize: width < 350 ? 23 : 26, 
+    fontSize: width < 350 ? 22 : 23, 
     color: "#717171"
   },
   underline: {
