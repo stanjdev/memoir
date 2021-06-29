@@ -74,6 +74,7 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
     }
   };
 
+  const yourEveningWindDownTitle = width < 380 ? "Evening Wind-Down" : "Your Evening Wind-Down";
 
   const JumboExercise = () => (
     <TouchableWithoutFeedback onPress={() => notSignedIn ? console.log("not signed in!") : 
@@ -104,7 +105,7 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
           fontSize: width < 350 ? 22 : 23, 
           letterSpacing: 0.3,
           }}>
-            {currentHour >= 20 || currentHour <= 3 ? "Your Evening Wind-Down" : "Your Daily Exhale" }
+            {currentHour >= 20 || currentHour <= 3 ? yourEveningWindDownTitle : "Your Daily Exhale" }
         </Text>
         <Text style={{
           fontFamily: "Assistant-SemiBold", 
@@ -131,7 +132,7 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
           isLooping
           style={{ 
             width: width * 0.85, 
-            height: 280, 
+            height: 275, 
             marginTop: 10,
             marginBottom: 20,
             borderRadius: 33, 

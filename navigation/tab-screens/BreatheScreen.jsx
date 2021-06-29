@@ -221,7 +221,7 @@ export default function BreatheScreen({navigation}) {
         isReady ? 
         <View>
 
-          <View style={{marginTop: 50, justifyContent: "center", alignItems: "center"}}>
+          <View style={{marginTop: height > 850 ? 60 : 50, justifyContent: "center", alignItems: "center"}}>
             {/* <Exercise uniqueSize="topBanner" navigation={navigation} image={Exercises[7].image} videoFile={Exercises[7].videoFile} modalIcon={Exercises[7].modalIcon} id={Exercises[7].id} autoCountDown={"2m"}/>  */}
             { 
             currentHour >= 20 || currentHour <= 3 ? 
