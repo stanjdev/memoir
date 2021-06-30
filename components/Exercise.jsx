@@ -127,16 +127,16 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
         <Video
           source={ cachedVideo }
           isMuted={true}
-          resizeMode="cover"
+          resizeMode={"cover"}
           shouldPlay={true}
           isLooping
           style={{ 
             width: width * 0.85, 
-            height: 275, 
+            height: id === 2 ? 290 : 275, 
             marginTop: 10,
             marginBottom: 20,
             borderRadius: 33, 
-            backgroundColor: "black"
+            backgroundColor: "black",
           }}
         />
       </View>

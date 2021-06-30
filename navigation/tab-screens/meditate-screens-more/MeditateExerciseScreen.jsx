@@ -222,7 +222,6 @@ export default function MeditateExerciseScreen({ route, navigation }) {
     interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
     shouldDuckAndroid: true,
     playThroughEarpieceAndroid: true,
-    allowsRecordingIOS: true,
     interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
   });
 
