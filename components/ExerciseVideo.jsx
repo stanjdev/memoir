@@ -526,7 +526,8 @@ export default function ExerciseVideo({ route, navigation }) {
   if (currUser) {
     favRef.on("value", snapshot => {
       snapshot.forEach(node => {
-        favIds.push(node.val().id)
+        favIds.push(node.val())
+        // console.log("node " + JSON.stringify(node.val().id))
       })
       // console.log("favIds includes the id!" + favIds.includes(id))
     })
@@ -535,8 +536,9 @@ export default function ExerciseVideo({ route, navigation }) {
   const toggleFavorite = async () => {
     // get a unique key
     if (currUser !== null) {
-      const databaseRef = await fireApp.database().ref(currUser.uid).child('favorites').push();
+      const databaseRef = await favRef.push();
       const key = databaseRef.key
+      // console.log("key: " + key);
       
       // databaseRef.set({
       //   "id": id,
@@ -546,11 +548,11 @@ export default function ExerciseVideo({ route, navigation }) {
       let favs = [];
       favRef.on("value", snapshot => {
         snapshot.forEach(node => {
-          favs.push(node.val().id)
+          // console.log("fav id:", node.val())
+          favs.push(node.val())
         })
-        // console.log(favs.includes(id))
       })
-      console.log(favs);
+      console.log("favs: " + favs);
       
       favRef.once("value", (snapshot) => {
         // // // if no favs, add one:
@@ -560,17 +562,19 @@ export default function ExerciseVideo({ route, navigation }) {
         //   }).then(() => console.log(`added video ${id}`))
         // }
 
+        // console.log("snapshot: ", snapshot.forEach(childSnapshot => {
+        //   console.log(childSnapshot)
+        // }))
+
         // if vidID not found in database, add it
         if (!favs.includes(id)) {
-          databaseRef.set({
-            "id": id,
-          }).then(() => console.log(`favorited video ${id}!`));
+          favRef.push(id).then(() => console.log(`favorited video ${id}!`));
           toggleLike(favs.includes(id));
           return;
         } else {
         // Remove from favorites
           snapshot.forEach(child => {
-            let exId = child.val().id
+            let exId = child.val().id || child.val()
             let key = child.key;
   
             // console.log(key);
@@ -586,7 +590,7 @@ export default function ExerciseVideo({ route, navigation }) {
   };
 
   useEffect(() => {
-    console.log(`fav ids: ${favIds} and id: ${id} = ${favIds.includes(id)}`);
+    // console.log(`fav ids: ${favIds} and id: ${id} = ${favIds.includes(id)}`);
     setLiked(favIds.includes(id));
     // return () => favRef.off()
   }, [])

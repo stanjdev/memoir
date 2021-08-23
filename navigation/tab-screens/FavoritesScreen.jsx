@@ -51,7 +51,7 @@ export default function FavoritesScreen({navigation}) {
     if (currUser !== null) {
       favRef.on("value", snapshot => {
         snapshot.forEach(node => {
-          favIds.push(node.val().id)
+          favIds.push(node.val())
         })
       })
 
@@ -67,13 +67,16 @@ export default function FavoritesScreen({navigation}) {
         // console.log(data.toJSON())
         let favsArray = [];
           data.forEach(child => {
-            let exId = child.val().id;
+            let exId = child.val().id || child.val();
+            let oldExId = child.val().id;
             let key = child.key;
-            // console.log(favIds);
-            // console.log(exId)
             
-            // favs.push(exId)
-            
+            // Delete old existing favs when Favorites Screen is pressed:
+            if (oldExId) {
+              fireApp.database().ref(currUser.uid).child(`favorites/${key}`).remove()
+              .then(() => console.log(`Unfavorited video ${oldExId}!`))
+            }
+
             // if (favIds.length !== favs.length) {
             setFavs(favs => [...favs, 
               <Exercise 

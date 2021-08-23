@@ -22,16 +22,14 @@ export default function BreatheScreen({navigation}) {
     'Assistant-SemiBold': require('../../assets/fonts/Assistant/static/Assistant-SemiBold.ttf'),
   });
 
-
   const currentHour = new Date().getHours();
 
   const [selectedCategory, setSelectedCategory] = useState(currentHour >= 20 || currentHour <= 3 ? "Sleep" : "New");
-
   const categoryOptions = {
     "Sleep": "Sleep",
     "New": "New",
     "Popular": "Popular",
-  }
+  };
   const renderCategoryOptions = () => {
     return Object.keys(categoryOptions).map((option, i) => {
       return (
@@ -43,7 +41,7 @@ export default function BreatheScreen({navigation}) {
         </TouchableOpacity>
       )
     })
-  }
+  };
 
   const handleSelectedOption = (optionName) => {
     setSelectedCategory(optionName)
@@ -58,6 +56,7 @@ export default function BreatheScreen({navigation}) {
   }
 
 
+  /* === FIREBASE === */
   const currUser = firebase.auth().currentUser;
   const favRef = currUser ? firebase.database().ref(currUser.uid).child('favorites') : null;
 
@@ -70,7 +69,7 @@ export default function BreatheScreen({navigation}) {
         setFavIds([]);
         snapshot.forEach(node => {
           // favIds.push(node.val().id)
-          setFavIds(arr => [...arr, node.val().id])
+          setFavIds(arr => [...arr, node.val()])
           // console.log(favIds)
           // console.log(favIds.includes(2))
         })

@@ -289,9 +289,6 @@ export default function MeditateExerciseScreen({ route, navigation }) {
 
 
 
-
-
-
   const currUser = firebase.auth().currentUser;
   const progressRef = currUser ? firebase.database().ref(currUser.uid).child('progress') : null;
 
@@ -350,14 +347,10 @@ export default function MeditateExerciseScreen({ route, navigation }) {
     } 
   };
 
-
   const goBack = () => {
     updateUserTime();
     navigation.goBack();
   }
-
-
-
 
 
 
@@ -390,9 +383,7 @@ export default function MeditateExerciseScreen({ route, navigation }) {
             }
           </TouchableOpacity>
 
-
         </View>
-
 
       </View>
 

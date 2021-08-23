@@ -28,7 +28,7 @@ export default function Exercise({ uniqueSize, uniqueImgEvening, image, gif, tit
     if (currUser) {
       favRef.on("value", snapshot => {
         snapshot.forEach(node => {
-          favIds.push(node.val().id)
+          favIds.push(node.val().id || node.val())
         })
       })
     }

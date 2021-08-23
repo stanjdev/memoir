@@ -1,10 +1,10 @@
-import firebase from 'firebase';
+// import firebase from 'firebase';
 
-const retrieveFile = async (fileName) => {
-  let fileRef = firebase.storage().ref('/' + fileName);
-  const url = await fileRef.getDownloadURL();
-  return url;
-}
+// const retrieveFile = async (fileName) => {
+//   let fileRef = firebase.storage().ref('/' + fileName);
+//   const url = await fileRef.getDownloadURL();
+//   return url;
+// }
 
 export const Exercises = {
   1: {
