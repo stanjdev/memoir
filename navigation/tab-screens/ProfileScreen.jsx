@@ -441,7 +441,7 @@ export function CustomAlert({header, message, isVisible, onPress}) {
   return(
     <Modal 
       isVisible={isVisible}
-      deviceHeight={width}
+      deviceWidth={width}
       deviceHeight={height}
       style={{justifyContent: "center", alignItems: "center"}}
       backdropOpacity={0.6}

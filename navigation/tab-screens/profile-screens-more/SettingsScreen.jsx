@@ -5,6 +5,7 @@ import { AuthContext } from '../../../components/context';
 import { useIsFocused } from '@react-navigation/native';
 import * as WebBrowser from 'expo-web-browser';
 import Constants from 'expo-constants';
+import AppButton from '../../../components/AppButton';
 
 const { width, height } = Dimensions.get('window');
 
@@ -13,6 +14,7 @@ import firebase from 'firebase';
 export default function SettingsScreen({ navigation }) {
   const isFocused = useIsFocused();
   const { signOut, userToken } = React.useContext(AuthContext);
+  const currUser = firebase.auth().currentUser;
 
   const logOutAlert = () => {
     Alert.alert("Are you sure you want to logout?", "", [
@@ -32,6 +34,24 @@ export default function SettingsScreen({ navigation }) {
     // then, back to "Progress" screen
   };
 
+  const deleteAccountAlert = () => {
+    Alert.alert("Are you sure you want to delete your account?", "", [
+        {text: "Yes", onPress: () => deleteAccount()}, 
+        {text: "Cancel", style: "cancel"}
+      ]
+    );
+  };
+
+  const deleteAccount = () => {
+    currUser.delete().then(() => {
+      alert('Account successfully deleted.');
+      signOutToHome();
+    }).catch((error) => {
+      alert(error)
+    });
+  };
+
+
   // const [showPopUp, setShowPopup] = React.useState(false);
   // React.useEffect(() => {
   //   if (!userToken) {
@@ -50,7 +70,6 @@ export default function SettingsScreen({ navigation }) {
 
 
   // Change Password button
-  const currUser = firebase.auth().currentUser;
   const currUserEmail = currUser ? currUser.email : null;
 
   const resetPassword = (email) => {
@@ -99,7 +118,12 @@ export default function SettingsScreen({ navigation }) {
               </View>
               }
              
-
+              <AppButton 
+                  title={"Delete Account"} 
+                  buttonStyles={styles.redButton}
+                  buttonTextStyles={styles.buttonText}
+                  onPress={deleteAccountAlert}
+                />
             </View>
              <Text style={{color: "grey", position: "absolute", bottom: height * 0.15}}>Version {Constants.manifest.version}</Text>
           </View>
@@ -141,5 +165,21 @@ const styles = StyleSheet.create({
   },
   arrow: {
     height: 14
-  }
+  },
+  redButton: {
+    backgroundColor: "#D22B2B",
+    height: width < 330 ? 35 : Math.min(height * 0.07, 44),
+    width: 220,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 17,
+  },
+  buttonText: {
+    color: "#fff",
+    flex: 1,
+    textAlign: "center",
+    fontSize: width < 330 ? 19 : 21,
+    fontFamily: "Assistant-SemiBold"
+  },
 })
